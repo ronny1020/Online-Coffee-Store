@@ -16,7 +16,39 @@ if (isset($_POST["logout"])) {
     header('Location: index.php');
 }
 
+header("content-type:text/html; charset=utf-8");
+$link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
+$result = mysqli_query($link, "set names utf8");
+mysqli_select_db($link, "coffee");
+
+$commandText = <<<SqlQuery
+select productID, ProductName, sellerID, UnitPrice, UnitsInStock
+from coffee.products
+SqlQuery;
+
+$result = mysqli_query($link, $commandText);
+
 ?>
+
+<!-- right delete btn -->
+<?php 
+  $deleteItem;
+ foreach($_POST as $i=>$j){
+  echo $i;
+  $deleteItem = $i;
+  echo $deleteItem;
+ }
+echo $deleteItem;
+if($deleteItem != 'logout'){
+$deleteCommandText= <<<SqlQuery
+DELETE FROM coffee.products WHERE productID='$deleteItem';
+SqlQuery;
+mysqli_query($link, $deleteCommandText);
+
+}
+?>
+
+
 <!DOCTYPE html>
 <title>管理後台</title>
 
@@ -46,50 +78,51 @@ if (isset($_POST["logout"])) {
     <?php include 'head.php';?>
 
 <!-- Start your code here -->
+
 <div class ="main p-5">
-<form>
-<input type="submit" value="刪除" class="btn btn-danger mb-3">
+
+<form method='post'>
+  <input type="submit" value="刪除勾選" class="btn btn-danger mb-3">
+  <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
 </form>
+
+<form method='post'>
   <table class="table table-striped ">
     <thead class="thead-light">
       <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-        <th>Email</th>
-        <th>Email</th>
-        <th>Email</th>
+        <th>check</th>
+        <th>productID</th>
+        <th>ProductName</th>
+        <th>sellerID</th>
+        <th>UnitPrice</th>
+        <th>UnitsInStock</th>
+        <th></th>
       </tr>
     </thead>
+
     <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-      </tr>
-    </tbody>
-  </table>
- 
-</div>
+
+    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+		  <tr>
+        <td>
+         <input type="checkbox" value=""  class="btn btn-danger mb-3">
+        </td>
+          <td><?php echo $row["productID"] ?></td>
+          <td><?php echo $row["ProductName"] ?></td>
+          <td><?php echo $row["sellerID"] ?></td>
+          <td><?php echo $row["UnitPrice"] ?></td>
+          <td><?php echo $row["UnitsInStock"] ?></td>
+         <td>
+           <input type="submit" value="刪除" name="<?php echo $row["productID"] ?>" class="btn btn-danger mb-3">
+           <input type="submit" value="編輯" class="btn btn-primary mb-3">
+        </tr>
+    	  <?php endwhile?>
+      </tbody>
+
+    </table>
+    </form>
+
+  </div>
 
 <?php include 'footer.php';?>
 
