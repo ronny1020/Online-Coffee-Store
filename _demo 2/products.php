@@ -21,31 +21,21 @@ $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
-$commandText = <<<SqlQuery
-select productID, ProductName, sellerID, UnitPrice, UnitsInStock
-from coffee.products
-SqlQuery;
-
-$result = mysqli_query($link, $commandText);
 
 ?>
 
 <!-- right delete btn -->
 <?php 
-  $deleteItem;
- foreach($_POST as $i=>$j){
-  echo $i;
-  $deleteItem = $i;
-  echo $deleteItem;
- }
-echo $deleteItem;
-if($deleteItem != 'logout'){
-$deleteCommandText= <<<SqlQuery
-DELETE FROM coffee.products WHERE productID='$deleteItem';
-SqlQuery;
-mysqli_query($link, $deleteCommandText);
+  foreach($_POST as $i=>$j){
+    if(substr($i,0,6)=="delete"){
+      $deleteItem =  ltrim($i,"delete");
+      $deleteCommandText= <<<SqlQuery
+      DELETE FROM coffee.products WHERE productID='$deleteItem';
+      SqlQuery;
+      mysqli_query($link, $deleteCommandText);
+    }
+  }
 
-}
 ?>
 
 
@@ -84,9 +74,8 @@ mysqli_query($link, $deleteCommandText);
 <form method='post'>
   <input type="submit" value="刪除勾選" class="btn btn-danger mb-3">
   <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
-</form>
 
-<form method='post'>
+
   <table class="table table-striped ">
     <thead class="thead-light">
       <tr>
@@ -102,7 +91,15 @@ mysqli_query($link, $deleteCommandText);
 
     <tbody>
 
-    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+    <?php 
+    // write table
+    $commandText = <<<SqlQuery
+    select productID, ProductName, sellerID, UnitPrice, UnitsInStock
+    from coffee.products
+    SqlQuery;
+    
+    $result = mysqli_query($link, $commandText);    
+    while ($row = mysqli_fetch_assoc($result)): ?>
 		  <tr>
         <td>
          <input type="checkbox" value=""  class="btn btn-danger mb-3">
@@ -113,7 +110,7 @@ mysqli_query($link, $deleteCommandText);
           <td><?php echo $row["UnitPrice"] ?></td>
           <td><?php echo $row["UnitsInStock"] ?></td>
          <td>
-           <input type="submit" value="刪除" name="<?php echo $row["productID"] ?>" class="btn btn-danger mb-3">
+           <input type="submit" value="刪除" name="<?php echo "delete".$row["productID"] ?>" class="btn btn-danger mb-3">
            <input type="submit" value="編輯" class="btn btn-primary mb-3">
         </tr>
     	  <?php endwhile?>
