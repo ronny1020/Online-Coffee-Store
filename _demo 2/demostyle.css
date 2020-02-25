@@ -80,7 +80,7 @@ input#pwd {
     background-color: #444;
 }
 
-#main {
+#head {
     transition: margin-left .5s;
     padding: 16px;
 }
