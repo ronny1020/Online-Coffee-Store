@@ -14,30 +14,52 @@ if (isset($_POST["logout"])) {
     setcookie("username", "", time() - 3600);
     unset($_SESSION['AorS']);
     header('Location: index.php');
+    $_POST = null;
 }
 
+
+//connect to SQL
 header("content-type:text/html; charset=utf-8");
 $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
 
-?>
 
-<!-- right delete btn -->
-<?php 
-  foreach($_POST as $i=>$j){
-    if(substr($i,0,6)=="delete"){
-      $deleteItem =  ltrim($i,"delete");
-      $deleteCommandText= <<<SqlQuery
-      DELETE FROM coffee.products WHERE productID='$deleteItem';
-      SqlQuery;
-      mysqli_query($link, $deleteCommandText);
+// right delete btn
+foreach ($_POST as $i => $j) {
+    if (substr($i, 0, 6) == "delete") {
+        $deleteItem = ltrim($i, "delete");
+        $deleteCommandText = <<<SqlQuery
+        DELETE FROM coffee.products WHERE productID IN ('$deleteItem')
+        SqlQuery;
+        mysqli_query($link, $deleteCommandText);
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
     }
-  }
+}
+
+
+
+
+// delete selected items
+if (isset($_POST["deleteSelected"])) {
+    $selectedList = "!";
+    
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList = $selectedList . ",'" . $selectedItem . "'";
+        }
+    }
+    $selectedList = ltrim($selectedList, "!,");
+    $deleteSelectedCommandText = <<<SqlQuery
+  DELETE FROM coffee.products WHERE productID IN ($selectedList)
+  SqlQuery;
+  mysqli_query($link, $deleteSelectedCommandText);
+    header('location:'.$_SERVER['REQUEST_URI'].'');
+}
 
 ?>
-
 
 <!DOCTYPE html>
 <title>管理後台</title>
@@ -73,7 +95,7 @@ mysqli_select_db($link, "coffee");
 
 <form method='post' class="card p-3">
 <div >
-  <input type="submit" value="刪除勾選" class="btn btn-danger mb-3">
+  <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"  class="btn btn-danger mb-3">
   <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
   </div>
 
@@ -92,18 +114,19 @@ mysqli_select_db($link, "coffee");
 
     <tbody>
 
-    <?php 
-    // write table
-    $commandText = <<<SqlQuery
+    <?php
+// write table
+$commandText = <<<SqlQuery
     select productID, ProductName, sellerID, UnitPrice, UnitsInStock
     from coffee.products
     SqlQuery;
-    
-    $result = mysqli_query($link, $commandText);    
-    while ($row = mysqli_fetch_assoc($result)): ?>
+
+$result = mysqli_query($link, $commandText);
+while ($row = mysqli_fetch_assoc($result)): ?>
+
 		  <tr>
         <td>
-         <input type="checkbox" value=""  class="btn btn-danger mb-3">
+         <input type="checkbox"  name="<?php echo "selected" . $row["productID"] ?>" class="btn btn-danger mb-3">
         </td>
           <td><?php echo $row["productID"] ?></td>
           <td><?php echo $row["ProductName"] ?></td>
@@ -111,7 +134,7 @@ mysqli_select_db($link, "coffee");
           <td><?php echo $row["UnitPrice"] ?></td>
           <td><?php echo $row["UnitsInStock"] ?></td>
          <td>
-           <input type="submit" value="刪除" name="<?php echo "delete".$row["productID"] ?>" class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
+           <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>" class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
            <input type="submit" value="編輯" class="btn btn-primary mb-3">
         </tr>
     	  <?php endwhile?>

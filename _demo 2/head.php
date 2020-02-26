@@ -1,4 +1,4 @@
-<div id="head">
+<div id="head" class="pr-5 pl-5">
         <button class="openbtn btn" id='openbtn ' onclick="openNav()">☰ 展開選單</button>
         <!-- <button class='outbtn' id='logout' onclick='logout()'>登出</button> -->
         <form method='post'  class='logout_form' >
