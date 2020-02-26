@@ -3,7 +3,9 @@ body {
     font-family: 'Noto Sans TC', sans-serif;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: 'Noto Serif TC', serif;
 }
 
@@ -78,9 +80,13 @@ input#pwd {
     background-color: #444;
 }
 
-#main {
+#head {
     transition: margin-left .5s;
     padding: 16px;
+}
+
+.logout_form {
+    display: inline;
 }
 
 footer {
@@ -98,6 +104,7 @@ footer>p {
     font-size: medium;
     margin-right: 10px;
 }
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 

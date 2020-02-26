@@ -2,7 +2,7 @@
 
 function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    document.getElementById("head").style.marginLeft = "250px";
     // Hide button, show sidebar.
     // document.getElementById('openbtn').style.display = 'none';
     // document.getElementById('mySidebar').style.display = '';
@@ -10,7 +10,7 @@ function openNav() {
 
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
+    document.getElementById("head").style.marginLeft = "0";
     //Show button, hide sidebar.
     // document.getElementById('openbtn').style.display = '';
     // document.getElementById('mySidebar').style.display = 'none';

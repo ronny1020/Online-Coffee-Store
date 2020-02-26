@@ -1,13 +1,23 @@
 <?php
-session_start();
-if (isset($_GET["logout"])) {
-    setcookie("username", "", time() - 3600);
-    unset($_SESSION['AorS']);
+//Source: https://www.tutdepot.com/advanced-php-session-start/
+// $expire = the time in seconds until a session have to expire
+function start_session($expire = 0)
+{
+    if ($expire == 0) {
+        $expire = ini_get("session.gc_maxlifetime");
+    } else {
+        ini_set("session.gc_maxlifetime", $expire);
+    }
+    if (empty($_COOKIE['PHPSESSID'])) {
+        session_set_cookie_params($expire);
+        session_start();
+    } else {
+        session_start();
+        setcookie("PHPSESSID", session_id(), time() + $expire);
+    }
 }
-
-//SESSION: stored in server.
-// COOKIE: stored in client.
-//setcookie("myData", $Data, time()+60*60*24);
+session_start();
+// start_session(600) will start a session which will expire after 10 minutes (60*10 seconds)
 
 //Return:
 //admin  -->0
@@ -24,28 +34,26 @@ function loginCheck($acc, $pwd)
     $commandText = "select * from sellers";
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['sAccount'] == $acc && $row['sPassword'] == $pwd) {
+        if ($row['sAccount'] == $acc && password_verify($row['sPassword'], $pwd)) {
             mysqli_close($link);
             $_SESSION["AorS"] = 1;
             return 1;
         } else {
             continue;
         }
-
     }
 
     //Admin filter.
     $commandText = "select * from admins";
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['aAccount'] == $acc && $row['aPassword'] == $pwd) {
+        if ($row['aAccount'] == $acc && password_verify($row['aPassword'], $pwd)) {
             mysqli_close($link);
             $_SESSION["AorS"] = 0;
             return 0;
         } else {
             continue;
         }
-
     }
 
     //Invalid case:
@@ -55,17 +63,32 @@ function loginCheck($acc, $pwd)
 
 $sUserName = "";
 $error = "";
-$seller = 'seller';
-$admin = 'admin';
 
 if (isset($_POST["btnOK"])) {
     $sUserName = $_POST["txtacc"];
     $sPassword = $_POST["txtpwd"];
+    //密碼加密: 雜湊(hash)
+    $encrypt_pwd = password_hash($sPassword, PASSWORD_BCRYPT);
     //Empty contents shall not pass.
     if ($sPassword !== "" && $sUserName !== "") {
-        if (loginCheck($sUserName, $sPassword) >= 0) {
-            setcookie("username", $sUserName);
-            header('Location: back.php');
+        //檢查登入:
+        if (loginCheck($sUserName, $encrypt_pwd) >= 0) {
+            //If 記得我 ticked:
+            if ($_POST['remember'] == true) {
+                // $_SESSION['password'] = $sPassword;
+                setcookie('password', $sPassword, time() + 60);
+                //丟到textbox裡的username
+                setcookie('username', $sUserName, time() + 60);
+                setcookie('isChecked', 1, time() + 60);
+                //測試用: 只記得1分鐘
+            } else { // 不用記得我!
+                setcookie('password', '');
+                setcookie('username', '');
+                setcookie('isChecked', 0);
+            }
+            //驗證登入用的username
+            $_SESSION['username'] = $sUserName;
+            header('Location: main.php');
         } else {
             $error = '帳號或密碼錯誤！';
         }
@@ -106,15 +129,26 @@ if (isset($_POST["btnOK"])) {
     <form method='post' action="index.php" class='login card p-5'>
         <div class="form-group">
             <label for="account">輸入帳號:</label>
-            <input type="text" class="form-control" name='txtacc' placeholder="Enter account" id="acc">
+            <input type="text" class="form-control" name='txtacc' placeholder="Enter account" id="acc"
+             value=<?php if (isset($_COOKIE['username'])) {
+    echo $_COOKIE['username'];
+}
+?>>
         </div>
         <div class="form-group">
             <label for="pwd">輸入密碼:</label>
-            <input type="password" class="form-control" name='txtpwd' placeholder="Enter password" id="pwd">
+            <input type="password" class="form-control" name='txtpwd' placeholder="Enter password" id="pwd"
+            value=<?php if (isset($_COOKIE['password'])) {
+    echo $_COOKIE['password'];
+}
+?>>
         </div>
         <div class="form-group form-check">
             <label class="form-check-label">
-                <input class="form-check-input" type="checkbox"> 記得我
+            <!--Remember me: -->
+                <input class="form-check-input" type="checkbox" name='remember'
+                       <?php if (isset($_COOKIE["isChecked"]) && $_COOKIE["isChecked"] == 1) {
+    echo "checked";}?>> 記得我
             </label>
         </div>
         <!--Fake login: -->

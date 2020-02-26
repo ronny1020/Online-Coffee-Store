@@ -1,8 +1,6 @@
 <?php 
 $sUserName = "";
 $error = "";
-$seller = 'seller';
-$admin = 'admin';
 
 ?>
 

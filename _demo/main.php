@@ -2,16 +2,24 @@
 session_start();
 
 //Prevents direct connection.
-if ($_COOKIE['username'] == '') {
+if ($_SESSION['username'] == '') {
     header('Location: index.php');
     //echo "<script type='text/javascript'>alert('請先登入！');</script>";
 }
 
-// $_SESSION["username"] = "seller";
+//Logout:
+//清空SESSION
+if (isset($_POST["logout"])) {
+
+    $_SESSION['username'] = '';
+    $_SESSION['AorS'] = '';
+    header('Location: index.php');
+}
 
 ?>
 <!DOCTYPE html>
 <title>管理後台</title>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- include Bootstrap 4: cdn-->
@@ -34,17 +42,11 @@ if ($_COOKIE['username'] == '') {
 </head>
 
 <body>
-<?php include 'sidebar.php';?>
-    <div id="main">
-        <button class="openbtn" id='openbtn' onclick="openNav()">☰ 展開選單</button>
-        <!-- <button class='outbtn' id='logout' onclick='logout()'>登出</button> -->
-        <a href='index.php?logout=1'><button class='outbtn' id='logout'>登出</button></a>
-        <h3 style="float: right;">Hello, <?php print_r($_COOKIE['username']);?></h3>
-    </div>
+<?php include 'parts/sidebar.php';?>
+<?php include 'parts/head.php';?>
+<!-- Start your code here. -->
 
-    <footer>
-        <p>Powered by: MFEE06<br>
-            Contact information: <a href="mailto:someone@example.com">
-                someone@example.com</a>.</p>
-    </footer>
+<!-- End your code here. -->
+<?php include 'parts/footer.php';?>
+
 </body>
