@@ -2,29 +2,25 @@
 session_start();
 
 //Prevents direct connection.
-if ($_COOKIE['username'] == '') {
-    header('Location: index.php');
+if ($_SESSION['username'] == '') {
+    header('Location: ../index.php');
     //echo "<script type='text/javascript'>alert('請先登入！');</script>";
 }
 
-// $_SESSION["username"] = "seller";
-
-//logout function
+//Logout:
+//清空SESSION
 if (isset($_POST["logout"])) {
-    setcookie("username", "", time() - 3600);
-    unset($_SESSION['AorS']);
-    header('Location: index.php');
-    $_POST = null;
-}
 
+    $_SESSION['username'] = '';
+    $_SESSION['AorS'] = '';
+    header('Location: ../index.php');
+}
 
 //connect to SQL
 header("content-type:text/html; charset=utf-8");
 $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
-
-
 
 // right delete btn
 foreach ($_POST as $i => $j) {
@@ -38,13 +34,10 @@ foreach ($_POST as $i => $j) {
     }
 }
 
-
-
-
 // delete selected items
 if (isset($_POST["deleteSelected"])) {
     $selectedList = "!";
-    
+
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 8) == "selected") {
             $selectedItem = ltrim($i, "selected");
@@ -55,8 +48,8 @@ if (isset($_POST["deleteSelected"])) {
     $deleteSelectedCommandText = <<<SqlQuery
   DELETE FROM coffee.products WHERE productID IN ($selectedList)
   SqlQuery;
-  mysqli_query($link, $deleteSelectedCommandText);
-    header('location:'.$_SERVER['REQUEST_URI'].'');
+    mysqli_query($link, $deleteSelectedCommandText);
+    header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
 ?>
@@ -81,13 +74,13 @@ if (isset($_POST["deleteSelected"])) {
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Noto+Serif+TC&display=swap" rel="stylesheet">
 
     <!-- I edited these stuffs.-->
-    <link rel="stylesheet" type="text/css" href="demostyle.css">
-    <script src="demoutil.js"></script>
+    <link rel="stylesheet" type="text/css" href="../demostyle.css">
+    <script src="../demoutil.js"></script>
 </head>
 
 <body>
-    <?php include 'sidebar.php';?>
-    <?php include 'head.php';?>
+    <?php include '../parts/sidebar.php';?>
+    <?php include '../parts/head.php';?>
 
 <!-- Start your code here -->
 
@@ -145,6 +138,6 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
   </div>
 
-<?php include 'footer.php';?>
+<?php include '../parts/footer.php';?>
 
 </body>

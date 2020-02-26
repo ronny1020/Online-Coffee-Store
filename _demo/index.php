@@ -64,6 +64,8 @@ function loginCheck($acc, $pwd)
 $sUserName = "";
 $error = "";
 
+//無註冊:
+
 if (isset($_POST["btnOK"])) {
     $sUserName = $_POST["txtacc"];
     $sPassword = $_POST["txtpwd"];
