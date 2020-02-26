@@ -71,10 +71,11 @@ mysqli_select_db($link, "coffee");
 
 <div class ="main p-5">
 
-<form method='post'>
+<form method='post' class="card p-3">
+<div >
   <input type="submit" value="刪除勾選" class="btn btn-danger mb-3">
   <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
-
+  </div>
 
   <table class="table table-striped ">
     <thead class="thead-light">
@@ -110,7 +111,7 @@ mysqli_select_db($link, "coffee");
           <td><?php echo $row["UnitPrice"] ?></td>
           <td><?php echo $row["UnitsInStock"] ?></td>
          <td>
-           <input type="submit" value="刪除" name="<?php echo "delete".$row["productID"] ?>" class="btn btn-danger mb-3">
+           <input type="submit" value="刪除" name="<?php echo "delete".$row["productID"] ?>" class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
            <input type="submit" value="編輯" class="btn btn-primary mb-3">
         </tr>
     	  <?php endwhile?>
