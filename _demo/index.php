@@ -90,7 +90,7 @@ if (isset($_POST["btnOK"])) {
             }
             //驗證登入用的username
             $_SESSION['username'] = $sUserName;
-            header('Location: main.php');
+            header('Location: ./works/_main.php');
         } else {
             $error = '帳號或密碼錯誤！';
         }

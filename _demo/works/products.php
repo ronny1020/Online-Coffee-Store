@@ -2,7 +2,7 @@
 session_start();
 
 //Prevents direct connection.
-if ($_SESSION['username'] == '') {
+if ($_SESSION['username'] == '' || $_SESSION['AorS'] != 1) {
     header('Location: ../index.php');
     //echo "<script type='text/javascript'>alert('請先登入！');</script>";
 }
@@ -83,61 +83,85 @@ if (isset($_POST["deleteSelected"])) {
     <?php include '../parts/head.php';?>
 
 <!-- Start your code here -->
+<div class="main p-5">
 
-<div class ="main p-5">
+    <form method='post' class="card p-3">
+        <div>
+            <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
+                class="btn btn-danger mb-3">
+            <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
 
-<form method='post' class="card p-3">
-<div >
-  <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"  class="btn btn-danger mb-3">
-  <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
-  </div>
+            <div class='float-right'>
+                <label for="row_num_select">請選擇顯示行數:</label>
+                <select id="row_num_select" name="row_num">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50" selected>50</option>
+                    <option value="100">100</option>
+                </select>
+                <input type="submit" value="確定" name="row_num_submit" class="btn btn-primary ml-3 mb-3">
+            </div>
+        </div>
 
-  <table class="table table-striped ">
-    <thead class="thead-light">
-      <tr>
-        <th>check</th>
-        <th>productID</th>
-        <th>ProductName</th>
-        <th>sellerID</th>
-        <th>UnitPrice</th>
-        <th>UnitsInStock</th>
-        <th></th>
-      </tr>
-    </thead>
+        <table class="table table-striped ">
+            <thead class="thead-light">
+                <tr>
+                    <th>check</th>
+                    <th>productID</th>
+                    <th>ProductName</th>
+                    <th>sellerID</th>
+                    <th>UnitPrice</th>
+                    <th>UnitsInStock</th>
+                    <th></th>
+                </tr>
+            </thead>
 
-    <tbody>
+            <tbody>
 
-    <?php
+                <?php
 // write table
 $commandText = <<<SqlQuery
-    select productID, ProductName, sellerID, UnitPrice, UnitsInStock
-    from coffee.products
-    SqlQuery;
+        select productID, ProductName, sellerID, UnitPrice, UnitsInStock
+        from coffee.products
+        SqlQuery;
 
+//number of rows
 $result = mysqli_query($link, $commandText);
-while ($row = mysqli_fetch_assoc($result)): ?>
+if (isset($_POST["row_num_submit"])) {
+    $rowNum = $_POST["row_num"];
+}else{
+    $rowNum = 50;
+}
+$rowCount = 0;
+while (null !== ($row = mysqli_fetch_assoc($result)) && $rowCount < $rowNum):
+    $rowCount++;
+    ?>
 
-		  <tr>
-        <td>
-         <input type="checkbox"  name="<?php echo "selected" . $row["productID"] ?>" class="btn btn-danger mb-3">
-        </td>
-          <td><?php echo $row["productID"] ?></td>
-          <td><?php echo $row["ProductName"] ?></td>
-          <td><?php echo $row["sellerID"] ?></td>
-          <td><?php echo $row["UnitPrice"] ?></td>
-          <td><?php echo $row["UnitsInStock"] ?></td>
-         <td>
-           <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>" class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-           <input type="submit" value="編輯" class="btn btn-primary mb-3">
-        </tr>
-    	  <?php endwhile?>
-      </tbody>
+		                <tr>
+		                    <td>
+		                        <input type="checkbox" name="<?php echo "selected" . $row["productID"] ?>"
+		                            class="btn btn-danger mb-3">
+		                    </td>
+		                    <td><?php echo $row["productID"] ?></td>
+		                    <td><?php echo $row["ProductName"] ?></td>
+		                    <td><?php echo $row["sellerID"] ?></td>
+		                    <td><?php echo $row["UnitPrice"] ?></td>
+		                    <td><?php echo $row["UnitsInStock"] ?>
+		                    <td class="p-0">
+		                        <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
+		                            class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
+		                        <input type="submit" value="編輯" class="btn btn-primary mb-3">
+		                    </td>
+		                </tr>
+		                <?php endwhile?>
+            </tbody>
 
-    </table>
+        </table>
     </form>
 
-  </div>
+</div>
 
+<!-- End your code here. -->
 <?php include '../parts/footer.php';?>
 
 </body>
