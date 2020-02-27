@@ -45,3 +45,11 @@ function dummyLogin(strACC, strPWD) {
         return null;
     }
 }
+
+//select All
+function selectAllCheckbox() {
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = selectAll.checked;
+    }
+}

@@ -13,9 +13,9 @@ $error = "";
     <a href="members.php">會員管理</a>   
     <a href="sellers.php">廠商管理</a> 
 <?php } elseif ($_SESSION['AorS'] === 1) {  ?>
-    <a href="#">訂單管理</a>
+    <a href="orders.php">訂單管理</a>
     <a href="products.php">商品管理</a>
     <a href="#">資料管理</a> 
-    <a href="#">行銷管理</a>
+    <a href="discount.php">行銷管理</a>
 <?php  } ?>
 </div>

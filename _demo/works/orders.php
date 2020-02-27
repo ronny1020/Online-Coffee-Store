@@ -22,46 +22,16 @@ if (isset($_GET["page"])) {
 } else {
     $page = 1;
 }
-
-//orderby
-if (isset($_POST["productID_ASC"])||isset($_POST["ProductName_ASC"])||isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitsInStock_ASC"])) {
-    $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["productID_DESC"])||isset($_POST["ProductName_DESC"])||isset($_POST["UnitPrice_DESC"])||isset($_POST["UnitsInStock_DESC"])) {
-    $_SESSION["ASCorDESC"] = "DESC";
-} else if(isset($_SESSION["ASCorDESC"])) {
-} else {
-    $_SESSION["ASCorDESC"] = "ASC";
-}
-$ASCorDESC = $_SESSION["ASCorDESC"] ;
-
-
-if (isset($_POST["productID_ASC"])||isset($_POST["productID_DESC"])){
-    $_SESSION["orderby"]="productID";
-} else if (isset($_POST["ProductName_ASC"])||isset($_POST["ProductName_DESC"])){
-    $_SESSION["orderby"]="ProductName";
-} else if (isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitPrice_DESC"])){
-    $_SESSION["orderby"]="UnitPrice";
-} else if (isset($_POST["UnitsInStock_ASC"])||isset($_POST["UnitsInStock_DESC"])){
-    $_SESSION["orderby"]="UnitsInStock";
-} else if(isset($_SESSION["orderby"])) {
-} else {
-    $_SESSION["orderby"]="productID";
-}
-$orderby = $_SESSION["orderby"];
-
-
-
-
-
 //number of rows
+
 if (isset($_POST["row_num_submit"])) {
-    $_SESSION["products_row_num"] = $_POST["row_num"];
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
-} else if (isset($_SESSION["products_row_num"])) {
+    $_SESSION["orders_row_num"] = $_POST["row_num"];
+    header('Location: orders.php');
+} else if (isset($_SESSION["orders_row_num"])) {
 } else {
-    $_SESSION["products_row_num"] = 50;
+    $_SESSION["orders_row_num"] = 50;
 }
-$rowNum = $_SESSION["products_row_num"];
+$rowNum = $_SESSION["orders_row_num"];
 
 
 
@@ -78,7 +48,7 @@ $userID="";
 while ($ID = mysqli_fetch_assoc($findID)){
     $userID = $ID["sellerID"];
 }
-$total_num_rows = mysqli_num_rows(mysqli_query($link,"select productID from coffee.products WHERE sellerID='$userID';"));
+$total_num_rows = mysqli_num_rows(mysqli_query($link,"select OrderID from coffee.orders WHERE sellerID=$userID;"));
 $lastPage=floor($total_num_rows/$rowNum)+1;
 $tableOffSet = $rowNum * ($page-1);
 $showDataStartFrom=$tableOffSet+1;
@@ -94,11 +64,10 @@ foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
         $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.products WHERE productID IN ('$deleteItem')
+        DELETE FROM coffee.orders WHERE OrderID IN ('$deleteItem')
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
-        
     }
 }
 
@@ -114,12 +83,14 @@ if (isset($_POST["deleteSelected"])) {
     }
     $selectedList = ltrim($selectedList, "!,");
     $deleteSelectedCommandText = <<<SqlQuery
-  DELETE FROM coffee.products WHERE productID IN ($selectedList)
+  DELETE FROM coffee.orders WHERE OrderID IN ($selectedList)
   SqlQuery;
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+$link = "INSERT INTO orders (OrderID, CustomerID, EmployeeID, RequiredDate, ShippedDate, ShipVia, Freight, ShipName, ShipAddress, ShipRegion, ShipPostCode, ShipCountry, ShipCity)
+VALUES ('10248', 'VIENT', 5, 1996-07-04 00:00:00, 1996-08-04 00:00:00, 1996-07-14 00:00:00, 5, 333, 'A', 'AAA section1 4F', '5', 10055, 'TWW', 'AA' )";
 
 ?>
 
@@ -180,61 +151,31 @@ if (isset($_POST["deleteSelected"])) {
             <table class="table table-striped ">
                 <thead class="thead-light">
                     <tr>
-                        <th>
-                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()">
-                            <label for="selectAll">全選</label>
-                        </th>
-
-                        <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">    
-                                <p class="m-1">productID</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="productID_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="productID_ASC">
-                                </div>
-                            </div>
-                        </th>
-                  
-                        <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">ProductName</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="ProductName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="ProductName_ASC">
-                                </div>
-                            </div>
-                        </th>
-                        
-                        <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">UnitPrice</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitPrice_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="UnitPrice_ASC">
-                                </div>
-                            </div>
-                      
-                        </th>
-                        <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">UnitsInStock</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitsInStock_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="UnitsInStock_ASC">
-                                </div>
-                            </div>
-                        </th>
-                        </th>
-                        <th>                        
+                        <th><input type="checkbox" id="selectAll" onclick="selectAllCheckbox()"><label for="selectAll">全選</label></th>
+                        <th>OrderID</th>
+                        <th>CustomerID</th>
+                        <th>EmployeeID</th>
+                        <th>RequiredDate</th>
+                        <th>ShippedDate</th>
+                        <th>ShipVia</th>
+                        <th>Freight</th>
+                        <th>ShipName</th>
+                        <th>ShipAddress<City</th>
+                        <th>ShipRegion</th>
+                        <th>ShipPostCode</th>
+                        <th>ShipCountry</th>
+                        <th>ShipCity</th>
+                        <th></th>
+                    </tr>
                 </thead>
 
-                <tbody class="data_main_table">
+                <tbody>
 
                     <?php
 // write table
 
 $commandText = <<<SqlQuery
-                    select productID, ProductName, sellerID, UnitPrice, UnitsInStock from coffee.products where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select OrderID, CustomerID, EmployeeID, RequiredDate, ShippedDate, ShipVia, Freight, ShipName, ShipAddress, ShipRegion, ShipPostCode, ShipCountry, ShipCity   from coffee.orders where sellerID='$userID' ORDER BY OrderID LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 $result = mysqli_query($link, $commandText);
 
@@ -244,15 +185,24 @@ while ($row = mysqli_fetch_assoc($result)):
 
                     <tr>
                         <td>
-                            <input type="checkbox" name="<?php echo "selected" . $row["productID"] ?>"
+                            <input type="checkbox" name="<?php echo "selected" . $row["OrderID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
-                        <td><?php echo $row["productID"] ?></td>
-                        <td><?php echo $row["ProductName"] ?></td>
-                        <td><?php echo $row["UnitPrice"] ?></td>
-                        <td><?php echo $row["UnitsInStock"] ?>
+                        <td><?php echo $row["OrderID"] ?></td>
+                        <td><?php echo $row["CustomerID"] ?></td>
+                        <td><?php echo $row["EmployeeID"] ?></td>
+                        <td><?php echo $row["RequiredDate"] ?>
+                        <td><?php echo $row["ShippedDate"] ?>
+                        <td><?php echo $row["ShipVia"] ?>
+                        <td><?php echo $row["Freight"] ?>
+                        <td><?php echo $row["ShipName"] ?>
+                        <td><?php echo $row["ShipAddress"] ?>
+                        <td><?php echo $row["ShipRegion"] ?>
+                        <td><?php echo $row["ShipPostCode"] ?>
+                        <td><?php echo $row["ShipCountry"] ?>
+                        <td><?php echo $row["ShipCity"] ?>
                         <td class="p-0">
-                            <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
+                            <input type="submit" value="刪除" name="<?php echo "delete" . $row["OrderID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                             <input type="submit" value="編輯" class="btn btn-primary mb-3">
                         </td>
@@ -267,34 +217,34 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="d-flex justify-content-center align-items-center flex-column  m-5">
         <!-- page select -->
         <div class="m-3">
-            <a class='m-2 btn btn-info' href='products.php?page=1'>第一頁</a>
-            <a class='m-2 btn btn-info' href='products.php?page=<?php echo ($page<=1)? "1" : $previousPage; ?>'>上一頁</a>
-            <a class='m-2 btn btn-info' href='products.php?page=<?php echo ($page>=$lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
-            <a class='m-2 btn btn-info' href='products.php?page=<?php echo $lastPage;     ?>'>最尾頁</a>
+            <a class='m-2 btn btn-info' href='order.php?page=1'>第一頁</a>
+            <a class='m-2 btn btn-info' href='order.php?page=<?php echo ($page<=1)? "1" : $previousPage; ?>'>上一頁</a>
+            <a class='m-2 btn btn-info' href='order.php?page=<?php echo ($page>=$lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
+            <a class='m-2 btn btn-info' href='order.php?page=<?php echo $lastPage;     ?>'>最尾頁</a>
         </div>
             <div>
             <?php
             for($i=1 ; $i<=3 && $i<=$lastPage ; $i++ ){
-                echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+                echo " <a class='m-2' href='order.php?page=$i'>$i</a>";
             }
             if($page<=6){
                 for($i=4 ; $i<=($page+2)&& $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='orders.php?page=$i'>$i</a>";
                 }               
             }else{
                 echo "<span>......</span>";
                 for($i=($page-2)  ; $i<=($page+2)&& $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='order.php?page=$i'>$i</a>";
                 }
             }
             if($lastPage-$page<=5){
                 for($i=($page+3) ;  $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='order.php?page=$i'>$i</a>";
                 }               
             }else{
                 echo "<span>......</span>";
                 for($i=($lastPage-2)  ; $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='order.php?page=$i'>$i</a>";
                 }
             }
         
@@ -306,5 +256,10 @@ while ($row = mysqli_fetch_assoc($result)):
 
     <!-- End your code here. -->
     <?php include '../parts/footer.php';?>
+
+
+
+
+
 
 </body>
