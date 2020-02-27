@@ -120,7 +120,7 @@ if (isset($_POST["deleteSelected"])) {
                 <tr>
                     <!-- <label class="form-check-label"> -->
                         <td>
-                            <input type="checkbox" name="<?php echo "selected" . $row["productID"] ?>"
+                            <input type="checkbox" name="<?php echo "selected" . $row["customerID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
                         <td><?php echo $row["customerID"] ?></td>
