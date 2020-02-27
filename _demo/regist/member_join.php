@@ -20,23 +20,21 @@ function GetSQLValueString($theValue, $theType) {
 if(isset($_POST["action"])&&($_POST["action"]=="join")){
 	require_once("connMysql.php");
 	//找尋帳號是否已經註冊
-	$query_RecFindUser = "SELECT cAccount FROM customers WHERE cAccount='{$_POST["cAccount"]}'";
+	$query_RecFindUser = "SELECT sAccount FROM sellers WHERE sAccount='{$_POST["sAccount"]}'";
 	$RecFindUser=$db_link->query($query_RecFindUser);
 	if ($RecFindUser->num_rows>0){
-		header("Location: member_join.php?errMsg=1&username={$_POST["cAccount"]}");
+		header("Location: member_join.php?errMsg=1&username={$_POST["sAccount"]}");
 	}else{
 	//若沒有執行新增的動作	
-		$query_insert = "INSERT INTO customers (cName, cAccount, cPassword, cSex, cBirthdate, cMobile, cAddress) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		$query_insert = "INSERT INTO sellers (sName, sAccount, sPassword, sPhone, sAddress) VALUES (?, ?, ?, ?, ?)";
 		$stmt = $db_link->prepare($query_insert);
-		$stmt->bind_param("sssssss", 
-			GetSQLValueString($_POST["cName"], 'string'),
-			GetSQLValueString($_POST["cAccount"], 'string'),
-			password_hash($_POST["cPassword"], PASSWORD_DEFAULT),
-			GetSQLValueString($_POST["cSex"], 'string'),
-			GetSQLValueString($_POST["cBirthdate"], 'string'),
+		$stmt->bind_param("sssss", 
+			GetSQLValueString($_POST["sName"], 'string'),
+			GetSQLValueString($_POST["sAccount"], 'string'),
+			password_hash($_POST["sPassword"], PASSWORD_DEFAULT),
 			
-			GetSQLValueString($_POST["cMobile"], 'string'),
-			GetSQLValueString($_POST["cAddress"], 'string'));
+			GetSQLValueString($_POST["sPhone"], 'string'),
+			GetSQLValueString($_POST["sAddress"], 'string'));
 		$stmt->execute();
 		$stmt->close();
 		$db_link->close();
@@ -51,46 +49,43 @@ if(isset($_POST["action"])&&($_POST["action"]=="join")){
 <link href="style.css" rel="stylesheet" type="text/css">
 <script language="javascript">
 function checkForm(){
-	if(document.formJoin.cAccount.value==""){		
+	if(document.formJoin.sAccount.value==""){		
 		alert("請填寫帳號!");
-		document.formJoin.cAccount.focus();
+		document.formJoin.sAccount.focus();
 		return false;
 	}else{
-		uid=document.formJoin.cAccount.value;
+		uid=document.formJoin.sAccount.value;
 		if(uid.length<5 || uid.length>12){
 			alert( "您的帳號長度只能5至12個字元!" );
-			document.formJoin.cAccount.focus();
+			document.formJoin.sAccount.focus();
 			return false;}
 		if(!(uid.charAt(0)>='a' && uid.charAt(0)<='z')){
 			alert("您的帳號第一字元只能為小寫字母!" );
-			document.formJoin.cAccount.focus();
+			document.formJoin.sAccount.focus();
 			return false;}
 		for(idx=0;idx<uid.length;idx++){
 			if(uid.charAt(idx)>='A'&&uid.charAt(idx)<='Z'){
 				alert("帳號不可以含有大寫字元!" );
-				document.formJoin.cAccount.focus();
+				document.formJoin.sAccount.focus();
 				return false;}
 			if(!(( uid.charAt(idx)>='a'&&uid.charAt(idx)<='z')||(uid.charAt(idx)>='0'&& uid.charAt(idx)<='9')||( uid.charAt(idx)=='_'))){
 				alert( "您的帳號只能是數字,英文字母及「_」等符號,其他的符號都不能使用!" );
-				document.formJoin.cAccount.focus();
+				document.formJoin.sAccount.focus();
 				return false;}
 			if(uid.charAt(idx)=='_'&&uid.charAt(idx-1)=='_'){
 				alert( "「_」符號不可相連 !\n" );
-				document.formJoin.cAccount.focus();
+				document.formJoin.sAccount.focus();
 				return false;}
 		}
 	}
-	if(!check_passwd(document.formJoin.cPassword.value,document.formJoin.cPasswordrecheck.value)){
-		document.formJoin.cPassword.focus();
+	if(!check_passwd(document.formJoin.sPassword.value,document.formJoin.sPasswordrecheck.value)){
+		document.formJoin.sPassword.focus();
 		return false;}	
-	if(document.formJoin.cName.value==""){
+	if(document.formJoin.sName.value==""){
 		alert("請填寫姓名!");
-		document.formJoin.cName.focus();
+		document.formJoin.sName.focus();
 		return false;}
-	if(document.formJoin.cBirthdate.value==""){
-		alert("請填寫生日!");
-		document.formJoin.cBirthdate.focus();
-		return false;}
+	
 	
 	return confirm('確定送出嗎？');
 }
@@ -132,38 +127,31 @@ window.location.href='index.php';
         <td class="tdrline"><form action="" method="POST" name="formJoin" id="formJoin" onSubmit="return checkForm();">
           <p class="title">註冊會員</p>
 		  <?php if(isset($_GET["errMsg"]) && ($_GET["errMsg"]=="1")){?>
-          <div class="errDiv">帳號 <?php echo $_GET["cAccount"];?> 已經有人使用！</div>
+          <div class="errDiv">帳號 <?php echo $_GET["sAccount"];?> 已經有人使用！</div>
           <?php }?>
           <div class="dataDiv">
             <hr size="1" />
             <p class="heading">帳號資料</p>
             <p><strong>使用帳號</strong>：
-            <input name="cAccount" type="text" class="normalinput" id="cAccount">
+            <input name="sAccount" type="text" class="normalinput" id="sAccount">
             <font color="#FF0000">*</font><br><span class="smalltext">請填入5~12個字元以內的小寫英文字母、數字、以及_ 符號。</span></p>
             <p><strong>使用密碼</strong>：
-            <input name="cPassword" type="password" class="normalinput" id="cPassword">
+            <input name="sPassword" type="password" class="normalinput" id="sPassword">
             <font color="#FF0000">*</font><br><span class="smalltext">請填入5~10個字元以內的英文字母、數字、以及各種符號組合，</span></p>
             <p><strong>確認密碼</strong>：
-            <input name="cPasswordrecheck" type="password" class="normalinput" id="cPasswordrecheck">
+            <input name="sPasswordrecheck" type="password" class="normalinput" id="sPasswordrecheck">
             <font color="#FF0000">*</font> <br><span class="smalltext">再輸入一次密碼</span></p>
             <hr size="1" />
-            <p class="heading">個人資料</p>
-            <p><strong>真實姓名</strong>：
-            <input name="cName" type="text" class="normalinput" id="cName">
+            <p class="heading">公司資料</p>
+            <p><strong>公司名稱</strong>：
+            <input name="sName" type="text" class="normalinput" id="sName">
             <font color="#FF0000">*</font></p>
-            <p><strong>性　　別</strong>：
-            <input name="cSex" type="radio" value="女" checked>女
-            <input name="cSex" type="radio" value="男">男
-            <font color="#FF0000">*</font></p>
-            <p><strong>生　　日</strong>：
-            <input name="cBirthdate" type="text" class="normalinput" id="cBirthdate">
-            <font color="#FF0000">*</font> <br>
-            <span class="smalltext">為西元格式(YYYY-MM-DD)。</span></p>
+            
             
             <p><strong>電　　話</strong>：
-            <input name="cMobile" type="text" class="normalinput" id="cMobile"></p>
+            <input name="sPhone" type="text" class="normalinput" id="sPhone"></p>
             <p><strong>住　　址</strong>：
-            <input name="cAddress" type="text" class="normalinput" id="cAddress" size="40"></p>
+            <input name="sAddress" type="text" class="normalinput" id="sAddress" size="40"></p>
             <p> <font color="#FF0000">*</font> 表示為必填的欄位</p>
           </div>
           <hr size="1" />
