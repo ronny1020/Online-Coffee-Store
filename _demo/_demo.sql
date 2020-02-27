@@ -73,8 +73,8 @@ DROP TABLE IF EXISTS `sellers`;
 CREATE TABLE `sellers` (
   `sellerID` varchar(5) NOT NULL default '',-- Primary key:流水號
   `sName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 賣方稱謂
-  `sAccount` varchar(20) NOT NULL unique, -- 賣方帳號
-  `sPassword` varchar(60) NOT NULL unique, -- 賣方密碼: 加密後可能加長故取60
+  `sAccount` varchar(20) NOT NULL, -- 賣方帳號
+  `sPassword` varchar(60) NOT NULL, -- 賣方密碼: 加密後可能加長故取60
   `sAddress` varchar(60) default NULL, -- 賣方地址
   `sPhone` varchar(24) default NULL, -- 賣方電話
   PRIMARY KEY  (`sellerID`)
