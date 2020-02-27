@@ -18,7 +18,7 @@ if (isset($_POST["logout"])) {
 
 //connect to SQL
 header("content-type:text/html; charset=utf-8");
-$link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
+$link = @mysqli_connect("localhost", "root", "root") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
@@ -51,7 +51,14 @@ if (isset($_POST["deleteSelected"])) {
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
-
+// insert new data
+if (isset($_POST["testsubmit"])){
+    $insertData = $_POST["insert"];
+    $insertCommandText = <<<SqlQuery
+    INSERT INTO coffee.sellers VALUES ('$insertData','11','22','33','44','55')
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
 ?>
 <!DOCTYPE html>
 <title>管理後台</title>
@@ -87,7 +94,7 @@ if (isset($_POST["deleteSelected"])) {
         <div>
             <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                 class="btn btn-danger mb-3">
-            <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
+            <input type="button" value="新增資料" class="btn btn-primary ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
         </div>
 
         <table class="table table-striped ">
@@ -127,17 +134,43 @@ if (isset($_POST["deleteSelected"])) {
                         <td><?php echo $row["sAddress"] ?></td>
                         <td><?php echo $row["sPhone"] ?></td>
                         <td>
-                            <input type="submit" value="刪除" name="<?php echo "delete" . $row["sellerID"] ?>"
+                            <input type="submit" value="刪除" name="<?php echo "delete".$row["sellerID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="submit" value="編輯" class="btn btn-primary mb-3">
+                            <!-- <input type="submit" value="編輯" name="<?php echo "edit".$row["sellerID"] ?>"
+                            class="btn btn-primary mb-3"> -->
                 </tr>
                 <?php endwhile?>
             </tbody>
-
         </table>
+        
     </form>
 
+            <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">新增 / 編輯</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="">
+            <input type="text" name="insert" />
+            <input type="submit" name="testsubmit" />
+        <form> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+</div>
+
 <!-- End your code here. -->
 <!-- <?php include '../parts/footer.php';?> -->
 
