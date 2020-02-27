@@ -146,11 +146,11 @@ if (isset($_POST["btnOK"])) {
 ?>>
         </div>
         <div class="form-group form-check">
-            <label class="form-check-label">
             <!--Remember me: -->
+            <label class="form-check-label mycheck">記得我
                 <input class="form-check-input" type="checkbox" name='remember'
                        <?php if (isset($_COOKIE["isChecked"]) && $_COOKIE["isChecked"] == 1) {
-    echo "checked";}?>> 記得我
+    echo "checked";}?>><span class="checkmark"></span>
             </label>
         </div>
         <!--Fake login: -->
