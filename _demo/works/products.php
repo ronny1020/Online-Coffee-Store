@@ -22,11 +22,41 @@ if (isset($_GET["page"])) {
 } else {
     $page = 1;
 }
-//number of rows
 
+//orderby
+if (isset($_POST["productID_ASC"])||isset($_POST["ProductName_ASC"])||isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitsInStock_ASC"])) {
+    $_SESSION["ASCorDESC"] = "ASC";
+} else if (isset($_POST["productID_DESC"])||isset($_POST["ProductName_DESC"])||isset($_POST["UnitPrice_DESC"])||isset($_POST["UnitsInStock_DESC"])) {
+    $_SESSION["ASCorDESC"] = "DESC";
+} else if(isset($_SESSION["ASCorDESC"])) {
+} else {
+    $_SESSION["ASCorDESC"] = "ASC";
+}
+$ASCorDESC = $_SESSION["ASCorDESC"] ;
+
+
+if (isset($_POST["productID_ASC"])||isset($_POST["productID_DESC"])){
+    $_SESSION["orderby"]="productID";
+} else if (isset($_POST["ProductName_ASC"])||isset($_POST["ProductName_DESC"])){
+    $_SESSION["orderby"]="ProductName";
+} else if (isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitPrice_DESC"])){
+    $_SESSION["orderby"]="UnitPrice";
+} else if (isset($_POST["UnitsInStock_ASC"])||isset($_POST["UnitsInStock_DESC"])){
+    $_SESSION["orderby"]="UnitsInStock";
+} else if(isset($_SESSION["orderby"])) {
+} else {
+    $_SESSION["orderby"]="productID";
+}
+$orderby = $_SESSION["orderby"];
+
+
+
+
+
+//number of rows
 if (isset($_POST["row_num_submit"])) {
     $_SESSION["products_row_num"] = $_POST["row_num"];
-    header('Location: products.php');
+    header('location:' . $_SERVER['REQUEST_URI'] . '');
 } else if (isset($_SESSION["products_row_num"])) {
 } else {
     $_SESSION["products_row_num"] = 50;
@@ -68,6 +98,7 @@ foreach ($_POST as $i => $j) {
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
+        
     }
 }
 
@@ -149,22 +180,61 @@ if (isset($_POST["deleteSelected"])) {
             <table class="table table-striped ">
                 <thead class="thead-light">
                     <tr>
-                        <th><input type="checkbox" id="selectAll" onclick="selectAllCheckbox()"><label for="selectAll">全選</label></th>
-                        <th>productID</th>
-                        <th>ProductName</th>
-                        <th>UnitPrice</th>
-                        <th>UnitsInStock</th>
-                        <th></th>
-                    </tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()">
+                            <label for="selectAll">全選</label>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">    
+                                <p class="m-1">productID</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="productID_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="productID_ASC">
+                                </div>
+                            </div>
+                        </th>
+                  
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">ProductName</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="ProductName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="ProductName_ASC">
+                                </div>
+                            </div>
+                        </th>
+                        
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">UnitPrice</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitPrice_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="UnitPrice_ASC">
+                                </div>
+                            </div>
+                      
+                        </th>
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">UnitsInStock</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitsInStock_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="UnitsInStock_ASC">
+                                </div>
+                            </div>
+                        </th>
+                        </th>
+                        <th>                        
                 </thead>
 
-                <tbody>
+                <tbody class="data_main_table">
 
                     <?php
 // write table
 
 $commandText = <<<SqlQuery
-                    select productID, ProductName, sellerID, UnitPrice, UnitsInStock from coffee.products where sellerID='$userID' ORDER BY productID LIMIT $rowNum OFFSET $tableOffSet
+                    select productID, ProductName, sellerID, UnitPrice, UnitsInStock from coffee.products where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 $result = mysqli_query($link, $commandText);
 
