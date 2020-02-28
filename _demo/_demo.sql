@@ -77,17 +77,19 @@ CREATE TABLE `sellers` (
   `sPassword` varchar(60) NOT NULL, -- 賣方密碼: 加密後可能加長故取60
   `sAddress` varchar(60) default NULL, -- 賣方地址
   `sPhone` varchar(24) default NULL, -- 賣方電話
+  `sMail` varchar(60) default NULL, -- 賣方信箱
+  `sCountry` varchar(20) default NULL, -- 賣方國家
   PRIMARY KEY  (`sellerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 預設儲存引擎: InnoDB(after php5.5)
 
 -- add dummy datas:
 INSERT INTO `sellers` VALUES
- ('S001','會社01','sel01ler','pwd01','my_dummy_adrs01','(99)0000-0001')
-,('S002','會社02','sel02ler','pwd02','my_dummy_adrs02','(99)0000-0002')
-,('S003','會社03','sel03ler','pwd03','my_dummy_adrs03','(99)0000-0003')
-,('S004','會社04','sel04ler','pwd04','my_dummy_adrs04','(99)0000-0004')
-,('S005','會社05','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005');
+ ('S001','會社01','sel01ler','pwd01','my_dummy_adrs01','(99)0000-0001','s001@gmail.com','台灣')
+,('S002','會社02','sel02ler','pwd02','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
+,('S003','會社03','sel03ler','pwd03','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
+,('S004','會社04','sel04ler','pwd04','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','台灣')
+,('S005','會社05','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','台灣');
 
 -- table訂單: orders
 -- 刪除已存在之重複table
