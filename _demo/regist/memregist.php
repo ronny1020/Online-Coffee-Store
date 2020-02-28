@@ -26,26 +26,28 @@ if(isset($_POST["action"])&&($_POST["action"]=="join")){
 		header("Location: member_join.php?errMsg=1&username={$_POST["sAccount"]}");
 	}else{
 	//若沒有執行新增的動作	
-		$query_insert = "INSERT INTO sellers (sName, sAccount, sPassword, sPhone, sAddress) VALUES (?, ?, ?, ?, ?)";
+		$query_insert = "INSERT INTO sellers (sName, sAccount, sPassword, sPhone, sAddress, sMail, sCountry) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		$stmt = $db_link->prepare($query_insert);
-		$stmt->bind_param("sssss", 
+		$stmt->bind_param("sssssss", 
 			GetSQLValueString($_POST["sName"], 'string'),
 			GetSQLValueString($_POST["sAccount"], 'string'),
 			password_hash($_POST["sPassword"], PASSWORD_DEFAULT),
 			
-			GetSQLValueString($_POST["sPhone"], 'string'),
+      GetSQLValueString($_POST["sPhone"], 'string'),
+      GetSQLValueString($_POST["sMail"], 'string'),
+      GetSQLValueString($_POST["sCountry"], 'string'),
 			GetSQLValueString($_POST["sAddress"], 'string'));
 		$stmt->execute();
 		$stmt->close();
 		$db_link->close();
-		header("Location: member_join.php?loginStats=1");
+		header("Location: memregist.php?loginStats=1");
 	}
 }
 ?>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>網站會員系統</title>
+<title>廠商註冊系統</title>
 <link href="style.css" rel="stylesheet" type="text/css">
 <script language="javascript">
 function checkForm(){
@@ -146,19 +148,27 @@ window.location.href='index.php';
             <p><strong>公司名稱</strong>：
             <input name="sName" type="text" class="normalinput" id="sName">
             <font color="#FF0000">*</font></p>
+            <p><strong>國　　家</strong>：
+            <input name="sCountry" type="text" class="normalinput" id="sCountry">
+            <font color="#FF0000">*</font></p>
+            
             
             
             <p><strong>電　　話</strong>：
-            <input name="sPhone" type="text" class="normalinput" id="sPhone"></p>
-            <p><strong>住　　址</strong>：
-            <input name="sAddress" type="text" class="normalinput" id="sAddress" size="40"></p>
+            <input name="sPhone" type="text" class="normalinput" id="sPhone">
+            <font color="#FF0000">*</font></p>
+            <p><strong>信　　箱</strong>：
+            <input name="sMail" type="text" class="normalinput" id="sMail" size="40"></p>
+            <p><strong>地　　址</strong>：
+            <input name="sAddress" type="text" class="normalinput" id="sAddress" size="40">
+            <font color="#FF0000">*</font></p>
             <p> <font color="#FF0000">*</font> 表示為必填的欄位</p>
           </div>
           <hr size="1" />
           <p align="center">
             <input name="action" type="hidden" id="action" value="join">
             <input type="submit" name="Submit2" value="送出申請">
-            <input type="reset" name="Submit3" value="重設資料">
+            
             <input type="button" name="Submit" value="回上一頁" onClick="window.history.back();">
           </p>
         </form></td>
