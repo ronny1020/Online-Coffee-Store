@@ -91,6 +91,66 @@ INSERT INTO `sellers` VALUES
 ,('S004','會社04','sel04ler','pwd04','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','台灣')
 ,('S005','會社05','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','台灣');
 
+DROP TABLE IF EXISTS `infomations`;
+CREATE TABLE `infomations` (
+  `infoID` varchar(10) NOT NULL default '',-- Primary key:流水號
+  `infoName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 活動名稱
+  `infoDescrip` varchar(250) NOT NULL, -- 資訊描述
+  `sellerID` varchar(5) NOT NULL, -- 賣方編碼
+  
+  PRIMARY KEY  (`infoID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 預設儲存引擎: InnoDB(after php5.5)
+
+-- add dummy datas:
+INSERT INTO `infomations` VALUES
+ ('I001','資訊01','描述01','S001')
+,('I002','資訊02','描述02','S002')
+,('I003','資訊03','描述03','S003')
+,('I004','資訊04','描述04','S004')
+,('I005','資訊05','描述05','S005');
+
+DROP TABLE IF EXISTS `actions`;
+CREATE TABLE `actions` (
+  `actID` varchar(10) NOT NULL default '',-- Primary key:流水號
+  `actName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 活動名稱
+  `actDescrip` varchar(250) NOT NULL, -- 活動描述
+  `sellerID` varchar(5) NOT NULL, -- 賣方編碼
+  
+  PRIMARY KEY  (`actID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 預設儲存引擎: InnoDB(after php5.5)
+
+-- add dummy datas:
+INSERT INTO `actions` VALUES
+ ('A001','活動01','描述01','S001')
+,('A002','活動02','描述02','S002')
+,('A003','活動03','描述03','S003')
+,('A004','活動04','描述04','S004')
+,('A005','活動05','描述05','S005');
+
+DROP TABLE IF EXISTS `discounts`;
+CREATE TABLE `discounts` (
+  `disID` varchar(10) NOT NULL default '',-- Primary key:流水號
+  `disName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 折扣名稱
+  `disDescrip` varchar(250) NOT NULL, -- 折扣描述
+  `productID` varchar(5) NOT NULL, -- 產品帳號
+  `sellerID` varchar(5) NOT NULL, -- 賣方編碼
+  `Discount` float NOT NULL, -- 折扣
+  
+  
+  PRIMARY KEY  (`disID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 預設儲存引擎: InnoDB(after php5.5)
+
+-- add dummy datas:
+INSERT INTO `discounts` VALUES
+ ('D001','優惠01','描述01','P005','S001','0.75')
+,('D002','優惠02','描述02','P004','S002','0.75')
+,('D003','優惠03','描述03','P003','S003','0.75')
+,('D004','優惠04','描述04','P002','S004','0.75')
+,('D005','優惠05','描述05','P001','S005','0.75');
+
 -- table訂單: orders
 -- 刪除已存在之重複table
 DROP TABLE IF EXISTS `orders`;
