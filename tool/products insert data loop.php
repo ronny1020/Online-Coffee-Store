@@ -2,46 +2,89 @@
 
 //connect to SQL
 header("content-type:text/html; charset=utf-8");
-$link = @mysqli_connect("localhost", "root", "root") or die(mysqli_connect_error());
+$link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
-//insert
+//insert products
 if (isset($_POST["insert"])) {
-    $selectedList = "!";
-    $start = $_POST["start"];
-    $end = $_POST["end"];
+    
+    $number = $_POST["number"];
+   
 
-    $insertList = "!";
+    $time = time();
+    
+    while($number>=1){
 
-    for ($i = $start; $i <= $end; $i++) {
-        $iii= str_repeat("0",3-(strlen($i))).$i;
-        $sellerId=rand(1,5);
-        $sellerId= str_repeat("0",3-(strlen($sellerId))).$sellerId;
-        $UnitPrice=rand(10,1000);
-        $UnitsInStock=rand(10,100);
-        $insertItem = "('P$iii','好貨$iii','S$sellerId','$UnitPrice','$UnitsInStock')";
-        $insertList= $insertList.","."$insertItem";
+        
+        $thisTime =($number>999)?999:$number;
+        $number-=999;
+        $insertList = "!";
+        
+        for ($i = 1; $i <= $thisTime; $i++) {
+            $sellerId=rand(1,5);
+            $sellerId= str_repeat("0",3-(strlen($sellerId))).$sellerId;
+            $CategoryID = rand(1,8);
+            $UnitPrice=rand(10,1000);
+            $UnitsInStock=rand(10,100);
+            
+            
+            $timeRand =rand(0,3*365*24*60*60);
+            $dateTime = $time-$timeRand;
+            $dateTime =date("Y-m-d H:i:s", $dateTime);
+        
+            $specification="產地：";
+            $description="最高品質的咖啡，感受手作的溫度。";
+    
+            $insertItem = "('好貨$i','S$sellerId','$CategoryID','$UnitPrice','$UnitsInStock','$dateTime','$specification','$description')";
+            $insertList= $insertList.","."$insertItem";
+        }
+
+        
+        $insertList = ltrim($insertList, "!,");
+
+        $CommandText = <<<SqlQuery
+        INSERT INTO `coffee`.`products` (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`,
+        `UnitsInStock`, `add_time`, `specification`, `description`)  VALUES  $insertList;
+    SqlQuery;
+
+        mysqli_query($link, $CommandText);
     }
-
-    
-    $insertList = ltrim($insertList, "!,");
-
-    $deleteSelectedCommandText = <<<SqlQuery
-  INSERT INTO coffee.products VALUES $insertList
-  SqlQuery;
-    mysqli_query($link, $deleteSelectedCommandText);
-    
-    echo "done";
-    // header('location:' . $_SERVER['REQUEST_URI'] . '');
+    echo "done";    
 }
 
-// INSERT INTO coffee.products VALUES
-//  ('P001','好貨01','S005',100,20)
-// ,('P002','好貨02','S004',200,5)
-// ,('P003','好貨03','S003',1000,10)
-// ,('P004','好貨04','S002',500,10)
-// ,('P005','好貨05','S001',400,100);
+
+//insert tags
+
+if (isset($_POST["insertTag"])) {
+    $number = $_POST["number"];
+
+    $findMaxMin = mysqli_query( $link, "SELECT MAX( productID ) as MAX ,min( productID ) as MIN FROM products;" );
+    $row = mysqli_fetch_assoc($findMaxMin);
+    $maxProductID = $row["MAX"];
+    $minProductID = $row["MIN"];
+   
+    $findMaxTag = mysqli_query( $link, "SELECT MAX( tagID ) as MAX FROM products_tags;" );
+    $row = mysqli_fetch_assoc($findMaxTag);
+    $maxTagID = $row["MAX"];
+
+
+for($i=1;$i<=$number;$i++){
+    $pid=rand($minProductID,$maxProductID);
+    $pid= str_repeat("0",10-(strlen($pid))).$pid;
+    $tid=rand(1,$maxTagID);
+
+    $CommandText = "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($pid,$tid);";
+    echo $CommandText;  
+    mysqli_query($link, $CommandText);
+}
+    echo "done";   
+
+
+}
+
+
+
 
 ?>
 
@@ -70,15 +113,20 @@ if (isset($_POST["insert"])) {
 </head>
 
 <body>
+products:
 <form method='post'>
-start:<input type='number' name='start' >
-<br>
-end:<input type='number' name='end' >
+number of data:<input type='number' name='number' >
 <br>
 <input type='submit' value='insert' name='insert'>
 </form>
 
-
-
+<hr>
+tags:
+<form method='post'>
+number of data:<input type='number' name='number' >
+<br>
+<input type='submit' value='insert' name='insertTag'>
+<Tag/form>
+Tag
 
 </body>

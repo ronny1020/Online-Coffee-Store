@@ -24,9 +24,10 @@ if (isset($_GET["page"])) {
 }
 
 //orderby
-if (isset($_POST["productID_ASC"])||isset($_POST["ProductName_ASC"])||isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitsInStock_ASC"])) {
+// productID, ProductName, categoryName, UnitPrice, UnitsInStock, add_time
+if (isset($_POST["productID_ASC"])||isset($_POST["ProductName_ASC"])||isset($_POST["categoryName_ASC"])||isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitsInStock_ASC"])||isset($_POST["add_time_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["productID_DESC"])||isset($_POST["ProductName_DESC"])||isset($_POST["UnitPrice_DESC"])||isset($_POST["UnitsInStock_DESC"])) {
+} else if (isset($_POST["productID_DESC"])||isset($_POST["ProductName_DESC"])||isset($_POST["categoryName_DESC"])||isset($_POST["UnitPrice_DESC"])||isset($_POST["UnitsInStock_DESC"])||isset($_POST["add_time_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if(isset($_SESSION["ASCorDESC"])) {
 } else {
@@ -39,10 +40,14 @@ if (isset($_POST["productID_ASC"])||isset($_POST["productID_DESC"])){
     $_SESSION["orderby"]="productID";
 } else if (isset($_POST["ProductName_ASC"])||isset($_POST["ProductName_DESC"])){
     $_SESSION["orderby"]="ProductName";
+} else if (isset($_POST["categoryName_ASC"])||isset($_POST["categoryName_DESC"])){
+    $_SESSION["orderby"]="categoryName";
 } else if (isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitPrice_DESC"])){
     $_SESSION["orderby"]="UnitPrice";
 } else if (isset($_POST["UnitsInStock_ASC"])||isset($_POST["UnitsInStock_DESC"])){
     $_SESSION["orderby"]="UnitsInStock";
+} else if (isset($_POST["add_time_ASC"])||isset($_POST["add_time_DESC"])){
+    $_SESSION["orderby"]="add_time";
 } else if(isset($_SESSION["orderby"])) {
 } else {
     $_SESSION["orderby"]="productID";
@@ -74,10 +79,9 @@ mysqli_select_db($link, "coffee");
 //important var
 $username=$_SESSION['username'];
 $findID=mysqli_query($link,"select sellerID from coffee.sellers WHERE sAccount='$username';");
-$userID="";
-while ($ID = mysqli_fetch_assoc($findID)){
-    $userID = $ID["sellerID"];
-}
+$ID = mysqli_fetch_assoc($findID);
+$userID = $ID["sellerID"];
+
 $total_num_rows = mysqli_num_rows(mysqli_query($link,"select productID from coffee.products WHERE sellerID='$userID';"));
 $lastPage=floor($total_num_rows/$rowNum)+1;
 $tableOffSet = $rowNum * ($page-1);
@@ -97,6 +101,11 @@ foreach ($_POST as $i => $j) {
         DELETE FROM coffee.products WHERE productID IN ('$deleteItem')
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
+        $deleteCommandTextTagMap = <<<SqlQuery
+        DELETE FROM coffee.products_tags WHERE productID IN ('$deleteItem')
+        SqlQuery;
+        mysqli_query($link, $deleteCommandTextTagMap);
+
         header('location:' . $_SERVER['REQUEST_URI'] . '');
         
     }
@@ -113,10 +122,10 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
-  DELETE FROM coffee.products WHERE productID IN ($selectedList)
-  SqlQuery;
+    $deleteSelectedCommandText = "DELETE FROM coffee.products WHERE productID IN ($selectedList);";
     mysqli_query($link, $deleteSelectedCommandText);
+    $deleteSelectedCommandTextTagMap = "DELETE FROM coffee.products_tags WHERE productID IN ($selectedList);";
+    mysqli_query($link, $deleteSelectedCommandTextTagMap);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
@@ -177,11 +186,11 @@ if (isset($_POST["deleteSelected"])) {
                 </span>
             </div>
 
-            <table class="table table-striped ">
+            <table class="table table-striped main-table  data_main_table">
                 <thead class="thead-light">
                     <tr>
                         <th>
-                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()">
+                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
                             <label for="selectAll">全選</label>
                         </th>
 
@@ -207,14 +216,24 @@ if (isset($_POST["deleteSelected"])) {
                         
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">categoryName</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="categoryName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="categoryName_ASC">
+                                </div>
+                            </div>
+                      
+                        </th>
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">UnitPrice</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitPrice_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="UnitPrice_ASC">
                                 </div>
                             </div>
-                      
                         </th>
+                        <!-- here -->
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">UnitsInStock</p>
@@ -224,40 +243,85 @@ if (isset($_POST["deleteSelected"])) {
                                 </div>
                             </div>
                         </th>
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">add_time</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="add_time_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="add_time_ASC">
+                                </div>
+                            </div>
                         </th>
-                        <th>                        
+                        <th class=tags>tags                            
+                        </th> 
+                        <th>                            
+                        </th>                       
                 </thead>
 
-                <tbody class="data_main_table">
+                <tbody>
 
                     <?php
 // write table
 
-$commandText = <<<SqlQuery
-                    select productID, ProductName, sellerID, UnitPrice, UnitsInStock from coffee.products where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
-                    SqlQuery;
+$commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description
+from coffee.products JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID 
+where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
+   
 $result = mysqli_query($link, $commandText);
 
-while ($row = mysqli_fetch_assoc($result)):
+
+$rowList=array();
+$i=0;
+while ($row = mysqli_fetch_assoc($result)) {
+    $rowList[$i]=$row;
+    $i++;
+}
+
+foreach( $rowList as $row ){
+
 
 ?>
 
                     <tr>
                         <td>
-                            <input type="checkbox" name="<?php echo "selected" . $row["productID"] ?>"
-                                class="btn btn-danger mb-3">
+                            <input type="checkbox" name="<?php echo "selected" . $row["productID"] ?>"class='checkmark'
+                        style='position: relative;'>
                         </td>
-                        <td><?php echo $row["productID"] ?></td>
+                        <td class="num"><?php echo $row["productID"] ?></td>
                         <td><?php echo $row["ProductName"] ?></td>
-                        <td><?php echo $row["UnitPrice"] ?></td>
-                        <td><?php echo $row["UnitsInStock"] ?>
-                        <td class="p-0">
+                        <td><?php echo $row["categoryName"] ?></td>
+                        <td class="num"><?php echo number_format($row["UnitPrice"]) ?></td>
+                        <td class="num"><?php echo number_format($row["UnitsInStock"]) ?></td>
+                        <td><?php echo $row["add_time"] ?></td>
+                        <td><?php 
+                        
+                        $productIDForTags=$row["productID"];
+                        $tagCommandText = "SELECT tagName FROM coffee.products_tagMap
+                        JOIN coffee.products ON coffee.products.productID=coffee.products_tagMap.productID
+                        JOIN coffee.products_tags ON coffee.products_tags.tagID=coffee.products_tagMap.tagID
+                        WHERE coffee.products.productID = $productIDForTags;";
+                        
+                        $result = mysqli_query($link, $tagCommandText);
+                        while ($rowJ = mysqli_fetch_assoc($result)){ ?>
+                        
+                        
+                        <span class="tags"><?php echo  "#".$rowJ["tagName"] ?></span>
+                        
+                        
+                        <?php }  ?>
+                        
+                        
+                        </td>
+                        <td>
+                            <div class="right_btn">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
-                                class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="submit" value="編輯" class="btn btn-primary mb-3">
+                                class="btn btn-danger my-0 btn-md" onclick="return confirm('你確定要刪除這筆資料嗎？')">
+                            <input type="submit" value="編輯" class="btn btn-primary my-0 btn-md">
+                            </div>
+                            
                         </td>
                     </tr>
-                    <?php endwhile?>
+                        <?php }?>
                 </tbody>
 
             </table>
