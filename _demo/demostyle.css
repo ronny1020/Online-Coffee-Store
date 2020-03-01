@@ -1,3 +1,37 @@
+/* color schemes 主色票*/
+
+.bg-color-gold {
+    background-color: #C0B283;
+}
+
+.bg-color-silk {
+    background-color: #DCD0C0;
+}
+
+.bg-color-Paper {
+    background-color: #F4F4F4;
+}
+
+.color-charcoal {
+    color: #373737;
+}
+
+.color-gold {
+    color: #C0B283;
+}
+
+.color-silk {
+    color: #DCD0C0;
+}
+
+.color-Paper {
+    color: #F4F4F4;
+}
+
+.color-charcoal {
+    color: #373737;
+}
+
 .mycheck {
     /* display: block;
     position: relative; */
@@ -89,6 +123,7 @@ iframe[name=thisframe] {
 body {
     /* font-family: "Lato", sans-serif; */
     font-family: 'Noto Sans TC', sans-serif;
+    min-height: 1024px;
 }
 
 h1,
@@ -123,15 +158,40 @@ td>input {
 
 .sidebar {
     height: 100%;
-    width: 0;
+    width: 250px;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    transform: translateX(-100%);
+}
+
+.sidebar_open {
+    transform: translateX(0px) !important;
+}
+
+.sidebar .sidebar_bg {
+    background-color: #373737;
+    opacity: 0.95;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+}
+
+.sidebar .sidebar_context {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: 1;
+}
+
+.sidebar .sidebar-head {
+    object-fit: cover;
 }
 
 .sidebar a {
@@ -143,34 +203,63 @@ td>input {
     transition: 0.3s;
     /* Word-position fixed. */
     word-break: keep-all;
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 300;
 }
 
 .sidebar a:hover {
-    color: #f1f1f1;
+    color: #f4f4f4;
+    background-color: #C0B283;
+    width: 250PX;
 }
 
 .sidebar .closebtn {
+    color: #f4f4f4;
     position: absolute;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+    cursor: pointer;
+}
+
+.sidebar .hello {
+    color: #C0B283;
+    font-size: 1.5rem;
+    padding: 8px 8px 8px 32px;
+    word-break: keep-all;
+    margin-top: 3rem;
+}
+
+.sidebar hr {
+    border-color: #C0B283;
 }
 
 .openbtn {
     font-size: 20px;
     cursor: pointer;
-    background-color: #111;
-    color: white;
+    background-color: #373737;
+    color: white !important;
     padding: 10px 15px;
     border: none;
+    opacity: 0.5;
+    transition: .5s;
+}
+
+.openbtn:hover {
+    opacity: 1;
+    color: white !important;
+}
+
+.openbtn:hover::after {
+    content: "  展開選單";
 }
 
 .outbtn {
     font-size: 20px;
     cursor: pointer;
-    background-color: lightskyblue;
-    color: white;
+    background-color: #C0B283;
+    color: #373737;
     padding: 10px 15px;
     border: none;
 }
@@ -180,27 +269,27 @@ input#pwd {
     font-size: 16px;
 }
 
-.openbtn:hover {
-    background-color: #444;
-}
-
 #head {
     transition: margin-left .5s;
     padding: 16px;
+    position: fixed;
+    transition: 0.5s;
+    z-index: 1;
 }
 
 .logout_form {
-    display: inline;
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
 }
 
 footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    position: absolute;
+    margin-top: 3rem;
     width: 100%;
-    height: 50px;
-    background-color: lightslategray;
-    color: white;
+    height: 4rem;
+    background-color: #DCD0C0;
+    color: #373737;
     text-align: right;
 }
 

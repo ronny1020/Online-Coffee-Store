@@ -1,16 +1,25 @@
 // document.getElementById('error').innerHTML = '';
+function openCloseNav() {
+    check = document.getElementById("mySidebar").getAttribute("class")
+    if (check == "sidebar") {
+        openNav();
+    } else {
+        closeNav();
+    }
+}
+
 
 function openNav() {
-    document.getElementById("mySidebar").style.width = "250px";
-    document.getElementById("head").style.marginLeft = "250px";
+    document.getElementById("mySidebar").setAttribute("class", "sidebar sidebar_open");
+    document.getElementById("head").style.transform = "translateX(250px)";
     // Hide button, show sidebar.
     // document.getElementById('openbtn').style.display = 'none';
     // document.getElementById('mySidebar').style.display = '';
 }
 
 function closeNav() {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("head").style.marginLeft = "0";
+    document.getElementById("mySidebar").setAttribute("class", "sidebar");
+    document.getElementById("head").style.transform = "translateX(0px)";
     //Show button, hide sidebar.
     // document.getElementById('openbtn').style.display = '';
     // document.getElementById('mySidebar').style.display = 'none';

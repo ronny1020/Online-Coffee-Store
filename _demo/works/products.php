@@ -156,7 +156,7 @@ if (isset($_POST["deleteSelected"])) {
     <script src="../demoutil.js"></script>
 </head>
 
-<body>
+<body class="bg-color-Paper">
     <?php include '../parts/sidebar.php';?>
     <?php include '../parts/head.php';?>
 
@@ -186,8 +186,8 @@ if (isset($_POST["deleteSelected"])) {
                 </span>
             </div>
 
-            <table class="table table-striped main-table  data_main_table">
-                <thead class="thead-light">
+            <table class="table table-striped data_main_table">
+                <thead class="bg-color-gold">
                     <tr>
                         <th>
                             <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
@@ -331,10 +331,10 @@ foreach( $rowList as $row ){
         <div class="d-flex justify-content-center align-items-center flex-column  m-5">
         <!-- page select -->
         <div class="m-3">
-            <a class='m-2 btn btn-info' href='products.php?page=1'>第一頁</a>
-            <a class='m-2 btn btn-info' href='products.php?page=<?php echo ($page<=1)? "1" : $previousPage; ?>'>上一頁</a>
-            <a class='m-2 btn btn-info' href='products.php?page=<?php echo ($page>=$lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
-            <a class='m-2 btn btn-info' href='products.php?page=<?php echo $lastPage;     ?>'>最尾頁</a>
+            <a class='m-2 btn bg-color-gold' href='products.php?page=1'>第一頁</a>
+            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page<=1)? "1" : $previousPage; ?>'>上一頁</a>
+            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page>=$lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
+            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo $lastPage;     ?>'>最尾頁</a>
         </div>
             <div>
             <?php
@@ -367,7 +367,7 @@ foreach( $rowList as $row ){
         </div>
 
     </div>
-
+</div>
     <!-- End your code here. -->
     <?php include '../parts/footer.php';?>
 
