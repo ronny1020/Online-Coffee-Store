@@ -8,6 +8,7 @@
     user-select: none;
 }
 
+
 /* Hide the browser's default checkbox */
 
 .mycheck input {
@@ -17,6 +18,7 @@
     height: 0;
     width: 0;
 }
+
 
 /* Create a custom checkbox */
 
@@ -29,17 +31,20 @@
     background-color: #eee;
 }
 
+
 /* On mouse-over, add a grey background color */
 
 .mycheck:hover input~.checkmark {
     background-color: #ccc;
 }
 
+
 /* When the checkbox is checked, add a blue background */
 
 .mycheck input:checked~.checkmark {
     background-color: #2196F3;
 }
+
 
 /* Create the checkmark/indicator (hidden when not checked) */
 
@@ -49,11 +54,13 @@
     display: none;
 }
 
+
 /* Show the checkmark when checked */
 
 .mycheck input:checked~.checkmark:after {
     display: block;
 }
+
 
 /* Style the checkmark/indicator */
 
@@ -68,12 +75,14 @@
     transform: rotate(45deg);
 }
 
+
 /*====== do checkbox style. ======*/
 
 iframe[name=thisframe] {
     /* background-color: tomato; */
     display: none;
 }
+
 
 /* Source:https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox */
 
@@ -82,7 +91,9 @@ body {
     font-family: 'Noto Sans TC', sans-serif;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: 'Noto Serif TC', serif;
 }
 
@@ -198,6 +209,7 @@ footer>p {
     margin-right: 10px;
 }
 
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 
 @media screen and (max-height: 450px) {
@@ -208,6 +220,7 @@ footer>p {
         font-size: 18px;
     }
 }
+
 
 /* DESC-ASC button (0227 by hsieh.)*/
 
@@ -220,7 +233,23 @@ footer>p {
     line-height: 1rem;
 }
 
-.data_main_table {
+.data_main_table .btn {
+    line-height: 1;
+}
+
+.data_main_table th {
     text-align: center;
+}
+
+.data_main_table td.num {
+    text-align: right;
     padding-right: 1rem;
+}
+
+.data_main_table .tags {
+    width: 20%;
+}
+
+.data_main_table td.tags {
+    text-align: left !important;
 }
