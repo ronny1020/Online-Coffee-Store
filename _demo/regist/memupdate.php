@@ -203,7 +203,7 @@ function checkmail(sMail) {
             <input name="sellerID" type="hidden" id="sellerID" value="<?php echo $row_RecMember["sellerID"];?>">
             <input name="action" type="hidden" id="action" value="update">
             <input type="submit" class="btn btn-danger ml-3 mb-3" name="Submit2" value="修改資料">
-            <input type="reset" class="btn btn-warning  ml-3 mb-3" name="Submit3" value="重設資料">
+            
             <input type="button" class="btn btn-primary ml-3 mb-3" name="Submit" value="回上一頁" onClick="window.history.back();">
           </p>
         </form></td>
