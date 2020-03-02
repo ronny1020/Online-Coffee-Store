@@ -165,8 +165,7 @@ if (isset($_POST["deleteSelected"])) {
 
         <form method='post' class="card p-3">
             <div>
-                <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
-                    class="btn btn-danger mb-3">
+                <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')" class="btn btn-danger mb-3">
                 <input type="button" value="新增資料" class="btn btn-primary ml-3 mb-3" onclick="create_edit()">
 
                 <div class='float-right'>

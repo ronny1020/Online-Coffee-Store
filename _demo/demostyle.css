@@ -1,35 +1,51 @@
 /* color schemes 主色票*/
 
 .bg-color-gold {
-    background-color: #C0B283;
+    background-color: #C0B283 !important;
 }
 
 .bg-color-silk {
-    background-color: #DCD0C0;
+    background-color: #DCD0C0 !important;
 }
 
 .bg-color-Paper {
-    background-color: #F4F4F4;
+    background-color: #F4F4F4 !important;
 }
 
 .bg-color-charcoal {
-    color: #373737;
+    background-color: #373737 !important;
 }
 
 .color-gold {
-    color: #C0B283;
+    color: #C0B283 !important;
 }
 
 .color-silk {
-    color: #DCD0C0;
+    color: #DCD0C0 !important;
 }
 
 .color-Paper {
-    color: #F4F4F4;
+    color: #F4F4F4 !important;
 }
 
-.color-charcoal {
-    color: #373737;
+.border-color-charcoal {
+    border-color: #373737 !important;
+}
+
+.border-color-gold {
+    border-color: #C0B283 !important;
+}
+
+.border-color-silk {
+    border-color: #DCD0C0 !important;
+}
+
+.border-color-Paper {
+    border-color: #F4F4F4 !important;
+}
+
+.border-color-charcoal {
+    border-color: #373737 !important;
 }
 
 .mycheck {
@@ -193,7 +209,7 @@ td>input {
     object-fit: cover;
 }
 
-.sidebar a{
+.sidebar a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
@@ -206,7 +222,7 @@ td>input {
     font-weight: 300;
 }
 
-.sidebar a:hover{
+.sidebar a:hover {
     color: #f4f4f4;
     background-color: #C0B283;
     width: 250px;
@@ -233,21 +249,28 @@ td>input {
 .sidebar hr {
     border-color: #C0B283;
 }
+
+
 /* add collapsible sidebar! (0302, lee) */
 
-.triangle_rotate{
+.triangle_rotate {
     float: right;
     transition: transform 0.5s;
 }
+
+
 /* .triangle_title:hover+ .triangle_title>.triangle_rotate{
     transition: 0.5s;
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 } */
-.triangle_rotate:hover{
+
+.triangle_rotate:hover {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 }
+
+
 /* a:hover + #triangle_rotate{
     transition: 0.5s;
     transform: rotate(90deg);
@@ -320,7 +343,7 @@ footer>p {
     margin-right: 10px;
 }
 
-.push_footer{
+.push_footer {
     min-height: 1024px;
 }
 
@@ -400,18 +423,23 @@ footer>p {
     opacity: 0.8;
 }
 
-#create_edit_form {
+#create_edit_context {
     position: absolute;
     width: 61.8%;
+    height: 80%;
     left: 50%;
-    transform: translateX(-50%);
-    top: 5rem;
+    top: 50%;
+    transform: translate(-50%, -50%);
     background-color: #F4F4F4;
     z-index: 88;
 }
 
-#create_edit_form .closebtn {
+#create_edit_context .closebtn {
     color: #373737 !important;
+}
+
+#create_edit_form {
+    overflow-Y: scroll;
 }
 
 .hide {
