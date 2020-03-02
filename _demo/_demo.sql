@@ -47,6 +47,31 @@ INSERT INTO `customers` VALUES
 ,('C008','大名08','dummy08','pwd08','M','1997-08-01','my_dummy_adrs08','0900-000-008')
 ,('C009','大名09','dummy09','pwd09','F','1997-09-01','my_dummy_adrs09','0900-000-009');
 
+-- table顧客: crams
+-- 刪除已存在之重複table
+DROP TABLE IF EXISTS `crams`;
+CREATE TABLE `crams` (
+  `cramID` varchar(5) NOT NULL default '',-- 流水號
+  `customerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
+  `cDate` datetime default NULL, -- 客訴日期
+  `cramContent` varchar(300) default NULL, -- 客訴內容
+  `cChecked` enum('Y','N') collate utf8_unicode_ci NOT NULL, -- 已處理與否
+  PRIMARY KEY  (`cramID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 預設儲存引擎: InnoDB(after php5.5)
+
+-- add dummy datas:
+INSERT INTO `crams` VALUES
+ ('CR001','C002','2019-02-18','客訴客訴客訴客訴客訴客訴','Y')
+,('CR002','C003','2019-03-13','客訴客訴客訴客訴客訴客訴','Y')
+,('CR003','C001','2019-02-22','客訴客訴客訴客訴客訴客訴','Y')
+,('CR004','C002','2019-05-11','客訴客訴客訴客訴客訴客訴','N')
+,('CR005','C009','2019-08-18','客訴客訴客訴客訴客訴客訴','N')
+,('CR006','C002','2019-09-01','客訴客訴客訴客訴客訴客訴','N')
+,('CR007','C005','2019-02-18','客訴客訴客訴客訴客訴客訴','N')
+,('CR008','C003','2019-12-30','客訴客訴客訴客訴客訴客訴','Y')
+,('CR009','C004','2019-12-30','客訴客訴客訴客訴客訴客訴','Y');
+
 -- table管理員: admins
 -- 刪除已存在之重複table
 DROP TABLE IF EXISTS `admins`;
@@ -85,11 +110,12 @@ CREATE TABLE `sellers` (
 
 -- add dummy datas:
 INSERT INTO `sellers` VALUES
- ('S001','會社01','sel01ler','pwd01','my_dummy_adrs01','(99)0000-0001','s001@gmail.com','台灣')
-,('S002','會社02','sel02ler','pwd02','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
-,('S003','會社03','sel03ler','pwd03','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
-,('S004','會社04','sel04ler','pwd04','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','台灣')
-,('S005','會社05','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','台灣');
+ ('S001','星巴克','sel01ler','pwd01','my_dummy_adrs01','(99)0000-0001','s001@gmail.com','美國')
+,('S002','露易莎咖啡','sel02ler','pwd02','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
+,('S003','伯朗咖啡','sel03ler','pwd03','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
+,('S004','上島咖啡','sel04ler','pwd04','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','日本')
+,('S005','小樽咖啡','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','日本')
+,('S006','test','1234','1234','my_dummy_adrs06','(99)0000-0006','s006@gmail.com','台灣');
 
 DROP TABLE IF EXISTS `infomations`;
 CREATE TABLE `infomations` (
@@ -104,11 +130,11 @@ CREATE TABLE `infomations` (
 
 -- add dummy datas:
 INSERT INTO `infomations` VALUES
- ('I001','資訊01','描述01','S001')
-,('I002','資訊02','描述02','S002')
-,('I003','資訊03','描述03','S003')
-,('I004','資訊04','描述04','S004')
-,('I005','資訊05','描述05','S005');
+ ('I001','咖啡節','星巴克公司為慶祝咖啡節來臨，全館曼特寧買2送1','S001')
+,('I002','新品上市','露易莎咖啡特調瑪奇朵將於3月6日準時開賣','S002')
+,('I003','休館通知','為防治武漢肺炎擴散，伯朗咖啡敦南店將於4月7日至4月9日進行消毒作業暫停營業','S003')
+,('I004','新品上市','上島咖啡深焙咖啡豆將於3月6日準時開賣','S004')
+,('I005','講座通知','小樽咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S005');
 
 DROP TABLE IF EXISTS `actions`;
 CREATE TABLE `actions` (
@@ -123,11 +149,11 @@ CREATE TABLE `actions` (
 
 -- add dummy datas:
 INSERT INTO `actions` VALUES
- ('A001','活動01','描述01','S001')
-,('A002','活動02','描述02','S002')
-,('A003','活動03','描述03','S003')
-,('A004','活動04','描述04','S004')
-,('A005','活動05','描述05','S005');
+ ('A001','夥伴招募','星巴克公司將於6月14日舉行人才招募，歡迎對咖啡有興趣的民眾加入我們的行列','S001')
+,('A002','夥伴招募','露易莎咖啡將於3月24日舉行人才招募，歡迎對咖啡有興趣的民眾加入我們的行列','S002')
+,('A003','夥伴招募','伯朗咖啡將於3月24日舉行人才招募，歡迎對咖啡有興趣的民眾加入我們的行列','S003')
+,('A004','試喝會','上島咖啡深焙咖啡豆將於3月5日舉行試喝會，並3月6日準時開賣','S004')
+,('A005','講座舉辦','小樽咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S005');
 
 DROP TABLE IF EXISTS `discounts`;
 CREATE TABLE `discounts` (
@@ -145,11 +171,11 @@ CREATE TABLE `discounts` (
 
 -- add dummy datas:
 INSERT INTO `discounts` VALUES
- ('D001','優惠01','描述01','P005','S001','0.75')
-,('D002','優惠02','描述02','P004','S002','0.75')
-,('D003','優惠03','描述03','P003','S003','0.75')
-,('D004','優惠04','描述04','P002','S004','0.75')
-,('D005','優惠05','描述05','P001','S005','0.75');
+ ('D001','曼特寧優惠','現時曼特寧咖啡75折','P005','S001','0.75')
+,('D002','曼特寧優惠','現時曼特寧咖啡75折','P004','S002','0.75')
+,('D003','曼特寧優惠','現時曼特寧咖啡75折','P003','S003','0.75')
+,('D004','瑪奇朵優惠','現時瑪奇朵咖啡75折','P002','S004','0.75')
+,('D005','瑪奇朵優惠','現時瑪奇朵咖啡75折','P001','S005','0.75');
 
 -- table訂單: orders
 -- 刪除已存在之重複table

@@ -33,7 +33,7 @@ if (isset($_GET["page"])) {
 //number of rows
 if (isset($_POST["row_num_submit"])) {
     $_SESSION["member_row_num"] = $_POST["row_num"];
-    header('Location: members.php');
+    header('Location: crams.php');
 } else if (isset($_SESSION["member_row_num"])) {
 } else {
 //初始欄數=50
@@ -42,7 +42,7 @@ if (isset($_POST["row_num_submit"])) {
 $rowNum = $_SESSION["member_row_num"];
 
 //總欄數:
-$total_num_rows = mysqli_num_rows(mysqli_query($link, "select customerID from coffee.customers;"));
+$total_num_rows = mysqli_num_rows(mysqli_query($link, "select cramID from coffee.crams;"));
 //最後一頁的頁數為:
 $lastPage = floor($total_num_rows / $rowNum) + 1;
 $tableOffSet = $rowNum * ($page - 1);
@@ -63,7 +63,7 @@ foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
         $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.customers WHERE customerID IN ('$deleteItem')
+        DELETE FROM coffee.crams WHERE cramID IN ('$deleteItem')
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
@@ -92,16 +92,13 @@ foreach ($_POST as $i => $j) {
 
 //ADD NEW DATA TO FORM! :
 if (isset($_POST['modal_submit'])) {
+    $tmp_cri = $_POST['cri'];
     $tmp_cid = $_POST['cid'];
-    $tmp_nam = $_POST['nam'];
-    $tmp_acc = $_POST['acc'];
-    $tmp_pwd = $_POST['pwd'];
-    $tmp_sex = $_POST['sex'];
-    $tmp_bid = $_POST['bid'];
-    $tmp_adr = $_POST['adr'];
-    $tmp_mob = $_POST['mob'];
+    $tmp_dat = $_POST['dat'];
+    $tmp_ccn = $_POST['ccn'];
+    $tmp_ckd = $_POST['ckd'];
     $insertCommandText = <<<SqlQuery
-    insert into coffee.customers VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_pwd','$tmp_sex','$tmp_bid','$tmp_adr','$tmp_mob')
+    insert into coffee.crams VALUES ('$tmp_cri','$tmp_cid','$tmp_dat','$tmp_ccn','$tmp_ckd')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 }
@@ -130,11 +127,53 @@ if (isset($_POST["deleteSelected"])) {
     }
     $selectedList = ltrim($selectedList, "!,");
     $deleteSelectedCommandText = <<<SqlQuery
-    DELETE FROM coffee.customers WHERE customerID IN ($selectedList)
+    DELETE FROM coffee.crams WHERE cramID IN ($selectedList)
     SqlQuery;
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
+
+//===== 排序調整: =====//
+//Adjusted by 2 SESSION:
+// 1. ASCorDESC: 決定升序抑或降序
+// if ASC triggered:
+
+if (isset($_POST["cramID_ASC"]) ||
+    isset($_POST["customerID_ASC"]) ||
+    isset($_POST["cDate_ASC"]) ||
+    // isset($_POST["cramContent_ASC"]) ||
+    isset($_POST["cChecked_ASC"])) {
+    $_SESSION["ASCorDESC"] = "ASC";
+//elseif DESC triggered:
+} else if (
+    isset($_POST["cramID_DESC"]) ||
+    isset($_POST["customerID_DESC"]) ||
+    isset($_POST["cDate_DESC"]) ||
+    // isset($_POST["cramContent_DESC"]) ||
+    isset($_POST["cChecked_DESC"])) {
+    $_SESSION["ASCorDESC"] = "DESC";
+} else if (isset($_SESSION["ASCorDESC"])) {
+} else {// Default of ASCorDESC: ASC(升序)
+    $_SESSION["ASCorDESC"] = "ASC";
+}
+$ASCorDESC = $_SESSION["ASCorDESC"];
+
+// 2. ORDERBY: 決定以何物排序
+if (isset($_POST["cramID_ASC"]) || isset($_POST["cramID_DESC"])) {
+    $_SESSION["orderby"] = "cramID";
+} else if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
+    $_SESSION["orderby"] = "customerID";
+} else if (isset($_POST["cDate_ASC"]) || isset($_POST["cDate_DESC"])) {
+    $_SESSION["orderby"] = "cDate";
+} else if (isset($_POST["cChecked_ASC"]) || isset($_POST["cChecked_DESC"])) {
+    $_SESSION["orderby"] = "cChecked";
+} else if (isset($_SESSION["orderby"])) {
+} else {// Default of orderby: cramID
+    $_SESSION["orderby"] = "cramID";
+}
+$orderby = $_SESSION["orderby"];
+
+// 排序調整END HERE. //
 
 ?>
 <!DOCTYPE html>
@@ -189,33 +228,71 @@ if (isset($_POST["deleteSelected"])) {
                     <input type="submit" value="確定" name="row_num_submit" class="btn btn-primary ml-3 mb-3">
                     </span>
                 </div>
-
+<!-- Main table created here. -->
     <table class="table table-striped ">
     <thead class="bg-color-silk">
-            <tr>
-                <th>
-                <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
-                <label for="selectAll">全選</label>
-                </th>
-                <th>customerID</th>
-                <th>cName</th>
-                <th>cAccount</th>
-                <th>cSex</th>
-                <th>cBirthDate</th>
-                <th>cAddress</th>
-                <th>cMobile</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
+                            <label for="selectAll">全選</label>
+                        </th>
 
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
+                                <p class="m-1">cramID</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cramID_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cramID_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">customerID</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="customerID_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="customerID_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cDate</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cDate_ASC">
+                                </div>
+                            </div>
+
+                        </th>
+                        </th>
+                        <th class=tags>cramContent
+                        </th>
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cChecked</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
+                                </div>
+                            </div>
+                        </th>
+                        <!-- here -->
+                        <th>
+                        </th>
+                </thead>
+        <tbody>
 <?php
-// write table
-// $commandText: $str
-// 受所允許之總欄數調控
+
+// write main table
+// $commandText: string
+// 受所允許之總欄數調控!
+// 受升序降序調控!
 $commandText = <<<SqlQuery
-select customerID, cName, cAccount, cSex, cBirthDate, cAddress, cMobile
-from coffee.customers ORDER BY customerID LIMIT $rowNum OFFSET $tableOffSet
+select cramID, customerID, cDate, cramContent, cChecked
+from coffee.crams ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
@@ -223,21 +300,19 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
             <tr>
                 <td>
-                    <input type="checkbox" name="<?php echo "selected" . $row["customerID"] ?>" class='checkmark'
+                    <input type="checkbox" name="<?php echo "selected" . $row["cramID"] ?>" class='checkmark'
                         style='position: relative;'>
                 </td>
+                <?php echo $res_fSTR . $row["cramID"] . $res_bSTR ?>
                 <?php echo $res_fSTR . $row["customerID"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cName"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cAccount"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cSex"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cBirthDate"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cAddress"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cMobile"] . $res_bSTR ?>
+                <?php echo $res_fSTR . $row["cDate"] . $res_bSTR ?>
+                <?php echo $res_fSTR . $row["cramContent"] . $res_bSTR ?>
+                <?php echo $res_fSTR . $row["cChecked"] . $res_bSTR ?>
                 <td>
-                    <input type="submit" value="刪除" name="<?php echo "delete" . $row["customerID"] ?>"
+                    <input type="submit" value="刪除" name="<?php echo "delete" . $row["cramID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
-                    <input type='button' value="編輯" name="<?php echo "edit" . $row["customerID"] ?>"
+                    <input type='button' value="編輯" name="<?php echo "edit" . $row["cramID"] ?>"
                         class="btn btn-primary mb-3">
                 </td>
             </tr>
@@ -255,7 +330,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
             <a class='m-2 btn btn-info' href='members.php?page=<?php echo $lastPage; ?>'>最尾頁</a>
         </div>
             <div>
-            <?php
+<?php
 for ($i = 1; $i <= 3 && $i <= $lastPage; $i++) {
     echo " <a class='m-2' href='members.php?page=$i'>$i</a>";
 }
@@ -300,28 +375,20 @@ if ($lastPage - $page <= 5) {
         <div class="modal-body">
             <tr>
 
-                    <th>customerID:<input type="text" name='cid'>
+                    <th>cramID:<input type="text" name='cri'>
                     </th>
                     <hr>
-                    <th>cName: <input type="text" name='nam'></th>
+                    <th>customerID: <input type="text" name='cid'></th>
                     <hr>
-                    <th>cAccount: <input type="text" name='acc'>
+                    <th>cDate:<input type="date" name='dat'>
                     </th>
                     <hr>
-                    <th>cPassword: <input type="text" name='pwd'>
+                    <th>cContent: <textarea name="ccn" rows="4" cols="50"></textarea>
                     </th>
                     <hr>
-                    <th>cBirthDate:<input type="date" name='bid'>
-                    </th>
-                    <hr>
-                    <th>cAddress: <input type="text" name='adr'>
-                    </th>
-                    <hr>
-                    <th>cMobile: <input type="text" name='mob'></th>
-                    <hr>
-                    <th>cSex: <select name='sex'>
-                        <option value='F'>男</option>
-                        <option value='M'>女</option>
+                    <th>cChecked: <select name='ckd'>
+                        <option value='Y'>是</option>
+                        <option value='N'>否</option>
                     </select></th>
             </tr>
         </div>

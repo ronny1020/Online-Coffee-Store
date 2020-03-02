@@ -193,7 +193,7 @@ td>input {
     object-fit: cover;
 }
 
-.sidebar a {
+.sidebar a{
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
@@ -206,10 +206,10 @@ td>input {
     font-weight: 300;
 }
 
-.sidebar a:hover {
+.sidebar a:hover{
     color: #f4f4f4;
     background-color: #C0B283;
-    width: 250PX;
+    width: 250px;
 }
 
 .closebtn {
@@ -233,6 +233,29 @@ td>input {
 .sidebar hr {
     border-color: #C0B283;
 }
+/* add collapsible sidebar! (0302, lee) */
+
+.triangle_rotate{
+    float: right;
+    transition: transform 0.5s;
+}
+/* .triangle_title:hover+ .triangle_title>.triangle_rotate{
+    transition: 0.5s;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+} */
+.triangle_rotate:hover{
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+}
+/* a:hover + #triangle_rotate{
+    transition: 0.5s;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+} */
+
+
+/* (0302, lee) end here. */
 
 .openbtn {
     font-size: 20px;
@@ -295,6 +318,10 @@ footer {
 footer>p {
     font-size: medium;
     margin-right: 10px;
+}
+
+.push_footer{
+    min-height: 1024px;
 }
 
 

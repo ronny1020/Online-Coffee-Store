@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 //Prevents direct connection.
 if ($_SESSION['username'] == '' || $_SESSION['AorS'] != 1) {
     header('Location: ../index.php');
@@ -123,6 +124,21 @@ if (isset($_POST["deleteSelected"])) {
 }
 
 
+if (isset($_POST['modal_submit'])) {
+    $tmp_did = $_POST['did'];
+    $tmp_nam = $_POST['nam'];
+    $tmp_ddp = $_POST['ddp'];
+    $tmp_pid = $_POST['pid'];
+    $tmp_dct = $_POST['dct'];
+    
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.discounts VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_pwd', '$userID' ,'$tmp_sex')
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+    echo $insertCommandText;
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -160,7 +176,8 @@ if (isset($_POST["deleteSelected"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
-                <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
+                    <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
+               data-toggle="modal" data-target="#myModal">
 
                 <div class='float-right'>
                     <span class="mr-5">
@@ -244,8 +261,10 @@ if (isset($_POST["deleteSelected"])) {
 // write table
 
 $commandText = <<<SqlQuery
-                    select disID, disName, disDescrip, productID, Discount, sellerID from coffee.discounts where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select disID, disName, disDescrip, productID, Discount, sellerID from coffee.discounts where sellerID='$userID' ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
+
+
 $result = mysqli_query($link, $commandText);
 
 while ($row = mysqli_fetch_assoc($result)):
@@ -312,6 +331,56 @@ while ($row = mysqli_fetch_assoc($result)):
         
             ?>
             </div>
+
+
+<iframe name="thisframe"></iframe>
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">資料變更:</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="post" action=''>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <tr>
+
+                    <th>disID:<input type="text" name='did'>
+                    </th>
+                    <hr>
+                    <th>disName: <input type="text" name='nam'></th>
+                    <hr>
+                    <th>disDesrip: <input type="text" name='ddp'>
+                    </th>
+                    <hr>
+                    <th>productID: <input type="text" name='pid'>
+                    </th>
+                    <hr>
+                    <th>Discount:<input type="text" name='dct'>
+                    </th>
+                    <hr>
+                    
+            </tr>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <input type="submit" name="modal_submit" value='submit' class="btn btn-primary"></input>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
         </div>
 
     </div>

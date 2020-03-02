@@ -18,9 +18,43 @@ if (isset($_POST["logout"])) {
 
 //connect to SQL
 header("content-type:text/html; charset=utf-8");
-$link = @mysqli_connect("localhost", "root", "root") or die(mysqli_connect_error());
+$link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
+
+//========== ADD: ADJUST COLUMN. ==========//
+// get page
+if (isset($_GET["page"])) {
+    $page = $_GET["page"];
+} else {
+    $page = 1;
+}
+//number of rows
+if (isset($_POST["row_num_submit"])) {
+    $_SESSION["member_row_num"] = $_POST["row_num"];
+    header('Location: sellers.php');
+} else if (isset($_SESSION["member_row_num"])) {
+} else {
+//初始欄數=50
+    $_SESSION["member_row_num"] = 50;
+}
+$rowNum = $_SESSION["member_row_num"];
+
+//總欄數:
+$total_num_rows = mysqli_num_rows(mysqli_query($link, "select customerID from coffee.customers;"));
+//最後一頁的頁數為:
+$lastPage = floor($total_num_rows / $rowNum) + 1;
+$tableOffSet = $rowNum * ($page - 1);
+$showDataStartFrom = $tableOffSet + 1;
+$showDataEndTo = $tableOffSet + $rowNum;
+if ($showDataEndTo > $total_num_rows) {
+    $showDataEndTo = $total_num_rows;
+}
+;
+$previousPage = $page - 1;
+$nextPage = $page + 1;
+
+//===== ENDED HERE. =====//
 
 // right delete btn
 foreach ($_POST as $i => $j) {
@@ -51,11 +85,17 @@ if (isset($_POST["deleteSelected"])) {
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
+
 // insert new data
-if (isset($_POST["testsubmit"])){
-    $insertData = $_POST["insert"];
+if (isset($_POST["modal-submit"])){
+    $sid = $_POST['sid'];
+    $nam = $_POST['nam'];
+    $acc = $_POST['acc'];
+    $pwd = $_POST['pwd'];
+    $adr = $_POST['adr'];
+    $phone = $_POST['phone'];
     $insertCommandText = <<<SqlQuery
-    INSERT INTO coffee.sellers VALUES ('$insertData','11','22','33','44','55')
+    INSERT INTO coffee.sellers VALUES ('$sid','$nam','$acc','$pwd','$adr','$phone')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 }
@@ -94,8 +134,21 @@ if (isset($_POST["testsubmit"])){
         <div>
             <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                 class="btn btn-danger mb-3">
-            <input type="button" value="新增資料" class="btn btn-primary ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
-        </div>
+            <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+            <div class='float-right'>
+                    <span class="mr-5">
+                    <!-- show where you are -->
+                    <?php echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 筆(共 $total_num_rows 筆資料)" ?>
+                    </span>
+                    <label for="row_num_select">請選擇顯示行數:</label>
+                    <select id="row_num_select" name="row_num">
+                        <option value="10" <?php if ($rowNum == 10) {echo "selected";}?>>10 </option>
+                        <option value="20" <?php if ($rowNum == 20) {echo "selected";}?>>20 </option>
+                        <option value="50" <?php if ($rowNum == 50) {echo "selected";}?>>50 </option>
+                        <option value="100" <?php if ($rowNum == 100) {echo "selected";}?>>100</option>
+                    </select>
+                    <input type="submit" value="確定" name="row_num_submit" class="btn btn-primary ml-3 mb-3">
+            </div>
 
         <table class="table table-striped ">
             <thead class="thead-light">
@@ -120,7 +173,6 @@ if (isset($_POST["testsubmit"])){
     
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)): ?>
-
                 <tr>
                     <!-- <label class="form-check-label"> -->
                         <td>
@@ -142,13 +194,56 @@ if (isset($_POST["testsubmit"])){
                 <?php endwhile?>
             </tbody>
         </table>
-        
+        </div>
     </form>
 
-            <!-- Modal -->
+<!--頁尾頁碼&按鈕顯示:-->
+    <div class="d-flex justify-content-center align-items-center flex-column  m-5">
+        <!-- page select -->
+        <div class="m-3">
+            <a class='m-2 btn btn-info' href='sellers.php?page=1'>第一頁</a>
+            <a class='m-2 btn btn-info' href='sellers.php?page=<?php echo ($page <= 1) ? "1" : $previousPage; ?>'>上一頁</a>
+            <a class='m-2 btn btn-info' href='sellers.php?page=<?php echo ($page >= $lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
+            <a class='m-2 btn btn-info' href='sellers.php?page=<?php echo $lastPage; ?>'>最尾頁</a>
+        </div>
+    <div>
+<?php
+for ($i = 1; $i <= 3 && $i <= $lastPage; $i++) {
+    echo " <a class='m-2' href='sellers.php?page=$i'>$i</a>";
+}
+if ($page <= 6) {
+    for ($i = 4; $i <= ($page + 2) && $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='sellers.php?page=$i'>$i</a>";
+    }
+} else {
+    echo "<span>......</span>";
+    for ($i = ($page - 2); $i <= ($page + 2) && $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='sellers.php?page=$i'>$i</a>";
+    }
+}
+if ($lastPage - $page <= 5) {
+    for ($i = ($page + 3); $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='sellers.php?page=$i'>$i</a>";
+    }
+} else {
+    echo "<span>......</span>";
+    for ($i = ($lastPage - 2); $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='sellers.php?page=$i'>$i</a>";
+    }
+}
+?>
+<!--頁尾頁碼&按鈕結束-->
+    </div>
+
+<!-- Dummy frame. -->
+<iframe name="thisframe"></iframe>
+<!-- Modal -->
+
+    <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
+    <form method="POST" action="">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">新增 / 編輯</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -156,22 +251,35 @@ if (isset($_POST["testsubmit"])){
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="">
-            <input type="text" name="insert" />
-            <input type="submit" name="testsubmit" />
-        <form> 
+        <tr>
+            <th>sellerID:<input type="text" name='sid'>
+            </th>
+            <hr>
+            <th>sName: <input type="text" name='nam'></th>
+            <hr>
+            <th>sAccount: <input type="text" name='acc'>
+            </th>
+            <hr>
+            <th>sPassword: <input type="text" name='pwd'>
+            </th>
+            <hr>
+            <th>sAddress: <input type="text" name='adr'>
+            </th>
+            <hr>
+            <th>sPhone: <input type="text" name='phone'></th>
+        </tr>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <input type="submit" class="btn btn-primary" name="modal-submit" value="submit" />
+        <button type="button" class="btn btn-danger"  data-dismiss="modal">colse</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
-
 </div>
-
+</div>
 <!-- End your code here. -->
-<!-- <?php include '../parts/footer.php';?> -->
+<?php include '../parts/footer.php';?>
 
 </body>

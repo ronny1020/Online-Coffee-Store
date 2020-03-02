@@ -48,6 +48,13 @@ if(isset($_POST["action"])&&($_POST["action"]=="join")){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>廠商註冊系統</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Noto+Serif+TC&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../demostyle.css">
+<script src="../demoutil.js"></script>
 <link href="style.css" rel="stylesheet" type="text/css">
 <script language="javascript">
 function checkForm(){
@@ -167,9 +174,9 @@ window.location.href='index.php';
           <hr size="1" />
           <p align="center">
             <input name="action" type="hidden" id="action" value="join">
-            <input type="submit" name="Submit2" value="送出申請">
+            <input type="submit" class="btn btn-danger ml-3 mb-3" name="Submit2" value="送出申請">
             
-            <input type="button" name="Submit" value="回上一頁" onClick="window.history.back();">
+            <input type="button" class="btn btn-primary ml-3 mb-3" name="Submit" value="回上一頁" onClick="window.history.back();">
           </p>
         </form></td>
         <td width="200">
@@ -189,7 +196,7 @@ window.location.href='index.php';
     </table></td>
   </tr>
   <tr>
-    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2016 eHappy Studio All Rights Reserved.</td>
+    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCofee Company All Rights Reserved.</td>
   </tr>
 </table>
 </body>
