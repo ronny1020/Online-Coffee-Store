@@ -62,3 +62,10 @@ function selectAllCheckbox() {
         checkboxes[i].checked = selectAll.checked;
     }
 }
+
+//Rotate target when clicked.(0302, lee)
+
+function rotateTarget(strid){
+    let target = getElementById(strid).innerHTML;
+    
+}
