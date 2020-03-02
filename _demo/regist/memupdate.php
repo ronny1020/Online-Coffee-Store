@@ -35,27 +35,46 @@ if(isset($_GET["logout"]) && ($_GET["logout"]=="true")){
 	header("Location: ../index.php");
 }
 //重新導向頁面
-$redirectUrl="../_main.php";
+$redirectUrl="../works/_main.php";
 //執行更新動作
 if(isset($_POST["action"])&&($_POST["action"]=="update")){	
-	$query_update = "UPDATE sellers SET sPassword=?, sName=?, sMail=?, sCountry=?, sPhone=?, sAddress=? WHERE sellerID=?";
-	$stmt = $db_link->prepare($query_update);
+	// $query_update = "UPDATE sellers SET sPassword=?, sName=?, sMail=?, sCountry=?, sPhone=?, sAddress=? WHERE sellerID=?";
+	// $stmt = $db_link->prepare($query_update);
+
+	//修正bug
+	$MyName=$_POST["sName"];
+	$MyPhone=$_POST["sPhone"];
+	$MyPassword=$_POST["sPassword"];
+	$MyAddress=$_POST["sAddress"];
+	$MyMail=$_POST["sMail"];
+	$MyCountry=$_POST["sCountry"];
+	$sql_query = "UPDATE sellers SET sName='$MyName', sPassword='$MyPassword', sPhone='$MyPhone', sAddress='$MyAddress', sMail='$MyMail', sCountry='$MyCountry' WHERE sellerID='$userID' ";   
+	$stmt = $db_link -> prepare($sql_query);
+	$stmt -> execute();
+	$stmt -> close();
+	$db_link -> close();
+
+
+
+
+
 	//檢查是否有修改密碼
 	$mpass = $_POST["sPasswordo"];
 	if(($_POST["sPassword"]!="")&&($_POST["sPassword"]==$_POST["sPasswordrecheck"])){
 		$mpass = password_hash($_POST["sPassword"], PASSWORD_DEFAULT);
 	}
-	$stmt->bind_param("ssssssi", 
-		$mpass,
-		GetSQLValueString($_POST["sName"], 'string'),
+	// $stmt->bind_param("ssssssi", 
+	// 	$mpass,
+	// 	GetSQLValueString($_POST["sName"], 'string'),
 	
-		GetSQLValueString($_POST["sMail"], 'email'),
-		GetSQLValueString($_POST["sCountry"], 'string'),
-		GetSQLValueString($_POST["sPhone"], 'string'),
-		GetSQLValueString($_POST["sAddress"], 'string'),		
-		GetSQLValueString($_POST["sellerID"], 'int'));
-	$stmt->execute();
-	$stmt->close();
+	// 	GetSQLValueString($_POST["sMail"], 'email'),
+	// 	GetSQLValueString($_POST["sCountry"], 'string'),
+	// 	GetSQLValueString($_POST["sPhone"], 'string'),
+	// 	GetSQLValueString($_POST["sAddress"], 'string'),		
+	// 	GetSQLValueString($_POST["sellerID"], 'int'));
+	// $stmt->execute();
+	// $stmt->close();
+	
 	//若有修改密碼，則登出回到首頁。
 	if(($_POST["sPassword"]!="")&&($_POST["sPassword"]==$_POST["sPasswordrecheck"])){
 		unset($_SESSION["username"]);
