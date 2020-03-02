@@ -118,6 +118,20 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+if (isset($_POST['modal_submit'])) {
+    $tmp_iid = $_POST['iid'];
+    $tmp_ifn = $_POST['ifn'];
+    $tmp_ifd = $_POST['ifd'];
+   
+    
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.infomations VALUES ('$tmp_iid','$tmp_ifn','$tmp_ifd','$userID')
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+    echo $insertCommandText;
+}
+
+
 
 ?>
 
@@ -156,7 +170,8 @@ if (isset($_POST["deleteSelected"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
-                <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
+                    <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
+               data-toggle="modal" data-target="#myModal">
 
                 <div class='float-right'>
                     <span class="mr-5">
@@ -288,6 +303,46 @@ while ($row = mysqli_fetch_assoc($result)):
         
             ?>
             </div>
+
+            <iframe name="thisframe"></iframe>
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">資料變更:</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="post" action=''>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <tr>
+
+                    <th>infoID:<input type="text" name='iid'>
+                    </th>
+                    <hr>
+                    <th>infoName: <input type="text" name='ifn'></th>
+                    <hr>
+                    <th>infoDescrip: <input type="text" name='ifd'>
+                    </th>
+                    <hr>
+                    
+                    
+            </tr>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <input type="submit" name="modal_submit" value='submit' class="btn btn-primary"></input>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
         </div>
 
     </div>

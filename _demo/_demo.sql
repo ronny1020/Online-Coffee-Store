@@ -89,7 +89,8 @@ INSERT INTO `sellers` VALUES
 ,('S002','露易莎咖啡','sel02ler','pwd02','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
 ,('S003','伯朗咖啡','sel03ler','pwd03','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
 ,('S004','上島咖啡','sel04ler','pwd04','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','日本')
-,('S005','小樽咖啡','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','日本');
+,('S005','小樽咖啡','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','日本')
+,('S006','test','1234','1234','my_dummy_adrs06','(99)0000-0006','s006@gmail.com','台灣');
 
 DROP TABLE IF EXISTS `infomations`;
 CREATE TABLE `infomations` (
