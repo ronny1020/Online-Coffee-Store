@@ -196,7 +196,7 @@ window.location.href='index.php';
     </table></td>
   </tr>
   <tr>
-    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2016 eHappy Studio All Rights Reserved.</td>
+    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCofee Company All Rights Reserved.</td>
   </tr>
 </table>
 </body>
