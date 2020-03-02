@@ -12,7 +12,7 @@
     background-color: #F4F4F4;
 }
 
-.color-charcoal {
+.bg-color-charcoal {
     color: #373737;
 }
 
@@ -123,7 +123,6 @@ iframe[name=thisframe] {
 body {
     /* font-family: "Lato", sans-serif; */
     font-family: 'Noto Sans TC', sans-serif;
-    min-height: 1024px;
 }
 
 h1,
@@ -213,7 +212,7 @@ td>input {
     width: 250PX;
 }
 
-.sidebar .closebtn {
+.closebtn {
     color: #f4f4f4;
     position: absolute;
     top: 0;
@@ -330,6 +329,10 @@ footer>p {
     text-align: center;
 }
 
+.data_main_table tr.dataSQL:hover {
+    background-color: #DCD0C0 !important;
+}
+
 .data_main_table td.num {
     text-align: right;
     padding-right: 1rem;
@@ -341,4 +344,49 @@ footer>p {
 
 .data_main_table td.tags {
     text-align: left !important;
+}
+
+
+/* for creating form for create or edit in products */
+
+#create_edit_window {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 87;
+    top: 0;
+}
+
+.window_open {
+    display: block;
+}
+
+.window_close {
+    display: none;
+}
+
+#create_edit_bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #373737;
+    opacity: 0.8;
+}
+
+#create_edit_form {
+    position: absolute;
+    width: 61.8%;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 5rem;
+    background-color: #F4F4F4;
+    z-index: 88;
+}
+
+#create_edit_form .closebtn {
+    color: #373737 !important;
+}
+
+.hide {
+    display: none;
 }

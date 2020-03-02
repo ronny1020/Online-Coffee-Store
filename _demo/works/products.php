@@ -83,7 +83,7 @@ $ID = mysqli_fetch_assoc($findID);
 $userID = $ID["sellerID"];
 
 $total_num_rows = mysqli_num_rows(mysqli_query($link,"select productID from coffee.products WHERE sellerID='$userID';"));
-$lastPage=floor($total_num_rows/$rowNum)+1;
+$lastPage=ceil($total_num_rows/$rowNum);
 $tableOffSet = $rowNum * ($page-1);
 $showDataStartFrom=$tableOffSet+1;
 $showDataEndTo=$tableOffSet+$rowNum;
@@ -167,7 +167,7 @@ if (isset($_POST["deleteSelected"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
-                <input type="submit" value="新增資料" class="btn btn-primary ml-3 mb-3">
+                <input type="button" value="新增資料" class="btn btn-primary ml-3 mb-3" onclick="create_edit()">
 
                 <div class='float-right'>
                     <span class="mr-5">
@@ -282,17 +282,19 @@ foreach( $rowList as $row ){
 
 ?>
 
-                    <tr>
+                    <tr class="dataSQL">
                         <td>
                             <input type="checkbox" name="<?php echo "selected" . $row["productID"] ?>"class='checkmark'
                         style='position: relative;'>
                         </td>
-                        <td class="num"><?php echo $row["productID"] ?></td>
-                        <td><?php echo $row["ProductName"] ?></td>
-                        <td><?php echo $row["categoryName"] ?></td>
-                        <td class="num"><?php echo number_format($row["UnitPrice"]) ?></td>
-                        <td class="num"><?php echo number_format($row["UnitsInStock"]) ?></td>
-                        <td><?php echo $row["add_time"] ?></td>
+                        <td id="<?php echo $row["productID"]."productID" ?>" class="num"><?php echo $row["productID"] ?></td>
+                        <td id="<?php echo $row["productID"]."ProductName" ?>" ><?php echo $row["ProductName"] ?></td>
+                        <td id="<?php echo $row["productID"]."categoryName" ?>" ><?php echo $row["categoryName"] ?></td>
+                        <td id="<?php echo $row["productID"]."UnitPrice" ?>"  class="num"><?php echo number_format($row["UnitPrice"]) ?></td>
+                        <td id="<?php echo $row["productID"]."UnitsInStock" ?>"  class="num"><?php echo number_format($row["UnitsInStock"]) ?></td>
+                        <td id="<?php echo $row["productID"]."add_time" ?>" ><?php echo $row["add_time"] ?></td>
+                        <td class="hide" id="<?php echo $row["productID"]."specification" ?>" ><?php echo $row["specification"] ?></td>
+                        <td class="hide" id="<?php echo $row["productID"]."description" ?>" ><?php echo $row["description"] ?></td>
                         <td><?php 
                         
                         $productIDForTags=$row["productID"];
@@ -302,13 +304,17 @@ foreach( $rowList as $row ){
                         WHERE coffee.products.productID = $productIDForTags;";
                         
                         $result = mysqli_query($link, $tagCommandText);
+
+                        $tag_num=0;
                         while ($rowJ = mysqli_fetch_assoc($result)){ ?>
                         
                         
-                        <span class="tags"><?php echo  "#".$rowJ["tagName"] ?></span>
+                        <span id="<?php echo $row["productID"]."tag".$tag_num ?>" class="tags"><?php echo  "#".$rowJ["tagName"] ?></span>
+
                         
-                        
-                        <?php }  ?>
+                        <?php
+                        $tag_num++;
+                        }  ?>
                         
                         
                         </td>
@@ -316,7 +322,7 @@ foreach( $rowList as $row ){
                             <div class="right_btn">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
                                 class="btn btn-danger my-0 btn-md" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="submit" value="編輯" class="btn btn-primary my-0 btn-md">
+                            <input type="button" value="編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'".$row["productID"]."'"?>)">
                             </div>
                             
                         </td>
@@ -367,6 +373,12 @@ foreach( $rowList as $row ){
         </div>
 
     </div>
+</div>
+<div id="create_edit_window" class="window_close">
+    <div id="create_edit_bg">
+    </div>
+
+
 </div>
     <!-- End your code here. -->
     <?php include '../parts/footer.php';?>
