@@ -74,7 +74,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
 	// 	GetSQLValueString($_POST["sellerID"], 'int'));
 	// $stmt->execute();
 	// $stmt->close();
-	
+
 	//若有修改密碼，則登出回到首頁。
 	if(($_POST["sPassword"]!="")&&($_POST["sPassword"]==$_POST["sPasswordrecheck"])){
 		unset($_SESSION["username"]);
@@ -94,7 +94,15 @@ $row_RecMember = $RecMember->fetch_assoc();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>網站會員系統</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Noto+Serif+TC&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../demostyle.css">
+<script src="../demoutil.js"></script>
 <link href="style.css" rel="stylesheet" type="text/css">
+
 <script language="javascript">
 function checkForm(){
 	if(document.formJoin.sPassword.value!="" || document.formJoin.sPasswordrecheck.value!=""){
@@ -194,9 +202,9 @@ function checkmail(sMail) {
           <p align="center">
             <input name="sellerID" type="hidden" id="sellerID" value="<?php echo $row_RecMember["sellerID"];?>">
             <input name="action" type="hidden" id="action" value="update">
-            <input type="submit" name="Submit2" value="修改資料">
-            <input type="reset" name="Submit3" value="重設資料">
-            <input type="button" name="Submit" value="回上一頁" onClick="window.history.back();">
+            <input type="submit" class="btn btn-danger ml-3 mb-3" name="Submit2" value="修改資料">
+            <input type="reset" class="btn btn-warning  ml-3 mb-3" name="Submit3" value="重設資料">
+            <input type="button" class="btn btn-primary ml-3 mb-3" name="Submit" value="回上一頁" onClick="window.history.back();">
           </p>
         </form></td>
         <td width="200">
