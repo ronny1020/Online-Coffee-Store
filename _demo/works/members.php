@@ -308,8 +308,6 @@ if ($lastPage - $page <= 5) {
                     <th>cPassword: <input type="text" name='pwd'>
                     </th>
                     <hr>
-                    <th>cSex: <input type="text" name='sex'></th>
-                    <hr>
                     <th>cBirthDate:<input type="date" name='bid'>
                     </th>
                     <hr>
@@ -317,6 +315,11 @@ if ($lastPage - $page <= 5) {
                     </th>
                     <hr>
                     <th>cMobile: <input type="text" name='mob'></th>
+                    <hr>
+                    <th>cSex: <select name='sex'>
+                        <option value='F'>男</option>
+                        <option value='M'>女</option>
+                    </select></th>
             </tr>
         </div>
         <!-- Modal footer -->
@@ -328,6 +331,9 @@ if ($lastPage - $page <= 5) {
     </div>
 </div>
 </div>
+</div>
+</div>
+
 <!-- End your code here. -->
 <?php include '../parts/footer.php';?>
 </body>

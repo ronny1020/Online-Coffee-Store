@@ -13,7 +13,10 @@ $error = "";
         <p href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</p>
     <!-- Add welcome message here. -->
         <p class="hello">Hello, <?php print_r($_SESSION['username']);?></p>
-<hr>
+        <form method='post'  class='logout_form' >
+        <button type='submit' class='outbtn btn' id='logout' name='logout'>登出</button>
+        </form>
+        <hr>
         <?php if ($_SESSION['AorS'] === 0) { ?>
             <a href="members.php">會員管理</a>   
             <a href="sellers.php">廠商管理</a> 
@@ -25,12 +28,9 @@ $error = "";
             <a href="infomations.php">訊息管理</a>
             <a href="actions.php">活動管理</a>
             <a href="discounts.php">優惠管理</a>
-
-                <form method='post'  class='logout_form' >
-            <button type='submit' class='outbtn btn' id='logout' name='logout'>登出</button>
-        </form>
+<?php  } ?>
     </div>
 
   
-<?php  } ?>
+
 </div>
