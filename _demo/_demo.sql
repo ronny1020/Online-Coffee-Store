@@ -47,6 +47,31 @@ INSERT INTO `customers` VALUES
 ,('C008','大名08','dummy08','pwd08','M','1997-08-01','my_dummy_adrs08','0900-000-008')
 ,('C009','大名09','dummy09','pwd09','F','1997-09-01','my_dummy_adrs09','0900-000-009');
 
+-- table顧客: crams
+-- 刪除已存在之重複table
+DROP TABLE IF EXISTS `crams`;
+CREATE TABLE `crams` (
+  `cramID` varchar(5) NOT NULL default '',-- 流水號
+  `customerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
+  `cDate` datetime default NULL, -- 客訴日期
+  `cramContent` varchar(300) default NULL, -- 客訴內容
+  `cChecked` enum('Y','N') collate utf8_unicode_ci NOT NULL, -- 已處理與否
+  PRIMARY KEY  (`cramID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 預設儲存引擎: InnoDB(after php5.5)
+
+-- add dummy datas:
+INSERT INTO `crams` VALUES
+ ('CR001','C002','2019-02-18','客訴客訴客訴客訴客訴客訴','Y')
+,('CR002','C003','2019-03-13','客訴客訴客訴客訴客訴客訴','Y')
+,('CR003','C001','2019-02-22','客訴客訴客訴客訴客訴客訴','Y')
+,('CR004','C002','2019-05-11','客訴客訴客訴客訴客訴客訴','N')
+,('CR005','C009','2019-08-18','客訴客訴客訴客訴客訴客訴','N')
+,('CR006','C002','2019-09-01','客訴客訴客訴客訴客訴客訴','N')
+,('CR007','C005','2019-02-18','客訴客訴客訴客訴客訴客訴','N')
+,('CR008','C003','2019-12-30','客訴客訴客訴客訴客訴客訴','Y')
+,('CR009','C004','2019-12-30','客訴客訴客訴客訴客訴客訴','Y');
+
 -- table管理員: admins
 -- 刪除已存在之重複table
 DROP TABLE IF EXISTS `admins`;
