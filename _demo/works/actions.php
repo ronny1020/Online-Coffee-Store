@@ -222,7 +222,7 @@ if (isset($_POST["deleteSelected"])) {
 // write table
 
 $commandText = <<<SqlQuery
-                    select actID, actName, actDescrip, sellerID from coffee.actions where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select actID, actName, actDescrip, sellerID from coffee.actions where sellerID='$userID' ORDER BY actID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 $result = mysqli_query($link, $commandText);
 
