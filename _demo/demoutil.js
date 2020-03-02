@@ -63,7 +63,6 @@ function selectAllCheckbox() {
     }
 }
 
-<<<<<<< HEAD
 
 
 //create form for create or edit in products
@@ -225,11 +224,9 @@ function create_edit(ID) {
         }
 
     }
-=======
-//Rotate target when clicked.(0302, lee)
+    //Rotate target when clicked.(0302, lee)
 
-function rotateTarget(strid){
-    let target = getElementById(strid).innerHTML;
-    
->>>>>>> 996e7b0369ae50f9bfacb9814df020df6e5474aa
-}
+    function rotateTarget(strid) {
+        let target = getElementById(strid).innerHTML;
+
+    }
