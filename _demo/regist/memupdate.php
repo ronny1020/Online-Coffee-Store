@@ -1,7 +1,7 @@
 <?php
 session_start();
 include("connMysql.php");
-
+error_reporting(0);
 $username=$_SESSION['username'];
 $findID=mysqli_query($db_link,"select sellerID from coffee.sellers WHERE sAccount='$username';");
 $findNA=mysqli_query($db_link,"select sName from coffee.sellers WHERE sAccount='$username';");
