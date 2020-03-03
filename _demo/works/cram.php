@@ -332,7 +332,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["cramID"] ?>"
-                        class="btn btn-primary mb-3" onclick="throwInModal(<?php echo "'".$row['cramID']."'"?>)">
+                        class="btn btn-primary mb-3" onclick="throwinmodal_CRAM(<?php echo "'".$row['cramID']."'"?>)">
                         </td>
             </tr>
             <?php endwhile?>

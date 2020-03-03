@@ -68,25 +68,25 @@ function selectAllCheckbox() {
 // 2. onclick button觸發函數讀值進入modal
 // 3. submit之後送出update MySql
 
-function throwInModal(myid){
+function throwinmodal_CRAM(myid){
     //Summon modal by Jquery.
     $('#Modal_edit').modal('show');
 
     var myid = myid.toString();
     // alert('myid');
     // Get datas from ID-labelled table.
-    let cramID = myid + "cramID";
+    var cramID = myid + "cramID";
     var throw_cramID = document.getElementById(cramID).innerHTML;
-    let customerID = myid + "customerID";
+    var customerID = myid + "customerID";
     var throw_customerID = document.getElementById(customerID).innerHTML;
     // DATE: need to change format before used!
-    let cDate = myid + "cDate";
+    var cDate = myid + "cDate";
     var tmp_throw_cDate = document.getElementById(cDate).innerHTML;
     var throw_cDate = tmp_throw_cDate.split(" ");
     // alert(throw_cDate);
-    let cramContent = myid + "cramContent";
+    var cramContent = myid + "cramContent";
     var throw_cramContent = document.getElementById(cramContent).innerHTML;
-    let cChecked = myid + "cChecked";
+    var cChecked = myid + "cChecked";
     var throw_cChecked = document.getElementById(cChecked).innerHTML;
     // alert(throw_cChecked);
 
@@ -95,7 +95,46 @@ function throwInModal(myid){
     document.getElementById('cid_e').value = throw_customerID;
     document.getElementById('dat_e').value = throw_cDate[0];
     document.getElementById('ccn_e').value = throw_cramContent;
-    document.getElementById('ckd_e').value= throw_cChecked;
+    document.getElementById('ckd_e').value = throw_cChecked;
+
+}
+
+function throwinmodal_MEMBERS(myid){
+    //Summon modal by Jquery.
+    $('#Modal_edit').modal('show');
+
+    var myid = myid.toString();
+    // alert('myid');
+    // Get datas from ID-labelled table.
+    var customerID = myid + "customerID";
+    var throw_customerID = document.getElementById(customerID).innerHTML;
+    var cName = myid + "cName";
+    var throw_cName = document.getElementById(cName).innerHTML;
+    var cAccount = myid + "cAccount";
+    var throw_cAccount = document.getElementById(cAccount).innerHTML;
+    var cPassword = myid + "cPassword";
+    var throw_cPassword = document.getElementById(cPassword).innerHTML;
+    var cSex = myid + "cSex";
+    var throw_cSex = document.getElementById(cSex).innerHTML;
+
+    var cBirthDate = myid + "cBirthDate";
+    var tmp_throw_cBirthDate = document.getElementById(cBirthDate).innerHTML;
+    var throw_cBirthDate = tmp_throw_cBirthDate.split(" ");
+    // alert(throw_cBirthDate);
+    let cAddress = myid + "cAddress";
+    var throw_cAddress = document.getElementById(cAddress).innerHTML;
+    let cMobile = myid + "cMobile";
+    var throw_cMobile = document.getElementById(cMobile).innerHTML;
+
+    // Write into Modal.
+    document.getElementById('cid_e').value = throw_customerID;
+    document.getElementById('nam_e').value = throw_cName;
+    document.getElementById('acc_e').value = throw_cAccount;
+    document.getElementById('pwd_e').value = throw_cPassword;
+    document.getElementById('sex_e').value = throw_cSex;
+    document.getElementById('bid_e').value = throw_cBirthDate[0];
+    document.getElementById('adr_e').value = throw_cAddress;
+    document.getElementById('mob_e').value = throw_cMobile;
 
 }
 
