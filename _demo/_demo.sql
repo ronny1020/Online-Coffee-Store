@@ -269,7 +269,7 @@ INSERT INTO coffee.category (categoryName, `category description`) VALUES
 
 CREATE TABLE coffee.products_tagMap (
   tagmapID int(10)  AUTO_INCREMENT  PRIMARY KEY, -- Primary key:流水號
-  productID int(10) NOT NULL,
+  productID int(10) ZEROFILL NOT NULL,
   tagID int(5)  NOT NULL, 
   CONSTRAINT tag UNIQUE (productID,tagID)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;

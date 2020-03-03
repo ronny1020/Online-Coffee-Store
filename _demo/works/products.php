@@ -25,38 +25,33 @@ if (isset($_GET["page"])) {
 
 //orderby
 // productID, ProductName, categoryName, UnitPrice, UnitsInStock, add_time
-if (isset($_POST["productID_ASC"])||isset($_POST["ProductName_ASC"])||isset($_POST["categoryName_ASC"])||isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitsInStock_ASC"])||isset($_POST["add_time_ASC"])) {
+if (isset($_POST["productID_ASC"]) || isset($_POST["ProductName_ASC"]) || isset($_POST["categoryName_ASC"]) || isset($_POST["UnitPrice_ASC"]) || isset($_POST["UnitsInStock_ASC"]) || isset($_POST["add_time_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["productID_DESC"])||isset($_POST["ProductName_DESC"])||isset($_POST["categoryName_DESC"])||isset($_POST["UnitPrice_DESC"])||isset($_POST["UnitsInStock_DESC"])||isset($_POST["add_time_DESC"])) {
+} else if (isset($_POST["productID_DESC"]) || isset($_POST["ProductName_DESC"]) || isset($_POST["categoryName_DESC"]) || isset($_POST["UnitPrice_DESC"]) || isset($_POST["UnitsInStock_DESC"]) || isset($_POST["add_time_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
-} else if(isset($_SESSION["ASCorDESC"])) {
+} else if (isset($_SESSION["ASCorDESC"])) {
 } else {
     $_SESSION["ASCorDESC"] = "ASC";
 }
-$ASCorDESC = $_SESSION["ASCorDESC"] ;
+$ASCorDESC = $_SESSION["ASCorDESC"];
 
-
-if (isset($_POST["productID_ASC"])||isset($_POST["productID_DESC"])){
-    $_SESSION["orderby"]="productID";
-} else if (isset($_POST["ProductName_ASC"])||isset($_POST["ProductName_DESC"])){
-    $_SESSION["orderby"]="ProductName";
-} else if (isset($_POST["categoryName_ASC"])||isset($_POST["categoryName_DESC"])){
-    $_SESSION["orderby"]="categoryName";
-} else if (isset($_POST["UnitPrice_ASC"])||isset($_POST["UnitPrice_DESC"])){
-    $_SESSION["orderby"]="UnitPrice";
-} else if (isset($_POST["UnitsInStock_ASC"])||isset($_POST["UnitsInStock_DESC"])){
-    $_SESSION["orderby"]="UnitsInStock";
-} else if (isset($_POST["add_time_ASC"])||isset($_POST["add_time_DESC"])){
-    $_SESSION["orderby"]="add_time";
-} else if(isset($_SESSION["orderby"])) {
+if (isset($_POST["productID_ASC"]) || isset($_POST["productID_DESC"])) {
+    $_SESSION["orderby"] = "productID";
+} else if (isset($_POST["ProductName_ASC"]) || isset($_POST["ProductName_DESC"])) {
+    $_SESSION["orderby"] = "ProductName";
+} else if (isset($_POST["categoryName_ASC"]) || isset($_POST["categoryName_DESC"])) {
+    $_SESSION["orderby"] = "categoryName";
+} else if (isset($_POST["UnitPrice_ASC"]) || isset($_POST["UnitPrice_DESC"])) {
+    $_SESSION["orderby"] = "UnitPrice";
+} else if (isset($_POST["UnitsInStock_ASC"]) || isset($_POST["UnitsInStock_DESC"])) {
+    $_SESSION["orderby"] = "UnitsInStock";
+} else if (isset($_POST["add_time_ASC"]) || isset($_POST["add_time_DESC"])) {
+    $_SESSION["orderby"] = "add_time";
+} else if (isset($_SESSION["orderby"])) {
 } else {
-    $_SESSION["orderby"]="productID";
+    $_SESSION["orderby"] = "productID";
 }
 $orderby = $_SESSION["orderby"];
-
-
-
-
 
 //number of rows
 if (isset($_POST["row_num_submit"])) {
@@ -68,8 +63,6 @@ if (isset($_POST["row_num_submit"])) {
 }
 $rowNum = $_SESSION["products_row_num"];
 
-
-
 //connect to SQL
 header("content-type:text/html; charset=utf-8");
 $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
@@ -77,37 +70,49 @@ $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
 //important var
-$username=$_SESSION['username'];
-$findID=mysqli_query($link,"select sellerID from coffee.sellers WHERE sAccount='$username';");
+$username = $_SESSION['username'];
+$findID = mysqli_query($link, "select sellerID from coffee.sellers WHERE sAccount='$username';");
 $ID = mysqli_fetch_assoc($findID);
 $userID = $ID["sellerID"];
 
-$total_num_rows = mysqli_num_rows(mysqli_query($link,"select productID from coffee.products WHERE sellerID='$userID';"));
-$lastPage=ceil($total_num_rows/$rowNum);
-$tableOffSet = $rowNum * ($page-1);
-$showDataStartFrom=$tableOffSet+1;
-$showDataEndTo=$tableOffSet+$rowNum;
-if($showDataEndTo>$total_num_rows)
-{$showDataEndTo=$total_num_rows;};
-$previousPage=$page-1;
-$nextPage=$page+1;
-
+$total_num_rows = mysqli_num_rows(mysqli_query($link, "select productID from coffee.products WHERE sellerID='$userID';"));
+$lastPage = ceil($total_num_rows / $rowNum);
+$tableOffSet = $rowNum * ($page - 1);
+$showDataStartFrom = $tableOffSet + 1;
+$showDataEndTo = $tableOffSet + $rowNum;
+if ($showDataEndTo > $total_num_rows) {$showDataEndTo = $total_num_rows;}
+;
+$previousPage = $page - 1;
+$nextPage = $page + 1;
 
 // right delete btn
 foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.products WHERE productID IN ('$deleteItem')
-        SqlQuery;
-        mysqli_query($link, $deleteCommandText);
-        $deleteCommandTextTagMap = <<<SqlQuery
-        DELETE FROM coffee.products_tags WHERE productID IN ('$deleteItem')
-        SqlQuery;
+        $findDeletedTags="select tagID from coffee.products_tagmap WHERE productID ='$deleteItem';";
+        $DeletedTags=mysqli_query($link, $findDeletedTags);
+        $k=0;
+        while ($tagRow = mysqli_fetch_assoc($DeletedTags)) {
+            $tagList[$k] = $tagRow;
+            $k++;
+        }
+        foreach ($tagList as $tagRow) {
+            $DeletedTagID=$tagRow["tagID"];
+            $checkDeletedTagsComment="select tagID from coffee.products_tagmap WHERE tagID ='$DeletedTagID';";
+            $checkDeletedTags=mysqli_query($link, $checkDeletedTagsComment);
+            if(mysqli_num_rows($checkDeletedTags)==1){
+                $deletedTagID=mysqli_fetch_assoc($checkDeletedTags)["tagID"];
+                $DeletedTagComment = "DELETE FROM coffee.products_tags WHERE tagID ='$deletedTagID';";
+                echo $DeletedTagComment;
+                mysqli_query($link, $DeletedTagComment);
+            }
+        }
+        $deleteCommandTextTagMap = "DELETE FROM coffee.products_tagMap WHERE productID IN ('$deleteItem');";
         mysqli_query($link, $deleteCommandTextTagMap);
-
+        $deleteCommandText = "DELETE FROM coffee.products WHERE productID IN ('$deleteItem');";
+        mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
-        
+
     }
 }
 
@@ -118,16 +123,129 @@ if (isset($_POST["deleteSelected"])) {
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 8) == "selected") {
             $selectedItem = ltrim($i, "selected");
-            $selectedList = $selectedList . ",'" . $selectedItem . "'";
+            $findDeletedTags="select tagID from coffee.products_tagmap WHERE productID ='$selectedItem';";
+            $DeletedTags=mysqli_query($link, $findDeletedTags);
+            $k=0;
+            while ($tagRow = mysqli_fetch_assoc($DeletedTags)) {
+                $tagList[$k] = $tagRow;
+                $k++;
+            }
+            foreach ($tagList as $tagRow) {
+                $DeletedTagID=$tagRow["tagID"];
+                $checkDeletedTagsComment="select tagID from coffee.products_tagmap WHERE tagID ='$DeletedTagID';";
+                $checkDeletedTags=mysqli_query($link, $checkDeletedTagsComment);
+                if(mysqli_num_rows($checkDeletedTags)==1){
+                    $deletedTagID=mysqli_fetch_assoc($checkDeletedTags)["tagID"];
+                    $DeletedTagComment = "DELETE FROM coffee.products_tags WHERE tagID ='$deletedTagID';";
+                    echo $DeletedTagComment;
+                    mysqli_query($link, $DeletedTagComment);
+                }
+            }
+            $deleteCommandTextTagMap = "DELETE FROM coffee.products_tagMap WHERE productID IN ('$selectedItem');";
+            mysqli_query($link, $deleteCommandTextTagMap);
+            $deleteCommandText = "DELETE FROM coffee.products WHERE productID IN ('$selectedItem');";
+            mysqli_query($link, $deleteCommandText);
+            header('location:' . $_SERVER['REQUEST_URI'] . '');
         }
     }
-    $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = "DELETE FROM coffee.products WHERE productID IN ($selectedList);";
-    mysqli_query($link, $deleteSelectedCommandText);
-    $deleteSelectedCommandTextTagMap = "DELETE FROM coffee.products_tags WHERE productID IN ($selectedList);";
-    mysqli_query($link, $deleteSelectedCommandTextTagMap);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
+
+
+// create data from button
+if (isset($_POST["create_data"])) {
+    $ProductName_input = $_POST["ProductName_input"];
+    $categoryID_select = $_POST["categoryName_select"];
+    $UnitPrice_input = $_POST["UnitPrice_input"];
+    $UnitsInStock_input = $_POST["UnitsInStock_input"];
+    $add_time_now = date("Y-m-d H:i:s", time());
+    $specification_input = $_POST["specification_input"];
+    $description_input = $_POST["description_input"];
+
+    $input_comment = "INSERT INTO coffee.products (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`,`UnitsInStock`, `add_time`, `specification`, `description`)  
+    VALUES  ('$ProductName_input','$userID',$categoryID_select,$UnitPrice_input,$UnitsInStock_input,'$add_time_now','$specification_input','$description_input');";
+    mysqli_query($link, $input_comment );
+
+    $productID_input=mysqli_insert_id($link);
+    $productID_input= str_repeat("0",10-(strlen($productID_input))).$productID_input;
+    mysqli_error($link);
+
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 6) == "newTag" && $j !="" ) {
+            $newTag=$j;
+            $findTagID = mysqli_query($link, "select tagID from coffee.products_tags WHERE tagName ='$newTag';");
+            if(mysqli_num_rows($findTagID)==0){
+                mysqli_query($link, "INSERT INTO coffee.products_tags (tagName) VALUES ('$newTag');");
+                $newTagID=mysqli_insert_id($link);
+            }else{
+            $newTagID= mysqli_fetch_assoc($findTagID)["tagID"];
+            }
+
+            mysqli_query($link, "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($productID_input,$newTagID);");
+            }
+    }
+    header('location:' . $_SERVER['REQUEST_URI'] . '');
+}
+
+if (isset($_POST["edit_data"])) {
+    $productID_input = $_POST["ProductID_input"];
+    $ProductName_input = $_POST["ProductName_input"];
+    $categoryID_select = $_POST["categoryName_select"];
+    $UnitPrice_input = $_POST["UnitPrice_input"];
+    $UnitsInStock_input = $_POST["UnitsInStock_input"];
+    $specification_input = $_POST["specification_input"];
+    $description_input = $_POST["description_input"];
+
+
+    $input_comment = "UPDATE `coffee`.`products` SET 
+    `ProductName` = '$ProductName_input', 
+    `CategoryID` = '$categoryID_select',
+    `UnitPrice` = $UnitPrice_input, 
+    `UnitsInStock` = $UnitsInStock_input,
+    `specification` = '$specification_input',
+    `description` = '$description_input'
+    WHERE `productID` = $productID_input;";
+    
+    mysqli_query($link, $input_comment);
+
+    mysqli_error($link);
+
+    // tags delete or create
+    foreach ($_POST as $i => $j) {
+    // delete tags
+        if (substr($i, 0, 1) == "#") {
+        $deletedTag=ltrim($i, "#");;
+        $findDeletedTagID = mysqli_query($link, "select tagID from coffee.products_tags WHERE tagName ='$deletedTag';");
+        $deletedTagID=mysqli_fetch_assoc($findDeletedTagID)["tagID"];
+        $findDeletedTagMapID = mysqli_query($link, "select tagID from coffee.products_tagMap WHERE tagID ='$deletedTagID';");
+        if(mysqli_num_rows($findDeletedTagMapID)==1){
+            $DeletedTagMapIDComment = "DELETE FROM coffee.products_tagMap WHERE tagID ='$deletedTagID';";
+            mysqli_query($link, $DeletedTagMapIDComment);
+        }
+        $DeletedTagIDComment = "DELETE FROM coffee.products_tags WHERE tagID ='$deletedTagID';";
+        mysqli_query($link, $DeletedTagIDComment);
+
+        }
+    // create tags
+        if (substr($i, 0, 6) == "newTag" && $j !="" ) {
+        $newTag=$j;
+        $findTagID = mysqli_query($link, "select tagID from coffee.products_tags WHERE tagName ='$newTag';");
+        if(mysqli_num_rows($findTagID)==0){
+            mysqli_query($link, "INSERT INTO coffee.products_tags (tagName) VALUES ('$newTag');");
+            $newTagID=mysqli_insert_id($link);
+        }else{
+        $newTagID= mysqli_fetch_assoc($findTagID)["tagID"];
+        }
+
+        mysqli_query($link, "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($productID_input,$newTagID);");
+        }
+    }
+    header('location:' . $_SERVER['REQUEST_URI'] . '');
+}
+
+
+
+
 
 
 ?>
@@ -171,8 +289,8 @@ if (isset($_POST["deleteSelected"])) {
                 <div class='float-right'>
                     <span class="mr-5">
                         <!-- show where you are -->
-                        <?php 
-                        echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 筆(共 $total_num_rows 筆資料)"?>
+                        <?php
+echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 筆(共 $total_num_rows 筆資料)" ?>
                     </span>
                     <label for="row_num_select">請選擇顯示行數:</label>
                     <select id="row_num_select" name="row_num">
@@ -194,7 +312,7 @@ if (isset($_POST["deleteSelected"])) {
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
                                 <p class="m-1">productID</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="productID_DESC">
@@ -202,9 +320,9 @@ if (isset($_POST["deleteSelected"])) {
                                 </div>
                             </div>
                         </th>
-                  
+
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">ProductName</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="ProductName_DESC">
@@ -212,19 +330,19 @@ if (isset($_POST["deleteSelected"])) {
                                 </div>
                             </div>
                         </th>
-                        
+
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">categoryName</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="categoryName_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="categoryName_ASC">
                                 </div>
                             </div>
-                      
+
                         </th>
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">UnitPrice</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitPrice_DESC">
@@ -234,7 +352,7 @@ if (isset($_POST["deleteSelected"])) {
                         </th>
                         <!-- here -->
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">UnitsInStock</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitsInStock_DESC">
@@ -243,7 +361,7 @@ if (isset($_POST["deleteSelected"])) {
                             </div>
                         </th>
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">add_time</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="add_time_DESC">
@@ -251,10 +369,10 @@ if (isset($_POST["deleteSelected"])) {
                                 </div>
                             </div>
                         </th>
-                        <th class=tags>tags                            
-                        </th> 
-                        <th>                            
-                        </th>                       
+                        <th class=tags>tags
+                        </th>
+                        <th>
+                        </th>
                 </thead>
 
                 <tbody>
@@ -263,70 +381,70 @@ if (isset($_POST["deleteSelected"])) {
 // write table
 
 $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description
-from coffee.products JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID 
+from coffee.products JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID
 where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
-   
+
 $result = mysqli_query($link, $commandText);
+$result_exist = mysqli_num_rows($result)>1;
 
-
-$rowList=array();
-$i=0;
+if($result_exist){
+$rowList = array();
+$i = 0;
 while ($row = mysqli_fetch_assoc($result)) {
-    $rowList[$i]=$row;
+    $rowList[$i] = $row;
     $i++;
 }
 
-foreach( $rowList as $row ){
+foreach ($rowList as $row) {
 
-
-?>
+    ?>
 
                     <tr class="dataSQL">
                         <td>
                             <input type="checkbox" name="<?php echo "selected" . $row["productID"] ?>"class='checkmark'
                         style='position: relative;'>
                         </td>
-                        <td id="<?php echo $row["productID"]."productID" ?>" class="num"><?php echo $row["productID"] ?></td>
-                        <td id="<?php echo $row["productID"]."ProductName" ?>" ><?php echo $row["ProductName"] ?></td>
-                        <td id="<?php echo $row["productID"]."categoryName" ?>" ><?php echo $row["categoryName"] ?></td>
-                        <td id="<?php echo $row["productID"]."UnitPrice" ?>"  class="num"><?php echo number_format($row["UnitPrice"]) ?></td>
-                        <td id="<?php echo $row["productID"]."UnitsInStock" ?>"  class="num"><?php echo number_format($row["UnitsInStock"]) ?></td>
-                        <td id="<?php echo $row["productID"]."add_time" ?>" ><?php echo $row["add_time"] ?></td>
-                        <td class="hide" id="<?php echo $row["productID"]."specification" ?>" ><?php echo $row["specification"] ?></td>
-                        <td class="hide" id="<?php echo $row["productID"]."description" ?>" ><?php echo $row["description"] ?></td>
-                        <td><?php 
-                        
-                        $productIDForTags=$row["productID"];
-                        $tagCommandText = "SELECT tagName FROM coffee.products_tagMap
+                        <td id="<?php echo $row["productID"] . "productID" ?>" class="num"><?php echo $row["productID"] ?></td>
+                        <td id="<?php echo $row["productID"] . "ProductName" ?>" ><?php echo $row["ProductName"] ?></td>
+                        <td id="<?php echo $row["productID"] . "categoryName" ?>" ><?php echo $row["categoryName"] ?></td>
+                        <td id="<?php echo $row["productID"] . "UnitPrice" ?>"  class="num"><?php echo number_format($row["UnitPrice"]) ?></td>
+                        <td id="<?php echo $row["productID"] . "UnitsInStock" ?>"  class="num"><?php echo number_format($row["UnitsInStock"]) ?></td>
+                        <td id="<?php echo $row["productID"] . "add_time" ?>" ><?php echo $row["add_time"] ?></td>
+                        <td class="hide" id="<?php echo $row["productID"] . "specification" ?>" ><?php echo $row["specification"] ?></td>
+                        <td class="hide" id="<?php echo $row["productID"] . "description" ?>" ><?php echo $row["description"] ?></td>
+                        <td><?php
+
+    $productIDForTags = $row["productID"];
+    $tagCommandText = "SELECT tagName FROM coffee.products_tagMap
                         JOIN coffee.products ON coffee.products.productID=coffee.products_tagMap.productID
                         JOIN coffee.products_tags ON coffee.products_tags.tagID=coffee.products_tagMap.tagID
-                        WHERE coffee.products.productID = $productIDForTags;";
-                        
-                        $result = mysqli_query($link, $tagCommandText);
+                        WHERE coffee.products.productID = $productIDForTags ORDER BY tagName;";
 
-                        $tag_num=0;
-                        while ($rowJ = mysqli_fetch_assoc($result)){ ?>
-                        
-                        
-                        <span id="<?php echo $row["productID"]."tag".$tag_num ?>" class="tags"><?php echo  "#".$rowJ["tagName"] ?></span>
+    $result = mysqli_query($link, $tagCommandText);
 
-                        
+    $tag_num = 0;
+    while ($rowJ = mysqli_fetch_assoc($result)) {?>
+
+
+                        <span id="<?php echo $row["productID"] . "tag" . $tag_num ?>" class="tags"><?php echo "#" . $rowJ["tagName"] ?></span>
+
+
                         <?php
-                        $tag_num++;
-                        }  ?>
-                        
-                        
+$tag_num++;
+    }?>
+
+
                         </td>
                         <td>
                             <div class="right_btn">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
                                 class="btn btn-danger my-0 btn-md" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="button" value="編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'".$row["productID"]."'"?>)">
+                            <input type="button" value="編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'" . $row["productID"] . "'" ?>)">
                             </div>
-                            
+
                         </td>
                     </tr>
-                        <?php }?>
+                        <?php }}?>
                 </tbody>
 
             </table>
@@ -337,37 +455,40 @@ foreach( $rowList as $row ){
         <!-- page select -->
         <div class="m-3">
             <a class='m-2 btn bg-color-gold' href='products.php?page=1'>第一頁</a>
-            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page<=1)? "1" : $previousPage; ?>'>上一頁</a>
-            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page>=$lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
-            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo $lastPage;     ?>'>最尾頁</a>
+            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page <= 1) ? "1" : $previousPage; ?>'>上一頁</a>
+            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page >= $lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
+            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo $lastPage; ?>'>最尾頁</a>
         </div>
             <div>
             <?php
-            for($i=1 ; $i<=3 && $i<=$lastPage ; $i++ ){
-                echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
-            }
-            if($page<=6){
-                for($i=4 ; $i<=($page+2)&& $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
-                }               
-            }else{
-                echo "<span>......</span>";
-                for($i=($page-2)  ; $i<=($page+2)&& $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
-                }
-            }
-            if($lastPage-$page<=5){
-                for($i=($page+3) ;  $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
-                }               
-            }else{
-                echo "<span>......</span>";
-                for($i=($lastPage-2)  ; $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
-                }
-            }
-        
-            ?>
+for ($i = 1; $i <= 3 && $i <= $lastPage; $i++) {
+    echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+}
+if ($page <= 6) {
+    for ($i = 4; $i <= ($page + 2) && $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+    }
+} else {
+    echo "<span>......</span>";
+    for ($i = ($page - 2); $i <= ($page + 2) && $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+    }
+}
+if ($lastPage - $page <= 5) {
+    for ($i = ($page + 3); $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+    }
+} else {
+    echo "<span>......</span>";
+    for ($i = ($lastPage - 2); $i <= $lastPage; $i++) {
+        echo " <a class='m-2' href='products.php?page=$i'>$i</a>";
+    }
+}
+
+
+
+mysqli_close($link);
+?>
             </div>
         </div>
 

@@ -93,7 +93,7 @@ function create_edit_close() {
 function create_edit(ID) {
 
     create_edit_window.setAttribute("class", "window_open");
-    create_edit_window.CreateAppend("form", "", "class", "card border-0", "id", "create_edit_context")
+    create_edit_window.CreateAppend("form", "", "class", "card border-0", "id", "create_edit_context", "method", "post")
     create_edit_context.CreateAppend("p", "x", "class", "closebtn", "onclick", "create_edit_close()")
 
     if (ID == undefined) {
@@ -105,7 +105,7 @@ function create_edit(ID) {
         UnitsInStockInner = "";
         specificationInner = "";
         descriptionInner = "";
-        submit_name = "create";
+        submit_name = "create_data";
         submit_value = "新增";
     } else {
         ID = ID.toString();
@@ -114,7 +114,7 @@ function create_edit(ID) {
         create_edit_context.CreateAppend("div", "", "class", "card-body bg-color-Paper  p-5", "id", "create_edit_form")
         create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "ProductID_ce")
         ProductID_ce.CreateAppend("label", "ProductID:", "class", "form-control-label", "for", "ProductID_input")
-        ProductID_ce.CreateAppend("input", "", "type", "text", "value", ID, "class", "form-control", "id", "ProductID_input", "name", "ProductID_input", "disabled")
+        ProductID_ce.CreateAppend("input", "", "type", "text", "value", ID, "class", "form-control", "id", "ProductID_input", "name", "ProductID_input", "readonly")
             // name
         ProductNameID = ID + "ProductName";
         ProductNameInner = document.getElementById(ProductNameID).innerHTML
@@ -134,7 +134,7 @@ function create_edit(ID) {
         descriptionID = ID + "description";
         descriptionInner = document.getElementById(descriptionID).innerHTML
 
-        submit_name = "edit";
+        submit_name = "edit_data";
         submit_value = "修改";
     }
 
@@ -146,8 +146,8 @@ function create_edit(ID) {
         // category
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "categoryName_ce")
     categoryName_ce.CreateAppend("label", "categoryName:", "class", "form-control-label", "for", "categoryName_select")
-    categoryName_ce.CreateAppend("select", "", "class", "form-control", "id", "categoryName_select", "name", "categoryName_select")
-    categoryName_select.CreateAppend("option", "未選", "value", "0", "id", "categoryID_select0")
+    categoryName_ce.CreateAppend("select", "", "class", "form-control", "id", "categoryName_select", "name", "categoryName_select", "required")
+    categoryName_select.CreateAppend("option", "未選", "value", "", "id", "categoryID_select0")
     categoryName_select.CreateAppend("option", "咖啡豆", "value", "1", "id", "categoryID_select1")
     categoryName_select.CreateAppend("option", "即溶咖啡", "value", "2", "id", "categoryID_select2")
     categoryName_select.CreateAppend("option", "咖啡膠囊", "value", "3", "id", "categoryID_select3")
@@ -192,7 +192,7 @@ function create_edit(ID) {
     UnitPrice_ce.CreateAppend("input", "", "type", "number", "value", UnitPriceInner, "class", "form-control", "id", "UnitPrice_input", "name", "UnitPrice_input", "required")
         // UnitsInStock
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "UnitsInStock_ce")
-    UnitsInStock_ce.CreateAppend("label", "UnitPrice:", "class", "form-control-label", "for", "UnitsInStock_input")
+    UnitsInStock_ce.CreateAppend("label", "UnitsInStock:", "class", "form-control-label", "for", "UnitsInStock_input")
     UnitsInStock_ce.CreateAppend("input", "", "type", "number", "value", UnitsInStockInner, "class", "form-control", "id", "UnitsInStock_input", "name", "UnitsInStock_input", "required")
         // specification
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "specification_ce")
