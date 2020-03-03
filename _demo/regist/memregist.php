@@ -26,10 +26,11 @@ if(isset($_POST["action"])&&($_POST["action"]=="join")){
 		header("Location: member_join.php?errMsg=1&username={$_POST["sAccount"]}");
 	}else{
 	//若沒有執行新增的動作	
-		$query_insert = "INSERT INTO sellers (sName, sAccount, sPassword, sPhone, sAddress, sMail, sCountry) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		$query_insert = "INSERT INTO sellers (sName, sellerID, sAccount, sPassword, sPhone, sAddress, sMail, sCountry) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		$stmt = $db_link->prepare($query_insert);
-		$stmt->bind_param("sssssss", 
-			GetSQLValueString($_POST["sName"], 'string'),
+		$stmt->bind_param("ssssssss", 
+      GetSQLValueString($_POST["sName"], 'string'),
+      GetSQLValueString($_POST["sellerID"], 'string'),
 			GetSQLValueString($_POST["sAccount"], 'string'),
 			password_hash($_POST["sPassword"], PASSWORD_DEFAULT),
 			
@@ -123,7 +124,7 @@ function check_passwd(pw1,pw2){
 <?php if(isset($_GET["loginStats"]) && ($_GET["loginStats"]=="1")){?>
 <script language="javascript">
 alert('會員新增成功\n請用申請的帳號密碼登入。');
-window.location.href='index.php';		  
+window.location.href='../index.php';		  
 </script>
 <?php }?>
 <table width="780" border="0" align="center" cellpadding="4" cellspacing="0">
@@ -150,6 +151,9 @@ window.location.href='index.php';
             <p><strong>確認密碼</strong>：
             <input name="sPasswordrecheck" type="password" class="normalinput" id="sPasswordrecheck">
             <font color="#FF0000">*</font> <br><span class="smalltext">再輸入一次密碼</span></p>
+            <p><strong>序　　號</strong>：
+            <input name="sellerID" type="text" class="normalinput" id="sellerID">
+            <font color="#FF0000">*</font><br></p>
             <hr size="1" />
             <p class="heading">公司資料</p>
             <p><strong>公司名稱</strong>：
@@ -157,7 +161,7 @@ window.location.href='index.php';
             <font color="#FF0000">*</font></p>
             <p><strong>國　　家</strong>：
             <input name="sCountry" type="text" class="normalinput" id="sCountry">
-            <font color="#FF0000">*</font></p>
+            </p>
             
             
             
