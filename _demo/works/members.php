@@ -312,9 +312,8 @@ if ($lastPage - $page <= 5) {
 ?>
 <!--頁尾頁碼&按鈕結束-->
 </div>
-<!-- Dummy frame. -->
-<iframe name="thisframe"></iframe>
-<!-- Modal -->
+
+<!-- Modal: add new -->
 <div class="modal fade" id="myModal">
 <div class="modal-dialog">
     <div class="modal-content">
