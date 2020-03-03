@@ -121,6 +121,7 @@ function check_passwd(pw1,pw2){
 </head>
 
 <body>
+
 <?php if(isset($_GET["loginStats"]) && ($_GET["loginStats"]=="1")){?>
 <script language="javascript">
 alert('會員新增成功\n請用申請的帳號密碼登入。');
@@ -200,7 +201,7 @@ window.location.href='../index.php';
     </table></td>
   </tr>
   <tr>
-    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCofee Company All Rights Reserved.</td>
+    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCoffee Company All Rights Reserved.</td>
   </tr>
 </table>
 </body>

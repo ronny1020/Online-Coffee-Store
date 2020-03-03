@@ -214,7 +214,7 @@ function checkmail(sMail) {
           
             <p><strong><?php echo $row_RecMember["sName"];?></strong> 您好。</p>
             
-            本次登入的時間為：<br>
+            <p>本次登入的時間為：</p>
             <?php echo date("Y年m月d日") ;?></p>
             <p align="center"><a href="../works/_main.php">會員中心</a> | <a href="?logout=true">登出系統</a></p>
         </div>
@@ -223,7 +223,7 @@ function checkmail(sMail) {
     </table></td>
   </tr>
   <tr>
-    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCofee Company All Rights Reserved.</td>
+    <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCoffee Company All Rights Reserved.</td>
   </tr>
 </table>
 </body>
