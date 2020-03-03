@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+// error_reporting(0);
 
 //Prevents direct connection.
 if ($_SESSION['username'] == '' || $_SESSION['AorS'] != 1) {
@@ -137,6 +137,25 @@ if (isset($_POST['modal_submit'])) {
     mysqli_query($link, $insertCommandText);
 
 }
+
+if (isset($_POST['modal_submit2'])) {
+    $tmp_did2 = $_POST['did2'];
+    $tmp_nam2 = $_POST['nam2'];
+    $tmp_ddp2 = $_POST['ddp2'];
+    $tmp_pid2 = $_POST['pid2'];
+    $tmp_dct2 = $_POST['dct2'];
+    
+    
+	$sql_query = "UPDATE discounts SET disName='$tmp_nam2', disDescrip='$tmp_ddp2', productID='$tmp_pid2', Discount='$tmp_dct2' WHERE sellerID='$userID' AND disID='$tmp_did2'";   
+	$stmt = $link -> prepare($sql_query);
+    $stmt -> execute();
+	$stmt -> close();
+	// $link -> close();
+}
+
+$query_RecMember = "SELECT * FROM discounts WHERE sellerID='$userID'";
+$RecMember = $link->query($query_RecMember);	
+$row_RecMember = $RecMember->fetch_assoc();
 
 
 ?>
@@ -285,7 +304,8 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td class="p-0">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="submit" value="編輯" class="btn btn-primary mb-3">
+                                <input type="button" value="編輯" name="edit" class="btn btn-primary ml-3 mb-3"
+                                data-toggle="modal" data-target="#myModal2">
                         </td>
                     </tr>
                     <?php endwhile?>
@@ -376,7 +396,48 @@ while ($row = mysqli_fetch_assoc($result)):
 </div>
 </div>
 
+<iframe name="thisframe2"></iframe>
+<!-- Modal -->
+<div class="modal fade" id="myModal2">
+<div class="modal-dialog">
+    <div class="modal-content">
 
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">資料變更:</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="post" action=''>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <tr>
+
+                    <th>disID:<input type="text" name='did2' value="<?php echo $row_RecMember["disID"];?>">
+                    </th>
+                    <hr>
+                    <th>disName: <input type="text" name='nam2' value="<?php echo $row_RecMember["disName"];?>"></th>
+                    <hr>
+                    <th>disDesrip: <input type="text" name='ddp2' value="<?php echo $row_RecMember["disDescrip"];?>">
+                    </th>
+                    <hr>
+                    <th>productID: <input type="text" name='pid2' value="<?php echo $row_RecMember["productID"];?>">
+                    </th>
+                    <hr>
+                    <th>Discount:<input type="text" name='dct2' value="<?php echo $row_RecMember["Discount"];?>">
+                    </th>
+                    <hr>
+                    
+            </tr>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <input type="submit" name="modal_submit2" value='submit' class="btn btn-primary"></input>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
 
 
 

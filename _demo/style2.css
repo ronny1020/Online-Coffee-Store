@@ -1,0 +1,16 @@
+iframe[name=thisframe2] {
+    /* background-color: tomato; */
+    display: none;
+}
+
+div.modal2-header {
+    background-color: lightpink;
+}
+
+.modal2-body th {
+    font-size: 200%;
+}
+
+.modal2-body input {
+    float: right;
+}
