@@ -251,19 +251,23 @@ td>input {
 }
 
 
-/* add collapsible sidebar! (0302, lee) */
+/* add collapsible sidebar! (0303, lee) */
+
+.collapse > a{
+    background-color: #595959;
+}
 
 .triangle_rotate {
     float: right;
     transition: transform 0.5s;
 }
 
-.triangle_rotate:hover {
+.triangle_title:hover > .triangle_rotate{
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 }
 
-/* (0302, lee) end here. */
+/* (0303, lee) end here. */
 
 .openbtn {
     font-size: 20px;
