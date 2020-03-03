@@ -69,21 +69,72 @@ $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
+
+
+// search function
+if (isset($_POST["startSearch"])) {
+    if($_POST["searchKeyword"]!=""){
+        $_SESSION["searchKeyword"] = $_POST["searchKeyword"];
+    }
+    $_SESSION["searchBy"] = $_POST["searchBy"];
+    header('location:products.php');
+}
+
+// clear search
+if (isset($_POST["clearSearch"])) {
+    unset($_SESSION["searchKeyword"]);
+    unset($_SESSION["searchBy"]);
+    header('location:products.php');
+}
+$searchComment="";
+
+if(isset($_SESSION["searchKeyword"])) {
+    $searchKeyword=$_SESSION["searchKeyword"];
+    if($_SESSION["searchBy"]=="productName"){
+        $searchComment="and productName like '%$searchKeyword%'";
+
+    }else{
+        // get tagID
+        $searchTagComment="select tagID from coffee.products_tags WHERE tagName like '%$searchKeyword%';";
+        $searchTagResult= mysqli_query($link, $searchTagComment);
+        $tagIDList="('";
+        while ($tagRow = mysqli_fetch_assoc($searchTagResult)) {
+            $tagID=$tagRow['tagID'];
+            $tagIDList=$tagIDList.$tagID."','";
+        }
+        $tagIDList=$tagIDList."')";
+        // get productsID
+        $searchProductIDComment="select ProductID from coffee.products_tagMap WHERE tagID in $tagIDList;";
+        $searchProductIDResult= mysqli_query($link, $searchProductIDComment);
+        $productIDList="('";
+        while ($productRow = mysqli_fetch_assoc($searchProductIDResult)) {
+            $productID=$productRow['ProductID'];
+            $productIDList=$productIDList.$productID."','";
+        }
+        $productIDList=$productIDList."')";
+        $searchComment="and productID in $productIDList";
+    }
+}
+
 //important var
 $username = $_SESSION['username'];
 $findID = mysqli_query($link, "select sellerID from coffee.sellers WHERE sAccount='$username';");
 $ID = mysqli_fetch_assoc($findID);
 $userID = $ID["sellerID"];
 
-$total_num_rows = mysqli_num_rows(mysqli_query($link, "select productID from coffee.products WHERE sellerID='$userID';"));
+$total_num_rows = mysqli_num_rows(mysqli_query($link, "select productID from coffee.products WHERE sellerID='$userID' $searchComment;"));
 $lastPage = ceil($total_num_rows / $rowNum);
 $tableOffSet = $rowNum * ($page - 1);
 $showDataStartFrom = $tableOffSet + 1;
 $showDataEndTo = $tableOffSet + $rowNum;
 if ($showDataEndTo > $total_num_rows) {$showDataEndTo = $total_num_rows;}
 ;
+if($showDataStartFrom>$showDataEndTo){
+    $showDataStartFrom=$showDataEndTo;
+}
 $previousPage = $page - 1;
 $nextPage = $page + 1;
+
 
 // right delete btn
 foreach ($_POST as $i => $j) {
@@ -280,6 +331,26 @@ if (isset($_POST["edit_data"])) {
 
     <!-- Start your code here -->
     <div class="main p-5">
+        <form class="card p-3 mb-5" method="POST">
+            <div class="w-50 mx-auto">
+                <label for="searchKeyword">
+                    請輸入關鍵字並選擇搜尋欄位：
+                </label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
+                    <select name="searchBy">
+                        <option value="productName">
+                            產品名稱
+                        </option>
+                        <option value="tagName">
+                            TAG
+                        </option>
+                    </select>
+                </div>
+                <button class="btn btn-success mt-3" type="submit" name="startSearch">開始搜尋</button> 
+                <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
+            </div>
+        </form>
 
         <form method='post' class="card p-3">
             <div>
@@ -303,7 +374,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                 </span>
             </div>
 
-            <table class="table table-striped data_main_table">
+            <table class="table table-striped table-bordered data_main_table">
                 <thead class="bg-color-gold">
                     <tr>
                         <th>
@@ -313,7 +384,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
-                                <p class="m-1">productID</p>
+                                <p class="m-1">產品ID</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="productID_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="productID_ASC">
@@ -323,7 +394,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">ProductName</p>
+                                <p class="m-1">產品名稱</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="ProductName_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="ProductName_ASC">
@@ -333,7 +404,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">categoryName</p>
+                                <p class="m-1">產品類型</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="categoryName_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="categoryName_ASC">
@@ -343,7 +414,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">UnitPrice</p>
+                                <p class="m-1">單價</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitPrice_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="UnitPrice_ASC">
@@ -353,7 +424,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                         <!-- here -->
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">UnitsInStock</p>
+                                <p class="m-1">庫存量</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="UnitsInStock_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="UnitsInStock_ASC">
@@ -362,7 +433,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">add_time</p>
+                                <p class="m-1">新增時間</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="add_time_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="add_time_ASC">
@@ -378,26 +449,26 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                 <tbody>
 
                     <?php
-// write table
+                    // write table
 
-$commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description
-from coffee.products JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID
-where sellerID='$userID' ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
+                    $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description
+                    from coffee.products JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID
+                    where sellerID='$userID' $searchComment ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
 
-$result = mysqli_query($link, $commandText);
-$result_exist = mysqli_num_rows($result)>1;
+                    $result = mysqli_query($link, $commandText);
+                    $result_exist = mysqli_num_rows($result)>0;
 
-if($result_exist){
-$rowList = array();
-$i = 0;
-while ($row = mysqli_fetch_assoc($result)) {
-    $rowList[$i] = $row;
-    $i++;
-}
+                    if($result_exist){
+                    $rowList = array();
+                    $i = 0;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $rowList[$i] = $row;
+                        $i++;
+                    }
 
-foreach ($rowList as $row) {
+                    foreach ($rowList as $row) {
 
-    ?>
+                        ?>
 
                     <tr class="dataSQL">
                         <td>
@@ -414,24 +485,24 @@ foreach ($rowList as $row) {
                         <td class="hide" id="<?php echo $row["productID"] . "description" ?>" ><?php echo $row["description"] ?></td>
                         <td><?php
 
-    $productIDForTags = $row["productID"];
-    $tagCommandText = "SELECT tagName FROM coffee.products_tagMap
+                        $productIDForTags = $row["productID"];
+                        $tagCommandText = "SELECT tagName FROM coffee.products_tagMap
                         JOIN coffee.products ON coffee.products.productID=coffee.products_tagMap.productID
                         JOIN coffee.products_tags ON coffee.products_tags.tagID=coffee.products_tagMap.tagID
                         WHERE coffee.products.productID = $productIDForTags ORDER BY tagName;";
 
-    $result = mysqli_query($link, $tagCommandText);
+                        $result = mysqli_query($link, $tagCommandText);
 
-    $tag_num = 0;
-    while ($rowJ = mysqli_fetch_assoc($result)) {?>
+                        $tag_num = 0;
+                        while ($rowJ = mysqli_fetch_assoc($result)) {?>
 
 
                         <span id="<?php echo $row["productID"] . "tag" . $tag_num ?>" class="tags"><?php echo "#" . $rowJ["tagName"] ?></span>
 
 
                         <?php
-$tag_num++;
-    }?>
+                        $tag_num++;
+                            }?>
 
 
                         </td>
