@@ -132,10 +132,10 @@ if (isset($_POST['modal_submit'])) {
     $tmp_dct = $_POST['dct'];
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.discounts VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_pwd', '$userID' ,'$tmp_sex')
+    insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp','$tmp_pid', '$userID' ,'$tmp_dct')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
-    echo $insertCommandText;
+
 }
 
 
