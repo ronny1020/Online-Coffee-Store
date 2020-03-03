@@ -58,7 +58,6 @@
     user-select: none;
 }
 
-
 /* Hide the browser's default checkbox */
 
 .mycheck input {
@@ -68,7 +67,6 @@
     height: 0;
     width: 0;
 }
-
 
 /* Create a custom checkbox */
 
@@ -81,20 +79,17 @@
     background-color: #eee;
 }
 
-
 /* On mouse-over, add a grey background color */
 
 .mycheck:hover input~.checkmark {
     background-color: #ccc;
 }
 
-
 /* When the checkbox is checked, add a blue background */
 
 .mycheck input:checked~.checkmark {
     background-color: #2196F3;
 }
-
 
 /* Create the checkmark/indicator (hidden when not checked) */
 
@@ -104,13 +99,11 @@
     display: none;
 }
 
-
 /* Show the checkmark when checked */
 
 .mycheck input:checked~.checkmark:after {
     display: block;
 }
-
 
 /* Style the checkmark/indicator */
 
@@ -125,14 +118,7 @@
     transform: rotate(45deg);
 }
 
-
 /*====== do checkbox style. ======*/
-
-iframe[name=thisframe] {
-    /* background-color: tomato; */
-    display: none;
-}
-
 
 /* Source:https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox */
 
@@ -141,14 +127,12 @@ body {
     font-family: 'Noto Sans TC', sans-serif;
 }
 
-h1,
-h2,
-h3 {
+h1, h2, h3 {
     font-family: 'Noto Serif TC', serif;
 }
 
 div.modal-header {
-    background-color: lightpink;
+    background-color: rgb(192, 178, 131);
 }
 
 .modal-body th {
@@ -238,32 +222,29 @@ td>input {
     cursor: pointer;
 }
 
-.sidebar .hello {
-    color: #C0B283;
-    font-size: 1.5rem;
-    padding: 8px 8px 8px 32px;
-    word-break: keep-all;
-    margin-top: 3rem;
-}
-
 .sidebar hr {
     border-color: #C0B283;
 }
 
+/* add collapsible sidebar! (0303, lee) */
 
-/* add collapsible sidebar! (0302, lee) */
+.collapse>a {
+    background-color: #595959;
+}
 
 .triangle_rotate {
+    font-size: 80%;
+    text-align: center;
     float: right;
     transition: transform 0.5s;
 }
 
-.triangle_rotate:hover {
+.triangle_title:hover>.triangle_rotate {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 }
 
-/* (0302, lee) end here. */
+/* (0303, lee) end here. */
 
 .openbtn {
     font-size: 20px;
@@ -282,16 +263,30 @@ td>input {
 }
 
 .openbtn:hover::after {
-    content: "  展開選單";
+    content:" \5c55\958b\9078\55ae";
+    /*展開選單unicode*/
 }
 
 .outbtn {
     font-size: 20px;
+    position: absolute;
+    top: 175px;
+    right: 10px;
     cursor: pointer;
     background-color: #C0B283;
     color: #373737;
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     border: none;
+}
+.sidebar .hello {
+    position: absolute;
+    top: 175px;
+    left: 10px;
+    color: #C0B283;
+    font-size: 1.5rem;
+    /* padding: 8px 8px 8px 32px; */
+    word-break: keep-all;
+    /* margin-top: 3rem; */
 }
 
 input#pwd {
@@ -307,11 +302,11 @@ input#pwd {
     z-index: 1;
 }
 
-.logout_form {
+/* .logout_form {
     position: absolute;
     bottom: 3rem;
     right: 3rem;
-}
+} */
 
 footer {
     position: absolute;
@@ -332,7 +327,6 @@ footer>p {
     min-height: 1024px;
 }
 
-
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 
 @media screen and (max-height: 450px) {
@@ -344,11 +338,9 @@ footer>p {
     }
 }
 
-
 /* DESC-ASC button (0227 by hsieh.)*/
 
-.btn-DESC,
-.btn-ASC {
+.btn-DESC, .btn-ASC {
     height: 1.1rem;
     margin: 0;
     background-color: none;
@@ -380,7 +372,6 @@ footer>p {
 .data_main_table td.tags {
     text-align: left !important;
 }
-
 
 /* for creating form for create or edit in products */
 

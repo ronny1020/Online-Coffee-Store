@@ -152,7 +152,7 @@ if (isset($_POST["btnOK"])) {
                        <?php if (isset($_COOKIE["isChecked"]) && $_COOKIE["isChecked"] == 1) {
     echo "checked";}?>><span class="checkmark"></span>
     
-            </label><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../regist/memregist.php">還沒註冊嗎?點我註冊</a></span>
+            </label><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./regist/memregist.php">還沒註冊嗎?點我註冊</a></span>
         </div>
         <!--Fake login: -->
         <button type="submit" name="btnOK" class="btn btn-primary">登入</button>

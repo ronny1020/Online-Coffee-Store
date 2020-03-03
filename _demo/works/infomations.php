@@ -131,7 +131,22 @@ if (isset($_POST['modal_submit'])) {
     
 }
 
+if (isset($_POST['modal_submit2'])) {
+    $tmp_did2 = $_POST['did2'];
+    $tmp_nam2 = $_POST['nam2'];
+    $tmp_ddp2 = $_POST['ddp2'];
+   
+    
+	$sql_query = "UPDATE infomations SET infoName='$tmp_nam2', infoDescrip='$tmp_ddp2' WHERE sellerID='$userID' AND infoID='$tmp_did2'";   
+	$stmt = $link -> prepare($sql_query);
+    $stmt -> execute();
+	$stmt -> close();
+	// $link -> close();
+}
 
+$query_RecMember = "SELECT * FROM infomations WHERE sellerID='$userID'";
+$RecMember = $link->query($query_RecMember);	
+$row_RecMember = $RecMember->fetch_assoc();
 
 ?>
 
@@ -156,6 +171,7 @@ if (isset($_POST['modal_submit'])) {
 
     <!-- I edited these stuffs.-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
+    <link rel="stylesheet" type="text/css" href="../style2.css">
     <script src="../demoutil.js"></script>
 </head>
 
@@ -212,8 +228,8 @@ if (isset($_POST['modal_submit'])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">資訊名稱</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="infoName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="infoName_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="" name="infoName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="" name="infoName_ASC">
                                 </div>
                             </div>
                         </th>
@@ -221,8 +237,8 @@ if (isset($_POST['modal_submit'])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">資訊描述</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="infoDescript_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="infoDescript_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="" name="infoDescript_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="" name="infoDescript_ASC">
                                 </div>
                             </div>
                         </th>
@@ -257,7 +273,8 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td class="p-0">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["infoID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="submit" value="編輯" class="btn btn-primary mb-3">
+                                <input type="button" value="編輯" name="edit" class="btn btn-primary ml-3 mb-3"
+                                data-toggle="modal" data-target="#myModal2">
                         </td>
                     </tr>
                     <?php endwhile?>
@@ -341,6 +358,49 @@ while ($row = mysqli_fetch_assoc($result)):
     </div>
 </div>
 </div>
+
+<iframe name="thisframe2"></iframe>
+<!-- Modal -->
+<div class="modal fade" id="myModal2">
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">資料變更:</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="post" action=''>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <tr>
+
+                    <th>infoID:<input type="text" name='did2' value="<?php echo $row_RecMember["infoID"];?>">
+                    </th>
+                    <hr>
+                    <th>infoName: <input type="text" name='nam2' value="<?php echo $row_RecMember["infoName"];?>"></th>
+                    <hr>
+                    <th>infoDescrip: <input type="text" name='ddp2' value="<?php echo $row_RecMember["infoDescrip"];?>">
+                    </th>
+                    <hr>
+                    
+                    
+            </tr>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <input type="submit" name="modal_submit2" value='submit' class="btn btn-primary"></input>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+
+
 
 
         </div>

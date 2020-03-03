@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+// error_reporting(0);
 
 //Prevents direct connection.
 if ($_SESSION['username'] == '' || $_SESSION['AorS'] != 1) {
@@ -25,9 +25,9 @@ if (isset($_GET["page"])) {
 }
 
 //orderby
-if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["producyID_ASC"])||isset($_POST["Discount_ASC"])) {
+if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["Discount_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])||isset($_POST["producyID_DESC"])||isset($_POST["Discount_DESC"])) {
+} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])||isset($_POST["Discount_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if(isset($_SESSION["ASCorDESC"])) {
 } else {
@@ -42,8 +42,6 @@ if (isset($_POST["disID_ASC"])||isset($_POST["disID_DESC"])){
     $_SESSION["orderby"]="disName";
 } else if (isset($_POST["disDescrip_ASC"])||isset($_POST["disDescrip_DESC"])){
     $_SESSION["orderby"]="disDescrip";
-} else if (isset($_POST["productID_ASC"])||isset($_POST["productID_DESC"])){
-  $_SESSION["orderby"]="productID";
 } else if (isset($_POST["Discount_ASC"])||isset($_POST["Discount_DESC"])){
   $_SESSION["orderby"]="Discount";
 } else if(isset($_SESSION["orderby"])) {
@@ -132,11 +130,30 @@ if (isset($_POST['modal_submit'])) {
     $tmp_dct = $_POST['dct'];
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp','$tmp_pid', '$userID' ,'$tmp_dct')
+    insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp', '$userID' ,'$tmp_dct')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 
 }
+
+if (isset($_POST['modal_submit2'])) {
+    $tmp_did2 = $_POST['did2'];
+    $tmp_nam2 = $_POST['nam2'];
+    $tmp_ddp2 = $_POST['ddp2'];
+   
+    $tmp_dct2 = $_POST['dct2'];
+    
+    
+	$sql_query = "UPDATE discounts SET disName='$tmp_nam2', disDescrip='$tmp_ddp2', Discount='$tmp_dct2' WHERE sellerID='$userID' AND disID='$tmp_did2'";   
+	$stmt = $link -> prepare($sql_query);
+    $stmt -> execute();
+	$stmt -> close();
+	// $link -> close();
+}
+
+$query_RecMember = "SELECT * FROM discounts WHERE sellerID='$userID'";
+$RecMember = $link->query($query_RecMember);	
+$row_RecMember = $RecMember->fetch_assoc();
 
 
 ?>
@@ -162,6 +179,7 @@ if (isset($_POST['modal_submit'])) {
 
     <!-- I edited these stuffs.-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
+    <link rel="stylesheet" type="text/css" href="../style2.css">
     <script src="../demoutil.js"></script>
 </head>
 
@@ -218,8 +236,8 @@ if (isset($_POST['modal_submit'])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折扣名稱</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="disName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="disName_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
                                 </div>
                             </div>
                         </th>
@@ -227,20 +245,12 @@ if (isset($_POST['modal_submit'])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折扣描述</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="disName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="disName_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
                                 </div>
                             </div>
                         </th>
-                        <th>
-                        <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">適用產品</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="productID_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="productID_ASC">
-                                </div>
-                            </div>
-                        </th>
+                        
                         <th>
                         <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折數</p>
@@ -261,7 +271,7 @@ if (isset($_POST['modal_submit'])) {
 // write table
 
 $commandText = <<<SqlQuery
-                    select disID, disName, disDescrip, productID, Discount, sellerID from coffee.discounts where sellerID='$userID' ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select disID, disName, disDescrip, Discount, sellerID from coffee.discounts where sellerID='$userID' ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 
 
@@ -279,13 +289,14 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td><?php echo $row["disID"] ?></td>
                         <td><?php echo $row["disName"] ?></td>
                         <td><?php echo $row["disDescrip"] ?></td>
-                        <td><?php echo $row["productID"] ?></td>
+                        
                         <td><?php echo $row["Discount"] ?></td>
                         
                         <td class="p-0">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="submit" value="編輯" class="btn btn-primary mb-3">
+                                <input type="button" value="編輯" name="edit" class="btn btn-primary ml-3 mb-3"
+                                data-toggle="modal" data-target="#myModal2">
                         </td>
                     </tr>
                     <?php endwhile?>
@@ -357,9 +368,7 @@ while ($row = mysqli_fetch_assoc($result)):
                     <th>disDesrip: <input type="text" name='ddp'>
                     </th>
                     <hr>
-                    <th>productID: <input type="text" name='pid'>
-                    </th>
-                    <hr>
+                    
                     <th>Discount:<input type="text" name='dct'>
                     </th>
                     <hr>
@@ -376,7 +385,46 @@ while ($row = mysqli_fetch_assoc($result)):
 </div>
 </div>
 
+<iframe name="thisframe2"></iframe>
+<!-- Modal -->
+<div class="modal fade" id="myModal2">
+<div class="modal-dialog">
+    <div class="modal-content">
 
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">資料變更:</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="post" action=''>
+        <!-- Modal body -->
+        <div class="modal-body">
+            <tr>
+
+                    <th>disID:<input type="text" name='did2' value="<?php echo $row_RecMember["disID"];?>">
+                    </th>
+                    <hr>
+                    <th>disName: <input type="text" name='nam2' value="<?php echo $row_RecMember["disName"];?>"></th>
+                    <hr>
+                    <th>disDesrip: <input type="text" name='ddp2' value="<?php echo $row_RecMember["disDescrip"];?>">
+                    </th>
+                    <hr>
+                    
+                    <th>Discount:<input type="text" name='dct2' value="<?php echo $row_RecMember["Discount"];?>">
+                    </th>
+                    <hr>
+                    
+            </tr>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <input type="submit" name="modal_submit2" value='submit' class="btn btn-primary"></input>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
 
 
 
