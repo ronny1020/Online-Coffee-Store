@@ -25,9 +25,9 @@ if (isset($_GET["page"])) {
 }
 
 //orderby
-if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["producyID_ASC"])||isset($_POST["Discount_ASC"])) {
+if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["Discount_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])||isset($_POST["producyID_DESC"])||isset($_POST["Discount_DESC"])) {
+} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])||isset($_POST["Discount_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if(isset($_SESSION["ASCorDESC"])) {
 } else {
@@ -42,8 +42,6 @@ if (isset($_POST["disID_ASC"])||isset($_POST["disID_DESC"])){
     $_SESSION["orderby"]="disName";
 } else if (isset($_POST["disDescrip_ASC"])||isset($_POST["disDescrip_DESC"])){
     $_SESSION["orderby"]="disDescrip";
-} else if (isset($_POST["productID_ASC"])||isset($_POST["productID_DESC"])){
-  $_SESSION["orderby"]="productID";
 } else if (isset($_POST["Discount_ASC"])||isset($_POST["Discount_DESC"])){
   $_SESSION["orderby"]="Discount";
 } else if(isset($_SESSION["orderby"])) {
@@ -132,7 +130,7 @@ if (isset($_POST['modal_submit'])) {
     $tmp_dct = $_POST['dct'];
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp','$tmp_pid', '$userID' ,'$tmp_dct')
+    insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp', '$userID' ,'$tmp_dct')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 
@@ -142,11 +140,11 @@ if (isset($_POST['modal_submit2'])) {
     $tmp_did2 = $_POST['did2'];
     $tmp_nam2 = $_POST['nam2'];
     $tmp_ddp2 = $_POST['ddp2'];
-    $tmp_pid2 = $_POST['pid2'];
+   
     $tmp_dct2 = $_POST['dct2'];
     
     
-	$sql_query = "UPDATE discounts SET disName='$tmp_nam2', disDescrip='$tmp_ddp2', productID='$tmp_pid2', Discount='$tmp_dct2' WHERE sellerID='$userID' AND disID='$tmp_did2'";   
+	$sql_query = "UPDATE discounts SET disName='$tmp_nam2', disDescrip='$tmp_ddp2', Discount='$tmp_dct2' WHERE sellerID='$userID' AND disID='$tmp_did2'";   
 	$stmt = $link -> prepare($sql_query);
     $stmt -> execute();
 	$stmt -> close();
@@ -238,8 +236,8 @@ $row_RecMember = $RecMember->fetch_assoc();
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折扣名稱</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="disName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="disName_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
                                 </div>
                             </div>
                         </th>
@@ -247,20 +245,12 @@ $row_RecMember = $RecMember->fetch_assoc();
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折扣描述</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="disName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="disName_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
                                 </div>
                             </div>
                         </th>
-                        <th>
-                        <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">適用產品</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="productID_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="productID_ASC">
-                                </div>
-                            </div>
-                        </th>
+                        
                         <th>
                         <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折數</p>
@@ -281,7 +271,7 @@ $row_RecMember = $RecMember->fetch_assoc();
 // write table
 
 $commandText = <<<SqlQuery
-                    select disID, disName, disDescrip, productID, Discount, sellerID from coffee.discounts where sellerID='$userID' ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select disID, disName, disDescrip, Discount, sellerID from coffee.discounts where sellerID='$userID' ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 
 
@@ -299,7 +289,7 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td><?php echo $row["disID"] ?></td>
                         <td><?php echo $row["disName"] ?></td>
                         <td><?php echo $row["disDescrip"] ?></td>
-                        <td><?php echo $row["productID"] ?></td>
+                        
                         <td><?php echo $row["Discount"] ?></td>
                         
                         <td class="p-0">
@@ -378,9 +368,7 @@ while ($row = mysqli_fetch_assoc($result)):
                     <th>disDesrip: <input type="text" name='ddp'>
                     </th>
                     <hr>
-                    <th>productID: <input type="text" name='pid'>
-                    </th>
-                    <hr>
+                    
                     <th>Discount:<input type="text" name='dct'>
                     </th>
                     <hr>
@@ -421,9 +409,7 @@ while ($row = mysqli_fetch_assoc($result)):
                     <th>disDesrip: <input type="text" name='ddp2' value="<?php echo $row_RecMember["disDescrip"];?>">
                     </th>
                     <hr>
-                    <th>productID: <input type="text" name='pid2' value="<?php echo $row_RecMember["productID"];?>">
-                    </th>
-                    <hr>
+                    
                     <th>Discount:<input type="text" name='dct2' value="<?php echo $row_RecMember["Discount"];?>">
                     </th>
                     <hr>

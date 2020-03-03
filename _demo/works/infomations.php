@@ -228,8 +228,8 @@ $row_RecMember = $RecMember->fetch_assoc();
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">資訊名稱</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="infoName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="infoName_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="" name="infoName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="" name="infoName_ASC">
                                 </div>
                             </div>
                         </th>
@@ -237,8 +237,8 @@ $row_RecMember = $RecMember->fetch_assoc();
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">資訊描述</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="infoDescript_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="infoDescript_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="" name="infoDescript_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="" name="infoDescript_ASC">
                                 </div>
                             </div>
                         </th>
