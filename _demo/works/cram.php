@@ -33,7 +33,7 @@ if (isset($_GET["page"])) {
 //number of rows
 if (isset($_POST["row_num_submit"])) {
     $_SESSION["member_row_num"] = $_POST["row_num"];
-    header('Location: crams.php');
+    header('Location: cram.php');
 } else if (isset($_SESSION["member_row_num"])) {
 } else {
 //初始欄數=50
@@ -103,13 +103,27 @@ if (isset($_POST['modal_submit'])) {
     mysqli_query($link, $insertCommandText);
 }
 
-// Write table:
-$front_STR1 = "<td>";
-$back_STR1 = "</td>";
-$front_STR2 = "<td><input type='textbox' value='";
-$back_STR2 = "'></td>";
-$res_fSTR = $front_STR1;
-$res_bSTR = $back_STR1;
+//EDIT INNER DATA FROM FROM!
+//整行砍掉再重丟
+if (isset($_POST['modal_submit_e'])) {
+    $tmp_cri_e = $_POST['cri_e'];
+    $tmp_cid_e = $_POST['cid_e'];
+    $tmp_dat_e = $_POST['dat_e'];
+    $tmp_ccn_e = $_POST['ccn_e'];
+    $tmp_ckd_e = $_POST['ckd_e'];
+
+    //刪除舊資料
+    $insertCommandText = <<<SqlQuery
+    DELETE FROM coffee.crams WHERE cramID IN ('$tmp_cri_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+
+    //插入新資料
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.crams VALUES ('$tmp_cri_e','$tmp_cid_e','$tmp_dat_e','$tmp_ccn_e','$tmp_ckd_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
 
 // $editbtn = "<input type='submit' value='編輯' class='btn btn-primary mb-3' name='to_edit'>";
 // $updtbtn = "<input type='submit' value='送出' class='btn btn-primary mb-3' name='to_updt'>";
@@ -212,7 +226,7 @@ $orderby = $_SESSION["orderby"];
             class="btn btn-danger mb-3">
         <!--Modal toggled here.-->
         <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
-               data-toggle="modal" data-target="#myModal">
+               data-toggle="modal" data-target="#Modal_add">
                 <div class='float-right'>
                     <span class="mr-5">
                     <!-- show where you are -->
@@ -296,25 +310,30 @@ from coffee.crams ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
+
+// Give each row specific ID.
+$result = mysqli_query($link, $commandText);
 while ($row = mysqli_fetch_assoc($result)): ?>
 
             <tr>
-                <td>
-                    <input type="checkbox" name="<?php echo "selected" . $row["cramID"] ?>" class='checkmark'
+                        <td>
+                        <input type="checkbox" name="<?php echo "selected" . $row["cramID"] ?>"class='checkmark'
                         style='position: relative;'>
-                </td>
-                <?php echo $res_fSTR . $row["cramID"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["customerID"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cDate"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cramContent"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cChecked"] . $res_bSTR ?>
-                <td>
+                        </td>
+                        <!-- ID added here. -->
+                        <td id="<?php echo $row["cramID"]."cramID" ?>"><?php echo $row["cramID"] ?></td>
+                        <td id="<?php echo $row["cramID"]."customerID" ?>" ><?php echo $row["customerID"] ?></td>
+                        <td id="<?php echo $row["cramID"]."cDate" ?>" ><?php echo $row["cDate"] ?></td>
+                        <td id="<?php echo $row["cramID"]."cramContent" ?>"><?php echo $row["cramContent"] ?></td>
+                        <td id="<?php echo $row["cramID"]."cChecked" ?>"><?php echo $row["cChecked"] ?></td>
+                        <td>
+                        
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["cramID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["cramID"] ?>"
-                        class="btn btn-primary mb-3">
-                </td>
+                        class="btn btn-primary mb-3" onclick="throwInModal(<?php echo "'".$row['cramID']."'"?>)">
+                        </td>
             </tr>
             <?php endwhile?>
         </tbody>
@@ -358,10 +377,9 @@ if ($lastPage - $page <= 5) {
 ?>
 <!--頁尾頁碼&按鈕結束-->
 </div>
-<!-- Dummy frame. -->
-<iframe name="thisframe"></iframe>
-<!-- Modal -->
-<div class="modal fade" id="myModal">
+
+<!-- Modal: Add new-->
+<div class="modal fade" id="Modal_add">
 <div class="modal-dialog">
     <div class="modal-content">
 
@@ -401,6 +419,49 @@ if ($lastPage - $page <= 5) {
     </div>
 </div>
 </div>
+
+<!-- Modal: Edit old!-->
+<div class="modal fade" id="Modal_edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">資料變更:</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form method="post" action=''>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <tr>
+
+                        <th>cramID:<input type="text" name='cri_e' id='cri_e' readonly></a>
+                        </th><!-- ID不給改: readonly-->
+                        <hr>
+                        <th>customerID: <input type="text" name='cid_e' id='cid_e'></th>
+                        <hr>
+                        <th>cDate:<input type="date" name='dat_e' id='dat_e'>
+                        </th>
+                        <hr>
+                        <th>cContent: <textarea name="ccn_e" id='ccn_e' rows="4" cols="50"></textarea>
+                        </th>
+                        <hr>
+                        <th>cChecked: <select name='ckd_e' id='ckd_e'>
+                                <option value='Y'>是</option>
+                                <option value='N'>否</option>
+                            </select></th>
+                    </tr>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 
