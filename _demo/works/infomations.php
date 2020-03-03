@@ -171,6 +171,7 @@ $row_RecMember = $RecMember->fetch_assoc();
 
     <!-- I edited these stuffs.-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
+    <link rel="stylesheet" type="text/css" href="../style2.css">
     <script src="../demoutil.js"></script>
 </head>
 
