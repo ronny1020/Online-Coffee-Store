@@ -26,15 +26,14 @@ $error = "";
             <a href="members.php">會員資料</a>
             <a href="cram.php">客訴內容</a>
             </div>
-            <!-- collapse bar end here. -->
-            <a class='triangle_title' href="sellers.php">廠商管理<div class="triangle_rotate">▶</div></a>
+            <a href="sellers.php">廠商管理<div class="triangle_rotate">▶</div></a>
         <?php } elseif ($_SESSION['AorS'] === 1) {?>
             
             <a href="../regist/memupdate.php">資料管理</a>
             <a href="orders.php">訂單管理</a>
             <a href="products.php">商品管理</a>
             <a href="infomations.php">訊息管理</a>
-            <a href="actions.php">活動管理</a>
+            
             <a href="discounts.php">優惠管理</a>
 <?php }?>
     </div>
