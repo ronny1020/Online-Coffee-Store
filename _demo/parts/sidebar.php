@@ -30,11 +30,11 @@ $error = "";
         <?php } elseif ($_SESSION['AorS'] === 1) {?>
             
             <a href="../regist/memupdate.php">資料管理</a>
-            <a href="orders.php">訂單管理</a>
-            <a href="products.php">商品管理</a>
-            <a href="infomations.php">訊息管理</a>
+            <a href="../works/orders.php">訂單管理</a>
+            <a href="../works/products.php">商品管理</a>
+            <a href="../works/infomations.php">訊息管理</a>
             
-            <a href="discounts.php">優惠管理</a>
+            <a href="../works/discounts.php">優惠管理</a>
 <?php }?>
     </div>
 
