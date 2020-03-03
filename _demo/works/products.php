@@ -56,7 +56,7 @@ $orderby = $_SESSION["orderby"];
 //number of rows
 if (isset($_POST["row_num_submit"])) {
     $_SESSION["products_row_num"] = $_POST["row_num"];
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+    header('location:products.php');
 } else if (isset($_SESSION["products_row_num"])) {
 } else {
     $_SESSION["products_row_num"] = 50;
@@ -359,6 +359,13 @@ if (isset($_POST["edit_data"])) {
                 </div>
                 <button class="btn btn-success mt-3" type="submit" name="startSearch">開始搜尋</button> 
                 <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
+                <p class="mt-3">
+                    <?php 
+                    if(isset($_SESSION["searchKeyword"])){
+                        echo "您正在搜尋：".$_SESSION["searchKeyword"];
+                    }                    
+                     ?>
+                </p>
             </div>
         </form>
 
