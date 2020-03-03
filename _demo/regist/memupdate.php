@@ -161,6 +161,10 @@ function checkmail(sMail) {
 </head>
 
 <body>
+
+<?php include '../parts/sidebar.php';?>
+    <?php include '../parts/head.php';?>
+
 <table width="780" border="0" align="center" cellpadding="4" cellspacing="0">
   <tr>
     <td class="tdbline"><img src="images/mlogo.png" alt="會員系統" width="164" height="67"></td>
