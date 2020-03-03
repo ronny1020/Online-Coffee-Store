@@ -92,30 +92,24 @@ foreach ($_POST as $i => $j) {
 }
 
 //ADD NEW DATA TO FORM! :
-//if (isset($_POST['modal_submit'])) {
-//    $tmp_cid = $_POST['cid'];
-//    $tmp_nam = $_POST['nam'];
-//    $tmp_acc = $_POST['acc'];
-//    $tmp_pwd = $_POST['pwd'];
-//    $tmp_sex = $_POST['sex'];
-//    $tmp_bid = $_POST['bid'];
-//    $tmp_adr = $_POST['adr'];
-//    $tmp_mob = $_POST['mob'];
-//    $insertCommandText = <<<SqlQuery;
-  
-//    insert into coffee.orders (OrderID, CustomerID, RequiredDate, ShippedDate, ShipAddress, ShipRegion, ShipCity, ShipCountry, ShipPostCode  )
-//    VALUES ('R100', 'C002' , 1997-02-22 00:00:00, 1997-02-10 00:00:00,  'Albert Street No.113, 4F', 'B region', 'A City', 'U.S.', '104885'  );
-    
-
-         
-       
-           
+if (isset($_POST['modal_submit'])) {
+   $tmp_oid = $_POST['oid'];
+   $tmp_cid = $_POST['cid'];
+   $tmp_OrderD = $_POST['OrderD'];
+   $tmp_ShippedD = $_POST['ShippedD'];
+   $tmp_ShippedA = $_POST['ShippedA'];
+   $tmp_ShipR = $_POST['ShipR'];
+   $tmp_ShipPost = $_POST['ShipPost'];
+   $tmp_ShipCity = $_POST['ShipCity'];
+   $tmp_ShipCountry = $_POST['ShipCountry'];
+   $insertCommandText = <<<SqlQuery
+   insert into coffee.orders VALUES ('$tmp_oid','$tmp_cid','$tmp_OrderD','$tmp_ShippedD','$tmp_ShippedA','$tmp_ShipR','$tmp_ShipPost','$tmp_ShipCity','$tmp_ShipCountry')
+   SqlQuery;
    
- 
 
    
-//    mysqli_query($link, $insertCommandText);
-//}
+   mysqli_query($link, $insertCommandText);
+}
 
 // Write table:
 $front_STR1 = "<td>";
@@ -205,6 +199,7 @@ if (isset($_POST["deleteSelected"])) {
                 <th>ShipPostCode</th>
                 <th>ShipCity</th>
                 <th>ShipCountry</th>
+                <th></th>
 
 
 
@@ -228,29 +223,26 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
             <tr>
                 <td>
-                    <input type="checkbox" name="<?php echo "selected" . $row["customerID"] ?>" class='checkmark'
+                    <input type="checkbox" name="<?php echo "selected" . $row["OrderID"] ?>" class='checkmark'
                         style='position: relative;'>
                 </td>
-                <?php echo $res_fSTR . $row["OrderID"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["CustomerID"] . $res_bSTR ?>
-                
-                <?php echo $res_fSTR . $row["OrderDate"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["ShippedDate"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["ShipAddress"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["ShipRegion"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["ShipPostCode"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["ShipCity"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["ShipCountry"] . $res_bSTR ?>
-
-                
-
+                <td id="<?php echo $row["OrderID"]."OrderID" ?>"><?php echo $row["OrderID"] ?></td>
+                <td id="<?php echo $row["OrderID"]."CustomerID" ?>"><?php echo $row["CustomerID"] ?></td>
+                <td id="<?php echo $row["OrderID"]."OrderDate" ?>"><?php echo $row["OrderDate"] ?></td>
+                <td id="<?php echo $row["OrderID"]."ShippedDate" ?>"><?php echo $row["ShippedDate"] ?></td>
+                <td id="<?php echo $row["OrderID"]."ShipAddress" ?>"><?php echo $row["ShipAddress"] ?></td>
+                <td id="<?php echo $row["OrderID"]."ShipRegion" ?>"><?php echo $row["ShipRegion"] ?></td>
+                <td id="<?php echo $row["OrderID"]."ShipPostCode" ?>"><?php echo $row["ShipPostCode"] ?></td>
+                <td id="<?php echo $row["OrderID"]."ShipCity" ?>"><?php echo $row["ShipCity"] ?></td>
+                <td id="<?php echo $row["OrderID"]."ShipCountry" ?>"><?php echo $row["ShipCountry"] ?></td>
+               
                 <td>
 
-                    <input type="submit" value="刪除" name="<?php echo "delete" . $row["customerID"] ?>"
+                    <input type="submit" value="刪除" name="<?php echo "delete" . $row["OrderID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
-                    <input type='button' value="編輯" name="<?php echo "edit" . $row["customerID"] ?>"
-                        class="btn btn-primary mb-3">
+                    <input type='button' value="編輯" name="<?php echo "edit" . $row["OrderID"] ?>"
+                        class="btn btn-primary mb-3"  data-toggle="modal" data-target='#MyEdit'>
                 </td>
             </tr>
             <?php endwhile?>
@@ -261,7 +253,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
 <!--頁尾頁碼&按鈕結束-->
 </div>
-<!-- Modal -->
+<!-- 新增資料用 Modal -->
 <div class="modal fade" id="myModal">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -273,33 +265,38 @@ while ($row = mysqli_fetch_assoc($result)): ?>
         </div>
         <form method="post" action=''>
         <!-- Modal body -->
-        <!--<div class="modal-body">
+       <div class="modal-body">
             <tr>
 
-                    <th>customerID:<input type="text" name='cid'>
+                    <th>OrderID:<input type="text" name='oid'>
                     </th>
                     <hr>
-                    <th>cName: <input type="text" name='nam'></th>
+                    <th>CustomerID: <input type="text" name='cid'></th>
                     <hr>
-                    <th>cAccount: <input type="text" name='acc'>
+                    <th>OrderDate: <input type="date" name='OrderD'>
                     </th>
                     <hr>
-                    <th>cPassword: <input type="text" name='pwd'>
+                    <th>ShippedDate: <input type="date" name='ShippedD'>
                     </th>
                     <hr>
-                    <th>cSex: <input type="text" name='sex'></th>
+                    <th>ShipAddress: <input type="text" name='ShippedA'></th>
                     <hr>
-                    <th>cBirthDate:<input type="date" name='bid'>
+                    <th>ShipRegion:<input type="text" name='ShipR'>
                     </th>
                     <hr>
-                    <th>cAddress: <input type="text" name='adr'>
-                    </th>
+                    
+                    
+                    <th>ShipPostCode: <input type="text" name='ShipPost'></th>
                     <hr>
-                    <th>cMobile: <input type="text" name='mob'></th>
+                    <th>ShipCity: <input type="text" name='ShipCity'></th>
+                    <hr>
+                    <th>ShipCountry: <input type="text" name='ShipCountry'></th>
+
+
             </tr>
         </div>
 
-        -->
+
 
         <!-- Modal footer -->
         <div class="modal-footer">
@@ -311,5 +308,73 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 </div>
 </div>
 <!-- End your code here. -->
+
+
+
+
+
+
+<!--編輯資料用 Modal -->
+<div class="modal fade" id="MyEdit">
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">資料變更:</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="post" action=''>
+        <!-- Modal body -->
+       <div class="modal-body">
+            <tr>
+
+                    <th>OrderID:<input type="text" name='oid'>
+                    </th>
+                    <hr>
+                    <th>CustomerID: <input type="text" name='cid'></th>
+                    <hr>
+                    <th>OrderDate: <input type="date" name='OrderD'>
+                    </th>
+                    <hr>
+                    <th>ShippedDate: <input type="date" name='ShippedD'>
+                    </th>
+                    <hr>
+                    <th>ShipAddress: <input type="text" name='ShippedA'></th>
+                    <hr>
+                    <th>ShipRegion:<input type="text" name='ShipR'>
+                    </th>
+                    <hr>
+                    
+                    
+                    <th>ShipPostCode: <input type="text" name='ShipPost'></th>
+                    <hr>
+                    <th>ShipCity: <input type="text" name='ShipCity'></th>
+                    <hr>
+                    <th>ShipCountry: <input type="text" name='ShipCountry'></th>
+
+
+            </tr>
+        </div>
+
+
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <input type="submit" name="modal_submit" value='submit' class="btn btn-primary"></input>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+<!-- End your code here. -->
+
+
+
+
+
+
+
 <?php include '../parts/footer.php';?>
 </body>
