@@ -106,6 +106,31 @@ if (isset($_POST['modal_submit'])) {
     mysqli_query($link, $insertCommandText);
 }
 
+//EDIT INNER DATA FROM FROM!
+//整行砍掉再重丟
+if (isset($_POST['modal_submit_e'])) {
+    $tmp_cid_e = $_POST['cid_e'];
+    $tmp_nam_e = $_POST['nam_e'];
+    $tmp_acc_e = $_POST['acc_e'];
+    $tmp_pwd_e = $_POST['pwd_e'];
+    $tmp_sex_e = $_POST['sex_e'];
+    $tmp_bid_e = $_POST['bid_e'];
+    $tmp_adr_e = $_POST['adr_e'];
+    $tmp_mob_e = $_POST['mob_e'];
+    // echo $tmp_sex_e . $tmp_bid_e;
+    //刪除舊資料
+    $insertCommandText = <<<SqlQuery
+    DELETE FROM coffee.customers WHERE customerID IN ('$tmp_cid_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+
+    //插入新資料
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.customers VALUES ('$tmp_cid_e','$tmp_nam_e','$tmp_acc_e','$tmp_pwd_e','$tmp_sex_e','$tmp_bid_e','$tmp_adr_e','$tmp_mob_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
+
 // Write table:
 $front_STR1 = "<td>";
 $back_STR1 = "</td>";
@@ -200,6 +225,7 @@ if (isset($_POST["deleteSelected"])) {
                 <th>customerID</th>
                 <th>cName</th>
                 <th>cAccount</th>
+                <th>cPassword</th>
                 <th>cSex</th>
                 <th>cBirthDate</th>
                 <th>cAddress</th>
@@ -214,32 +240,35 @@ if (isset($_POST["deleteSelected"])) {
 // $commandText: $str
 // 受所允許之總欄數調控
 $commandText = <<<SqlQuery
-select customerID, cName, cAccount, cSex, cBirthDate, cAddress, cMobile
+select customerID, cName, cAccount, cPassword, cSex, cBirthDate, cAddress, cMobile
 from coffee.customers ORDER BY customerID LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
 while ($row = mysqli_fetch_assoc($result)): ?>
 
-            <tr>
-                <td>
-                    <input type="checkbox" name="<?php echo "selected" . $row["customerID"] ?>" class='checkmark'
+<tr>
+                        <td>
+                        <input type="checkbox" name="<?php echo "selected" . $row["customerID"] ?>"class='checkmark'
                         style='position: relative;'>
-                </td>
-                <?php echo $res_fSTR . $row["customerID"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cName"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cAccount"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cSex"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cBirthDate"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cAddress"] . $res_bSTR ?>
-                <?php echo $res_fSTR . $row["cMobile"] . $res_bSTR ?>
-                <td>
+                        </td>
+                        <!-- ID added here. -->
+                        <td id="<?php echo $row["customerID"]."customerID" ?>"><?php echo $row["customerID"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cName" ?>" ><?php echo $row["cName"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cAccount" ?>" ><?php echo $row["cAccount"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cPassword" ?>" ><?php echo $row["cPassword"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cSex" ?>" ><?php echo $row["cSex"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cBirthDate" ?>" ><?php echo $row["cBirthDate"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cAddress" ?>" ><?php echo $row["cAddress"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cMobile" ?>" ><?php echo $row["cMobile"] ?></td>
+                        <td>
+                        
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["customerID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["customerID"] ?>"
-                        class="btn btn-primary mb-3">
-                </td>
+                        class="btn btn-primary mb-3" onclick="throwinmodal_MEMBERS(<?php echo "'".$row['customerID']."'"?>)">
+                        </td>
             </tr>
             <?php endwhile?>
         </tbody>
@@ -334,6 +363,57 @@ if ($lastPage - $page <= 5) {
     </div>
 </div>
 </div>
+
+<!-- Modal: Edit old!-->
+<div class="modal fade" id="Modal_edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">資料變更:</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form method="post" action=''>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <tr>
+
+                    <th>customerID:<input type="text" name='cid_e' id='cid_e' readonly>
+                    </th>
+                    <hr>
+                    <th>cName: <input type="text" name='nam_e' id='nam_e'></th>
+                    <hr>
+                    <th>cAccount: <input type="text" name='acc_e' id='acc_e'>
+                    </th>
+                    <hr>
+                    <th>cPassword: <input type="text" name='pwd_e' id='pwd_e'>
+                    </th>
+                    <hr>
+                    <th>cBirthDate:<input type="date" name='bid_e' id='bid_e'>
+                    </th>
+                    <hr>
+                    <th>cAddress: <input type="text" name='adr_e' id='adr_e'>
+                    </th>
+                    <hr>
+                    <th>cMobile: <input type="text" name='mob_e' id='mob_e'></th>
+                    <hr>
+                    <th>cSex: <select name='sex_e' id='sex_e'>
+                        <option value='M'>男</option>
+                        <option value='F'>女</option>
+                    </select></th>
+                    </tr>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 
