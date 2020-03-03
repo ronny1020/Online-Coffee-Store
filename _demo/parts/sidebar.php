@@ -26,7 +26,8 @@ $error = "";
             <a href="members.php">會員資料</a>
             <a href="cram.php">客訴內容</a>
             </div>
-            <a href="sellers.php">廠商管理<div class="triangle_rotate">▶</div></a>
+            <!-- collapse bar end here. -->
+            <a class='triangle_title' href="sellers.php">廠商管理<div class="triangle_rotate">▶</div></a>
         <?php } elseif ($_SESSION['AorS'] === 1) {?>
             
             <a href="../regist/memupdate.php">資料管理</a>
