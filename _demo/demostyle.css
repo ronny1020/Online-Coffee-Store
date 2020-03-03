@@ -258,25 +258,10 @@ td>input {
     transition: transform 0.5s;
 }
 
-
-/* .triangle_title:hover+ .triangle_title>.triangle_rotate{
-    transition: 0.5s;
-    transform: rotate(90deg);
-    -webkit-transform: rotate(90deg);
-} */
-
 .triangle_rotate:hover {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 }
-
-
-/* a:hover + #triangle_rotate{
-    transition: 0.5s;
-    transform: rotate(90deg);
-    -webkit-transform: rotate(90deg);
-} */
-
 
 /* (0302, lee) end here. */
 

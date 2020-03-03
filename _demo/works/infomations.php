@@ -128,7 +128,7 @@ if (isset($_POST['modal_submit'])) {
     insert into coffee.infomations VALUES ('$tmp_iid','$tmp_ifn','$tmp_ifd','$userID')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
-    echo $insertCommandText;
+    
 }
 
 

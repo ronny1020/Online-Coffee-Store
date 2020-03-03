@@ -63,6 +63,44 @@ function selectAllCheckbox() {
     }
 }
 
+// Lightweight version by LEE.(0303)
+// 1. 更改table使各欄位附加上id
+// 2. onclick button觸發函數讀值進入modal
+// 3. submit之後送出update MySql
+
+function throwInModal(myid){
+    //Summon modal by Jquery.
+    $('#Modal_edit').modal('show');
+
+    var myid = myid.toString();
+    // alert('myid');
+    // Get datas from ID-labelled table.
+    let cramID = myid + "cramID";
+    var throw_cramID = document.getElementById(cramID).innerHTML;
+    let customerID = myid + "customerID";
+    var throw_customerID = document.getElementById(customerID).innerHTML;
+    // DATE: need to change format before used!
+    let cDate = myid + "cDate";
+    var tmp_throw_cDate = document.getElementById(cDate).innerHTML;
+    var throw_cDate = tmp_throw_cDate.split(" ");
+    // alert(throw_cDate);
+    let cramContent = myid + "cramContent";
+    var throw_cramContent = document.getElementById(cramContent).innerHTML;
+    let cChecked = myid + "cChecked";
+    var throw_cChecked = document.getElementById(cChecked).innerHTML;
+    // alert(throw_cChecked);
+
+    // Write into Modal.
+    document.getElementById('cri_e').value = throw_cramID;
+    document.getElementById('cid_e').value = throw_customerID;
+    document.getElementById('dat_e').value = throw_cDate[0];
+    document.getElementById('ccn_e').value = throw_cramContent;
+    document.getElementById('ckd_e').value= throw_cChecked;
+
+}
+
+// function from lee ended here. (0303)
+
 
 
 //create form for create or edit in products
