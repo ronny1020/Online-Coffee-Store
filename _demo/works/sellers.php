@@ -95,9 +95,25 @@ if (isset($_POST["modal-submit"])){
     $adr = $_POST['adr'];
     $phone = $_POST['phone'];
     $insertCommandText = <<<SqlQuery
-    INSERT INTO coffee.sellers VALUES ('$sid','$nam','$acc','$pwd','$adr','$phone')
+    INSERT INTO coffee.sellers VALUES ('$sid','$nam','$acc','$pwd','$adr','$phone','123','sss')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
+}
+
+// edit data
+if (isset($_POST['edModal-submit'])){
+    $sid = $_POST['sid'];
+    $nam = $_POST['nam'];
+    $acc = $_POST['acc'];
+    $pwd = $_POST['pwd'];
+    $adr = $_POST['adr'];
+    $phone = $_POST['phone'];
+    $editCommandText = <<<SqlQuery
+    UPDATE coffee.sellers SET sellerID='$sid', sName='$nam', sAccount='$acc',
+    sPassword='$pwd', sAddress='$adr', sPhone='$phone' 
+    where sellerID = '$sid'
+    SqlQuery;
+    mysqli_query($link, $editCommandText);
 }
 ?>
 <!DOCTYPE html>
@@ -122,6 +138,16 @@ if (isset($_POST["modal-submit"])){
     <!-- I edited these stuffs.-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
     <script src="../demoutil.js"></script>
+    <script>
+        function displayModal(...params) {
+            sid.value = params[0]; //id
+            nam.value = params[1]; //name
+            acc.value = params[2]; //account
+            pwd.value = params[3]; //password
+            adr.value = params[4]; //address
+            phone.value = params[5]; //phone
+        }
+    </script>
 </head>
 
 <body>
@@ -134,7 +160,7 @@ if (isset($_POST["modal-submit"])){
         <div>
             <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                 class="btn btn-danger mb-3">
-            <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+            <input type="button" value="新增資料" name="newInsert" class="btn btn-primary ml-3 mb-3" data-toggle="modal" data-target="#insertModal">
             <div class='float-right'>
                     <span class="mr-5">
                     <!-- show where you are -->
@@ -185,11 +211,14 @@ if (isset($_POST["modal-submit"])){
                         <td><?php echo $row["sPassword"] ?></td>
                         <td><?php echo $row["sAddress"] ?></td>
                         <td><?php echo $row["sPhone"] ?></td>
+                        <?php $temp = '"'.$row['sellerID'].'","'.$row['sName'].'","'.$row['sAccount'].'","'.$row['sPassword'].'","'.$row['sAddress'].'","'.$row['sPhone'].'"' ?>
                         <td>
                             <input type="submit" value="刪除" name="<?php echo "delete".$row["sellerID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <!-- <input type="submit" value="編輯" name="<?php echo "edit".$row["sellerID"] ?>"
-                            class="btn btn-primary mb-3"> -->
+                            <input type="button" value="編輯" name="<?php echo "edit".$row["sellerID"] ?>" 
+                                data-toggle="modal" data-target="#editModal"
+                                class="btn btn-primary mb-3"
+                                <?php echo "onclick='displayModal($temp)'"?>>
                 </tr>
                 <?php endwhile?>
             </tbody>
@@ -235,17 +264,13 @@ if ($lastPage - $page <= 5) {
 <!--頁尾頁碼&按鈕結束-->
     </div>
 
-<!-- Dummy frame. -->
-<iframe name="thisframe"></iframe>
-<!-- Modal -->
-
-    <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal insert  -->
+<div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel_insert" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
     <form method="POST" action="">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">新增 / 編輯</h5>
+        <h5 class="modal-title" id="ModalLabel_insert">新增</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -277,6 +302,46 @@ if ($lastPage - $page <= 5) {
     </div>
   </div>
 </div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel_edit" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <form method="POST" action="">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel_edit">編輯</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <tr>
+            <th>sellerID:<input type="text" name='sid' id="sid" readonly>
+            </th>
+            <hr>
+            <th>sName: <input type="text" name='nam' id="nam"></th>
+            <hr>
+            <th>sAccount: <input type="text" name='acc' id="acc">
+            </th>
+            <hr>
+            <th>sPassword: <input type="text" name='pwd' id="pwd">
+            </th>
+            <hr>
+            <th>sAddress: <input type="text" name='adr' id="adr">
+            </th>
+            <hr>
+            <th>sPhone: <input type="text" name='phone' id="phone"></th>
+        </tr>
+      </div>
+      <div class="modal-footer">
+        <input type="submit" class="btn btn-primary" name="edModal-submit" value="submit" />
+        <button type="button" class="btn btn-danger"  data-dismiss="modal">close</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 </div>
 </div>
 <!-- End your code here. -->
