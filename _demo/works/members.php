@@ -215,7 +215,7 @@ if (isset($_POST["deleteSelected"])) {
                     </span>
                 </div>
 
-    <table class="table table-striped ">
+    <table class="table table-striped">
     <thead class="bg-color-silk">
             <tr>
                 <th>

@@ -16,11 +16,10 @@ $error = "";
         <form method='post'  class='logout_form' >
         <button type='submit' class='outbtn btn' id='logout' name='logout'>登出</button>
         </form>
-        <hr>
+        <br><br><hr>
         <?php if ($_SESSION['AorS'] === 0) {?>
             <!-- Collapsible bar here. -->
-            <a class='triangle_title' type="button" data-toggle="collapse" data-target="#member"
-               onclick="rotateTarget('triangle_rotate')">
+            <a class='triangle_title' type="button" data-toggle="collapse" data-target="#member">
                 會員管理<div class="triangle_rotate">▶</div></a>
             <div id="member" class="collapse">
             <a href="members.php">會員資料</a>
