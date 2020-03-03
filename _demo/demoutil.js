@@ -192,7 +192,8 @@ function create_edit(ID) {
         create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "ProductID_ce")
         ProductID_ce.CreateAppend("label", "產品ID：", "class", "form-control-label", "for", "ProductID_input")
         ProductID_ce.CreateAppend("input", "", "type", "text", "value", ID, "class", "form-control", "id", "ProductID_input", "name", "ProductID_input", "readonly")
-            // name
+
+        // name
         ProductNameID = ID + "ProductName";
         ProductNameInner = document.getElementById(ProductNameID).innerHTML
             // category
@@ -220,6 +221,8 @@ function create_edit(ID) {
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "ProductName_ce")
     ProductName_ce.CreateAppend("label", "產品名稱：", "class", "form-control-label", "for", "ProductName_input")
     ProductName_ce.CreateAppend("input", "", "type", "text", "value", ProductNameInner, "class", "form-control", "id", "ProductName_input", "name", "ProductName_input", "required")
+    ProductName_ce.CreateAppend("div", "Valid.", "class", "valid-feedback")
+    ProductName_ce.CreateAppend("div", "Please fill out this field.", "class", "invalid-feedback")
         // category
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "categoryName_ce")
     categoryName_ce.CreateAppend("label", "產品類型：", "class", "form-control-label", "for", "categoryName_select")
