@@ -231,6 +231,8 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `products` AUTO_INCREMENT=164413;
+CREATE INDEX idx_sellerID ON `products` (`sellerID`);
+
 
 INSERT INTO `coffee`.`products` (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`, `UnitsInStock`, `add_time`, `specification`, `description`) VALUES 
 ('好貨01', 'S001', 1, 20, 10, '2020-02-28', 'GOOD', 'GOOD'),

@@ -92,8 +92,12 @@ if(isset($_SESSION["searchKeyword"])) {
     $searchKeyword=$_SESSION["searchKeyword"];
     if($_SESSION["searchBy"]=="productName"){
         $searchComment="and productName like '%$searchKeyword%'";
-
-    }else{
+    }else if($_SESSION["searchBy"]=="specification"){
+        $searchComment="and specification like '%$searchKeyword%'";
+    }else if($_SESSION["searchBy"]=="description"){
+        $searchComment="and description like '%$searchKeyword%'";
+    }
+    else{
         // get tagID
         $searchTagComment="select tagID from coffee.products_tags WHERE tagName like '%$searchKeyword%';";
         $searchTagResult= mysqli_query($link, $searchTagComment);
@@ -341,6 +345,12 @@ if (isset($_POST["edit_data"])) {
                     <select name="searchBy">
                         <option value="productName">
                             產品名稱
+                        </option>
+                        <option value="specification">
+                            規格    
+                        </option>
+                        <option value="description">
+                            介紹
                         </option>
                         <option value="tagName">
                             TAG
