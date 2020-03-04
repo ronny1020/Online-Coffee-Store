@@ -161,6 +161,47 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+//========== 欄位排序調整: ==========//
+//Adjusted by 2 SESSION:
+// 1. ASCorDESC: 決定升序抑或降序
+// if ASC triggered:
+
+    if (isset($_POST["customerID_ASC"]) ||
+    isset($_POST["cAccount_ASC"]) ||
+    isset($_POST["cSex_ASC"]) ||
+    isset($_POST["cBirthDate_ASC"])) {
+    $_SESSION["ASCorDESC"] = "ASC";
+
+//elseif DESC triggered:
+} else if (
+    isset($_POST["customerID_DESC"]) ||
+    isset($_POST["cAccount_DESC"]) ||
+    isset($_POST["cSex_DESC"]) ||
+    isset($_POST["cBirthDate_DESC"])) {
+    $_SESSION["ASCorDESC"] = "DESC";
+} else if (isset($_SESSION["ASCorDESC"])) {
+} else {// Default of ASCorDESC: ASC(升序)
+    $_SESSION["ASCorDESC"] = "ASC";
+}
+$ASCorDESC = $_SESSION["ASCorDESC"];
+
+// 2. ORDERBY: 決定以何物排序
+if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
+    $_SESSION["orderby"] = "customerID";
+} else if (isset($_POST["cAccount_ASC"]) || isset($_POST["cAccount_DESC"])) {
+    $_SESSION["orderby"] = "cAccount";
+} else if (isset($_POST["cSex"]) || isset($_POST["cSex_DESC"])) {
+    $_SESSION["orderby"] = "cSex";
+} else if (isset($_POST["cBirthDate_ASC"]) || isset($_POST["cBirthDate_DESC"])) {
+    $_SESSION["orderby"] = "cBirthDate";
+} else if (isset($_SESSION["orderby"])) {
+} else {// Default of orderby: cramID
+    $_SESSION["orderby"] = "customerID";
+}
+$orderby = $_SESSION["orderby"];
+
+//======= 排序調整: END HERE. =======//
+
 ?>
 <!DOCTYPE html>
 <title>管理後台</title>
@@ -215,9 +256,10 @@ if (isset($_POST["deleteSelected"])) {
                     </span>
                 </div>
 
-    <table class="table table-striped">
+    <!--======= Main table標題⬇: =======-->
+    <table class="table table-striped ">
     <thead class="bg-color-silk">
-    <tr>
+                    <tr>
                         <th>
                             <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
                             <label for="selectAll">全選</label>
@@ -227,16 +269,6 @@ if (isset($_POST["deleteSelected"])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
                                 <p class="m-1">customerID</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cramID_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cramID_ASC">
-                                </div>
-                            </div>
-                        </th>
-
-                        <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cNameID</p>
-                                <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="customerID_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="customerID_ASC">
                                 </div>
@@ -245,12 +277,19 @@ if (isset($_POST["deleteSelected"])) {
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cName</p>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cAccount</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cDate_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cDate_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cAccount_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cAccount_ASC">
                                 </div>
                             </div>
+
                         </th>
 
                         <th>
@@ -263,8 +302,8 @@ if (isset($_POST["deleteSelected"])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cSex</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cSex_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cSex_ASC">
                                 </div>
                             </div>
                         </th>
@@ -273,8 +312,8 @@ if (isset($_POST["deleteSelected"])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cBirthDate</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cBirthDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cBirthDate_ASC">
                                 </div>
                             </div>
                         </th>
@@ -282,33 +321,27 @@ if (isset($_POST["deleteSelected"])) {
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cAddress</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
-                                </div>
                             </div>
                         </th>
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cMobile</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
-                                </div>
                             </div>
                         </th>
+
                         <th>
                         </th>
                 </thead>
         <tbody>
+<!--======= Main table標題⬆: =======-->
 <?php
 // write table
 // $commandText: $str
 // 受所允許之總欄數調控
 $commandText = <<<SqlQuery
 select customerID, cName, cAccount, cPassword, cSex, cBirthDate, cAddress, cMobile
-from coffee.customers ORDER BY customerID LIMIT $rowNum OFFSET $tableOffSet
+from coffee.customers ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
