@@ -220,6 +220,69 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+// export selected data
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList="(";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList.=$selectedItem.",";
+        }
+    }
+    $selectedList=rtrim($selectedList,",");
+    $selectedList.=")";
+    $exportComment="select productID, ProductName, categoryName, UnitPrice, UnitsInStock, specification, products.description from coffee.products 
+    JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
+    where sellerID='$userID' and productID in $selectedList ORDER BY productID;";
+
+   
+    $exportResult = mysqli_query($link, $exportComment);
+    $columns_total = mysqli_num_fields($exportResult);
+    $exportResult_exist = mysqli_num_rows($exportResult)>0;
+    if($exportResult_exist){
+        // Get The Field Name
+        $output ="";
+        for($i = 0; $i < $columns_total; $i++){
+            $heading = mysqli_fetch_field_direct($exportResult, $i);
+            $output .= '"' . $heading->name . '",';
+        }
+        $output .="\n";
+ 
+        // Get Records from the table
+
+        while($row = mysqli_fetch_assoc($exportResult)){
+    
+        $output .='"' . $row["productID"] . '",';
+        $output .='"' . $row["ProductName"] . '",';
+        $output .='"' . $row["categoryName"] . '",';
+        $output .='"' . $row["UnitPrice"] . '",';
+        $output .='"' . $row["UnitsInStock"] . '",';
+        $output .='"' . $row["specification"] . '",';
+        $output .='"' . $row["description"] . '",';
+        $output .="\n";
+        }
+        echo $output;
+    
+    }
+    // Download the file
+
+    $filename = "ProductList". date('Y-m-d H:i:s').".csv";
+    header('Content-Encoding: UTF-8');
+    header("Content-Type: text/csv; charset=UTF-8");
+    header('Content-Disposition: attachment; filename=' . $filename);
+    echo "\xEF\xBB\xBF"; 
+
+ 
+    exit;
+
+  // header('location:' . $_SERVER['REQUEST_URI'] . '');
+}
+
+
+
+
+
 // uploadImage
 function uploadImage($productIDForImage){
     $ImageUpload_dir = "../image/products/";
@@ -234,6 +297,11 @@ function uploadImage($productIDForImage){
             echo "File is not an image.";
             $uploadOk = 0;
         }
+    }
+
+    if($ImageUploadType != "jpg" ) {
+    echo "Sorry, only JPG are allowed.";
+    $uploadOk = 0;
     }
 
     if ($uploadOk == 0) {
@@ -418,6 +486,7 @@ if (isset($_POST["edit_data"])) {
         <form method='post' class="card p-3">
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')" class="btn btn-danger mb-3">
+                <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
                 <input type="button" value="新增資料" class="btn btn-primary ml-3 mb-3" onclick="create_edit()">
 
                 <div class='float-right'>
@@ -515,8 +584,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                     // write table
 
                     $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description from coffee.products 
-                    JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID
-  
+                    JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
                     where sellerID='$userID' $searchComment ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
 
                     $result = mysqli_query($link, $commandText);
@@ -574,7 +642,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                             <div class="right_btn">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
                                 class="btn btn-danger my-0 btn-md" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="button" value="編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'" . $row["productID"] . "'" ?>)">
+                            <input type="button" value="檢視/編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'" . $row["productID"] . "'" ?>)">
                             </div>
 
                         </td>
