@@ -333,13 +333,3 @@ function deleteNewTag() {
         document.getElementById(newTagNo).remove();
     }
 }
-
-
-
-
-//Rotate target when clicked.(0302, lee)
-
-function rotateTarget(strid) {
-    let target = getElementById(strid).innerHTML;
-
-}
