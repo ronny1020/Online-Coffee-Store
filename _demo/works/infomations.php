@@ -269,7 +269,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                 </span>
             </div>
 
-            <table class="table table-striped ">
+            <table class="table table-striped table-bordered data_main_table">
                 <thead class="thead-light">
                     <tr>
                         <th>
