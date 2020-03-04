@@ -26,37 +26,37 @@ if (isset($_GET["page"])) {
 //orderby
 // productID, ProductName, categoryName, UnitPrice, UnitsInStock, add_time
 if (isset($_POST["productID_ASC"]) || isset($_POST["ProductName_ASC"]) || isset($_POST["categoryName_ASC"]) || isset($_POST["UnitPrice_ASC"]) || isset($_POST["UnitsInStock_ASC"]) || isset($_POST["add_time_ASC"])) {
-    $_SESSION["ASCorDESC"] = "ASC";
+    $_SESSION["product_ASCorDESC"] = "ASC";
 } else if (isset($_POST["productID_DESC"]) || isset($_POST["ProductName_DESC"]) || isset($_POST["categoryName_DESC"]) || isset($_POST["UnitPrice_DESC"]) || isset($_POST["UnitsInStock_DESC"]) || isset($_POST["add_time_DESC"])) {
-    $_SESSION["ASCorDESC"] = "DESC";
-} else if (isset($_SESSION["ASCorDESC"])) {
+    $_SESSION["product_ASCorDESC"] = "DESC";
+} else if (isset($_SESSION["product_ASCorDESC"])) {
 } else {
-    $_SESSION["ASCorDESC"] = "ASC";
+    $_SESSION["product_ASCorDESC"] = "ASC";
 }
-$ASCorDESC = $_SESSION["ASCorDESC"];
+$ASCorDESC = $_SESSION["product_ASCorDESC"];
 
 if (isset($_POST["productID_ASC"]) || isset($_POST["productID_DESC"])) {
-    $_SESSION["orderby"] = "productID";
+    $_SESSION["product_orderby"] = "productID";
 } else if (isset($_POST["ProductName_ASC"]) || isset($_POST["ProductName_DESC"])) {
-    $_SESSION["orderby"] = "ProductName";
+    $_SESSION["product_orderby"] = "ProductName";
 } else if (isset($_POST["categoryName_ASC"]) || isset($_POST["categoryName_DESC"])) {
-    $_SESSION["orderby"] = "categoryName";
+    $_SESSION["product_orderby"] = "categoryName";
 } else if (isset($_POST["UnitPrice_ASC"]) || isset($_POST["UnitPrice_DESC"])) {
-    $_SESSION["orderby"] = "UnitPrice";
+    $_SESSION["product_orderby"] = "UnitPrice";
 } else if (isset($_POST["UnitsInStock_ASC"]) || isset($_POST["UnitsInStock_DESC"])) {
-    $_SESSION["orderby"] = "UnitsInStock";
+    $_SESSION["product_orderby"] = "UnitsInStock";
 } else if (isset($_POST["add_time_ASC"]) || isset($_POST["add_time_DESC"])) {
-    $_SESSION["orderby"] = "add_time";
-} else if (isset($_SESSION["orderby"])) {
+    $_SESSION["product_orderby"] = "add_time";
+} else if (isset($_SESSION["product_orderby"])) {
 } else {
-    $_SESSION["orderby"] = "productID";
+    $_SESSION["product_orderby"] = "productID";
 }
-$orderby = $_SESSION["orderby"];
+$orderby = $_SESSION["product_orderby"];
 
 //number of rows
 if (isset($_POST["row_num_submit"])) {
     $_SESSION["products_row_num"] = $_POST["row_num"];
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+    header('location:products.php');
 } else if (isset($_SESSION["products_row_num"])) {
 } else {
     $_SESSION["products_row_num"] = 50;
@@ -74,27 +74,27 @@ mysqli_select_db($link, "coffee");
 // search function
 if (isset($_POST["startSearch"])) {
     if($_POST["searchKeyword"]!=""){
-        $_SESSION["searchKeyword"] = $_POST["searchKeyword"];
+        $_SESSION["product_searchKeyword"] = $_POST["searchKeyword"];
     }
-    $_SESSION["searchBy"] = $_POST["searchBy"];
+    $_SESSION["product_searchBy"] = $_POST["searchBy"];
     header('location:products.php');
 }
 
 // clear search
 if (isset($_POST["clearSearch"])) {
-    unset($_SESSION["searchKeyword"]);
-    unset($_SESSION["searchBy"]);
+    unset($_SESSION["product_searchKeyword"]);
+    unset($_SESSION["product_searchBy"]);
     header('location:products.php');
 }
 $searchComment="";
 
-if(isset($_SESSION["searchKeyword"])) {
-    $searchKeyword=$_SESSION["searchKeyword"];
-    if($_SESSION["searchBy"]=="productName"){
+if(isset($_SESSION["product_searchKeyword"])) {
+    $searchKeyword=$_SESSION["product_searchKeyword"];
+    if($_SESSION["product_searchBy"]=="productName"){
         $searchComment="and productName like '%$searchKeyword%'";
-    }else if($_SESSION["searchBy"]=="specification"){
+    }else if($_SESSION["product_searchBy"]=="specification"){
         $searchComment="and specification like '%$searchKeyword%'";
-    }else if($_SESSION["searchBy"]=="description"){
+    }else if($_SESSION["product_searchBy"]=="description"){
         $searchComment="and description like '%$searchKeyword%'";
     }
     else{
@@ -359,6 +359,13 @@ if (isset($_POST["edit_data"])) {
                 </div>
                 <button class="btn btn-success mt-3" type="submit" name="startSearch">開始搜尋</button> 
                 <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
+                <p class="mt-3">
+                    <?php 
+                    if(isset($_SESSION["product_searchKeyword"])){
+                        echo "您正在搜尋：".$_SESSION["product_searchKeyword"];
+                    }                    
+                     ?>
+                </p>
             </div>
         </form>
 

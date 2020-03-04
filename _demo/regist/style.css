@@ -1,6 +1,6 @@
 @charset "utf-8";
 p,ol {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	/* font-family: Verdana, Arial, Helvetica, sans-serif; */
 	font-size: 10pt;
 	line-height: 150%;
 	margin-top: 0px;
@@ -12,7 +12,7 @@ form {
 a {
 	text-decoration: none;
 }
-a:link {
+/* a:link {
 	color: rgb(84, 149, 214);
 }
 a:visited {
@@ -20,19 +20,19 @@ a:visited {
 }
 a:hover {
 	color: rgb(221, 96, 96);
-}
+} */
 .dataDiv {
 	margin: 10px;
 }
 
 .title {
-	font-family: "微軟正黑體";
+	/* font-family: "微軟正黑體"; */
 	font-size: 24pt;
 	font-weight: bolder;
 	color: rgb(221, 96, 96);
 }
 .heading {
-	font-family: "微軟正黑體";
+	/* font-family: "微軟正黑體"; */
 	font-size: 13pt;
 	color: rgb(84, 149, 214);
 	line-height: 150%;
@@ -41,11 +41,11 @@ a:hover {
 .smalltext {
 	font-size: 11px;
 	color: #999999;
-	font-family: Georgia, "Times New Roman", Times, serif;
+	/* font-family: Georgia, "Times New Roman", Times, serif; */
 	vertical-align: middle;
 }
 .trademark {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	/* font-family: Verdana, Arial, Helvetica, sans-serif; */
 	font-size: 8pt;
 	color: rgb(84, 149, 214);
 }
@@ -105,7 +105,7 @@ a:hover {
 	width: 150px;
 }
 .errDiv {
-	font-family: "微軟正黑體";
+	/* font-family: "微軟正黑體"; */
 	font-size: 10pt;
 	color: #FFFFFF;
 	background-color: rgb(221, 96, 96);

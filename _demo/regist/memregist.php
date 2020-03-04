@@ -143,37 +143,38 @@ window.location.href='../index.php';
           <div class="dataDiv">
             <hr size="1" />
             <p class="heading">帳號資料</p>
-            <p><strong>使用帳號</strong>：
-            <input name="sAccount" type="text" class="normalinput" id="sAccount">
-            <font color="#FF0000">*</font><br><span class="smalltext">請填入5~12個字元以內的小寫英文字母、數字、以及_ 符號。</span></p>
-            <p><strong>使用密碼</strong>：
-            <input name="sPassword" type="password" class="normalinput" id="sPassword">
-            <font color="#FF0000">*</font><br><span class="smalltext">請填入5~10個字元以內的英文字母、數字、以及各種符號組合，</span></p>
-            <p><strong>確認密碼</strong>：
-            <input name="sPasswordrecheck" type="password" class="normalinput" id="sPasswordrecheck">
-            <font color="#FF0000">*</font> <br><span class="smalltext">再輸入一次密碼</span></p>
-            <p><strong>序　　號</strong>：
-            <input name="sellerID" type="text" class="normalinput" id="sellerID">
-            <font color="#FF0000">*</font><br></p>
+            <p><font color="#FF0000">*</font>使用帳號：
+            <input name="sAccount" type="text" class="form-control" placeholder="請輸入帳號" id="sAccount">
+            <span class="smalltext">請填入5~12個字元以內的小寫英文字母、數字、以及_ 符號。</span></p>
+            <p><font color="#FF0000">*</font>使用密碼：
+            <input name="sPassword" type="password" class="form-control" placeholder="請輸入密碼" id="sPassword">
+            <span class="smalltext">請填入5~10個字元以內的英文字母、數字、以及各種符號組合，</span></p>
+            <p><font color="#FF0000">*</font>確認密碼：
+            <input name="sPasswordrecheck" type="password" class="form-control" placeholder="請確認密碼" id="sPasswordrecheck">
+            <span class="smalltext">再輸入一次密碼</span></p>
+            <p><font color="#FF0000">*</font>序　　號：
+            <input name="sellerID" type="text" class="form-control" placeholder="請輸入序號" id="sellerID">
+            <br>
             <hr size="1" />
             <p class="heading">公司資料</p>
-            <p><strong>公司名稱</strong>：
-            <input name="sName" type="text" class="normalinput" id="sName">
-            <font color="#FF0000">*</font></p>
-            <p><strong>國　　家</strong>：
-            <input name="sCountry" type="text" class="normalinput" id="sCountry">
-            </p>
+            <p><font color="#FF0000">*</font>公司名稱：
+            <input name="sName" type="text" class="form-control" placeholder="請輸入公司名稱" id="sName">
+            <br>
+            <p><label>&nbsp;國　　家</label>：
+            <input name="sCountry" type="text" class="form-control" placeholder="請輸入國家" id="sCountry">
+            <br>
             
             
             
-            <p><strong>電　　話</strong>：
-            <input name="sPhone" type="text" class="normalinput" id="sPhone">
-            <font color="#FF0000">*</font></p>
-            <p><strong>信　　箱</strong>：
-            <input name="sMail" type="text" class="normalinput" id="sMail" size="40"></p>
-            <p><strong>地　　址</strong>：
-            <input name="sAddress" type="text" class="normalinput" id="sAddress" size="40">
-            <font color="#FF0000">*</font></p>
+            <p><font color="#FF0000">*</font>電　　話：
+            <input name="sPhone" type="text" class="form-control" placeholder="請輸入電話" id="sPhone">
+            <br>
+            <p>&nbsp;&nbsp;信　　箱：
+            <input name="sMail" type="text" class="form-control" placeholder="請輸入信箱" id="sMail" size="40"></p>
+            <br>
+            <p><font color="#FF0000">*</font>地　　址：
+            <input name="sAddress" type="text" class="form-control" placeholder="請輸入地址" id="sAddress" size="40">
+            <br>
             <p> <font color="#FF0000">*</font> 表示為必填的欄位</p>
           </div>
           <hr size="1" />
@@ -187,7 +188,7 @@ window.location.href='../index.php';
         <td width="200">
         <div class="boxtl"></div><div class="boxtr"></div>
         <div class="regbox">
-          <p class="heading"><strong>填寫資料注意事項：</strong></p>
+          <p class="heading" align="center"><strong>注意事項：</strong></p>
           <ol>
             <li> 請提供您本人正確、最新及完整的資料。 </li>
             <li> 在欄位後方出現「*」符號表示為必填的欄位。</li>
