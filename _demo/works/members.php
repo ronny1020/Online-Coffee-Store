@@ -187,18 +187,18 @@ $ASCorDESC = $_SESSION["ASCorDESC"];
 
 // 2. ORDERBY: 決定以何物排序
 if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
-    $_SESSION["orderby"] = "customerID";
+    $_SESSION["cu_orderby"] = "customerID";
 } else if (isset($_POST["cAccount_ASC"]) || isset($_POST["cAccount_DESC"])) {
-    $_SESSION["orderby"] = "cAccount";
+    $_SESSION["cu_orderby"] = "cAccount";
 } else if (isset($_POST["cSex"]) || isset($_POST["cSex_DESC"])) {
-    $_SESSION["orderby"] = "cSex";
+    $_SESSION["cu_orderby"] = "cSex";
 } else if (isset($_POST["cBirthDate_ASC"]) || isset($_POST["cBirthDate_DESC"])) {
-    $_SESSION["orderby"] = "cBirthDate";
-} else if (isset($_SESSION["orderby"])) {
+    $_SESSION["cu_orderby"] = "cBirthDate";
+} else if (isset($_SESSION["cu_orderby"])) {
 } else {// Default of orderby: cramID
-    $_SESSION["orderby"] = "customerID";
+    $_SESSION["cu_orderby"] = "customerID";
 }
-$orderby = $_SESSION["orderby"];
+$orderby = $_SESSION["cu_orderby"];
 
 //======= 排序調整: END HERE. =======//
 
@@ -448,8 +448,8 @@ if ($lastPage - $page <= 5) {
                     <th>cMobile: <input type="text" name='mob'></th>
                     <hr>
                     <th>cSex: <select name='sex'>
-                        <option value='F'>男</option>
-                        <option value='M'>女</option>
+                        <option value='M'>男</option>
+                        <option value='F'>女</option>
                     </select></th>
             </tr>
         </div>

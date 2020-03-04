@@ -234,7 +234,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
                             折扣    
                         </option>
                         <option value="disDescrip">
-                            內容介紹
+                            優惠內容
                         </option>
                         
                     </select>
@@ -288,7 +288,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0 ">    
-                                <p class="m-1">折扣編號</p>
+                                <p class="m-1">優惠編號</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="disID_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="disID_ASC">
@@ -298,7 +298,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
                   
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">折扣名稱</p>
+                                <p class="m-1">優惠名稱</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
                                     <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
@@ -307,7 +307,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">折扣描述</p>
+                                <p class="m-1">優惠描述</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
                                     <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">

@@ -43,7 +43,7 @@ if (isset($_POST["logout"])) {
     <script src="../demoutil.js"></script>
 </head>
 
-<body>
+<body class="main_bg">
 <?php include '../parts/sidebar.php';?>
 <?php include '../parts/head.php';?>
 <!-- Start your code here. -->

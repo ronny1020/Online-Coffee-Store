@@ -219,11 +219,11 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                     <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
                     <select name="searchBy">
                         <option value="infoName">
-                            訊息名稱
+                        資訊名稱
                         </option>
                        
-                        <option value="infoNameDescrip">
-                            訊息內容
+                        <option value="infoDescrip">
+                        資訊內容
                         </option>
                         
                     </select>
@@ -391,7 +391,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
         <!-- Modal Header -->
         <div class="modal-header">
-            <h4 class="modal-title">資料變更:</h4>
+            <h4 class="modal-title">新增資料:</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <form method="post" action=''>
