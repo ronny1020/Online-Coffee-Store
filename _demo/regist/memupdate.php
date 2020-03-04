@@ -227,9 +227,9 @@ function checkmail(sMail) {
       </tr>
     </table></td>
   </tr>
-  <tr>
+  <!-- <tr>
     <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCoffee Company All Rights Reserved.</td>
-  </tr>
+  </tr> -->
 </table>
 </body>
 </html>
