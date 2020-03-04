@@ -58,6 +58,7 @@
     user-select: none;
 }
 
+
 /* Hide the browser's default checkbox */
 
 .mycheck input {
@@ -67,6 +68,7 @@
     height: 0;
     width: 0;
 }
+
 
 /* Create a custom checkbox */
 
@@ -79,17 +81,20 @@
     background-color: #eee;
 }
 
+
 /* On mouse-over, add a grey background color */
 
 .mycheck:hover input~.checkmark {
     background-color: #ccc;
 }
 
+
 /* When the checkbox is checked, add a blue background */
 
 .mycheck input:checked~.checkmark {
     background-color: #2196F3;
 }
+
 
 /* Create the checkmark/indicator (hidden when not checked) */
 
@@ -99,11 +104,13 @@
     display: none;
 }
 
+
 /* Show the checkmark when checked */
 
 .mycheck input:checked~.checkmark:after {
     display: block;
 }
+
 
 /* Style the checkmark/indicator */
 
@@ -118,7 +125,9 @@
     transform: rotate(45deg);
 }
 
+
 /*====== do checkbox style. ======*/
+
 
 /* Source:https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox */
 
@@ -127,7 +136,9 @@ body {
     font-family: 'Noto Sans TC', sans-serif;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     font-family: 'Noto Serif TC', serif;
 }
 
@@ -226,6 +237,7 @@ td>input {
     border-color: #C0B283;
 }
 
+
 /* add collapsible sidebar! (0303, lee) */
 
 .collapse>a {
@@ -243,6 +255,7 @@ td>input {
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
 }
+
 
 /* (0303, lee) end here. */
 
@@ -263,7 +276,7 @@ td>input {
 }
 
 .openbtn:hover::after {
-    content:" \5c55\958b\9078\55ae";
+    content: " \5c55\958b\9078\55ae";
     /*展開選單unicode*/
 }
 
@@ -278,6 +291,7 @@ td>input {
     /* padding: 10px 15px; */
     border: none;
 }
+
 .sidebar .hello {
     position: absolute;
     top: 175px;
@@ -301,6 +315,7 @@ input#pwd {
     transition: 0.5s;
     z-index: 1;
 }
+
 
 /* .logout_form {
     position: absolute;
@@ -327,6 +342,7 @@ footer>p {
     min-height: 1024px;
 }
 
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 
 @media screen and (max-height: 450px) {
@@ -338,9 +354,11 @@ footer>p {
     }
 }
 
+
 /* DESC-ASC button (0227 by hsieh.)*/
 
-.btn-DESC, .btn-ASC {
+.btn-DESC,
+.btn-ASC {
     height: 1.1rem;
     margin: 0;
     background-color: none;
@@ -372,6 +390,7 @@ footer>p {
 .data_main_table td.tags {
     text-align: left !important;
 }
+
 
 /* for creating form for create or edit in products */
 
@@ -420,4 +439,13 @@ footer>p {
 
 .hide {
     display: none;
+}
+
+
+/* product image default */
+
+img.product-image {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
 }

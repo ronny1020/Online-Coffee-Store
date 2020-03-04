@@ -1,4 +1,18 @@
 <?php
+                     
+//          　　∩＿＿＿∩　　   
+//             | ˊ ︵ ︵ˋ
+//            ∕   (⊙)(⊙)        It's not a bug, it's a feature.
+//           |  　( _●_) ≡      /
+//       ＿＿≡　    |∪| ミ        
+//     ˋ＿＿＿        ﹨ˊ  ＼   
+//          /　     ／  ( (    
+//         /       ╱     ﹀    
+//        /     ╴／         
+//     （＿     ˋ           
+//       | / ╲ }           
+//       ∪    ))           
+// 
 session_start();
 
 //Prevents direct connection.
@@ -206,6 +220,36 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+// uploadImage
+function uploadImage($productIDForImage){
+    $ImageUpload_dir = "../image/products/";
+    $ImageUpload_file = $ImageUpload_dir . $productIDForImage.".jpg";
+
+    $uploadOk = 1;
+    $ImageUploadType = strtolower(pathinfo($ImageUpload_file,PATHINFO_EXTENSION));
+    // Check if image file is a actual image or fake image
+    if(isset($_FILES["ProductImage_upload"])) {
+        $check = getimagesize($_FILES["ProductImage_upload"]["tmp_name"]);
+        if($check == false) {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+    }
+
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+    // if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES["ProductImage_upload"]["tmp_name"], $ImageUpload_file)) {
+          
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
+
+
+
+}
 
 // create data from button
 if (isset($_POST["create_data"])) {
@@ -225,6 +269,8 @@ if (isset($_POST["create_data"])) {
     $productID_input= str_repeat("0",10-(strlen($productID_input))).$productID_input;
     mysqli_error($link);
 
+    uploadImage($productID_input);
+
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 6) == "newTag" && $j !="" ) {
             $newTag=$j;
@@ -241,7 +287,7 @@ if (isset($_POST["create_data"])) {
     }
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
-
+// update
 if (isset($_POST["edit_data"])) {
     $productID_input = $_POST["ProductID_input"];
     $ProductName_input = $_POST["ProductName_input"];
@@ -250,7 +296,6 @@ if (isset($_POST["edit_data"])) {
     $UnitsInStock_input = $_POST["UnitsInStock_input"];
     $specification_input = $_POST["specification_input"];
     $description_input = $_POST["description_input"];
-
 
     $input_comment = "UPDATE `coffee`.`products` SET 
     `ProductName` = '$ProductName_input', 
@@ -265,6 +310,7 @@ if (isset($_POST["edit_data"])) {
 
     mysqli_error($link);
 
+    uploadImage($productID_input);
     // tags delete or create
     foreach ($_POST as $i => $j) {
     // delete tags
@@ -295,7 +341,7 @@ if (isset($_POST["edit_data"])) {
         mysqli_query($link, "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($productID_input,$newTagID);");
         }
     }
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+    // header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
 
@@ -438,7 +484,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                                 </div>
                             </div>
                         </th>
-                        <!-- here -->
+                        
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">庫存量</p>
@@ -468,8 +514,9 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                     <?php
                     // write table
 
-                    $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description
-                    from coffee.products JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID
+                    $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description from coffee.products 
+                    JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID
+  
                     where sellerID='$userID' $searchComment ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
 
                     $result = mysqli_query($link, $commandText);
