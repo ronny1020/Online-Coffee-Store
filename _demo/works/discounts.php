@@ -126,7 +126,7 @@ if (isset($_POST['modal_submit'])) {
     $tmp_did = $_POST['did'];
     $tmp_nam = $_POST['nam'];
     $tmp_ddp = $_POST['ddp'];
-    $tmp_pid = $_POST['pid'];
+   
     $tmp_dct = $_POST['dct'];
     
     $insertCommandText = <<<SqlQuery
@@ -155,6 +155,35 @@ $query_RecMember = "SELECT * FROM discounts WHERE sellerID='$userID'";
 $RecMember = $link->query($query_RecMember);	
 $row_RecMember = $RecMember->fetch_assoc();
 
+
+// search function
+if (isset($_POST["startSearch"])) {
+    if($_POST["searchKeyword"]!=""){
+        $_SESSION["discount_searchKeyword"] = $_POST["searchKeyword"];
+    }
+    $_SESSION["discount_searchBy"] = $_POST["searchBy"];
+    header('location:discounts.php');
+}
+
+// clear search
+if (isset($_POST["clearSearch"])) {
+    unset($_SESSION["discount_searchKeyword"]);
+    unset($_SESSION["discount_searchBy"]);
+    header('location:discounts.php');
+}
+$searchComment="";
+
+if(isset($_SESSION["discount_searchKeyword"])) {
+    $searchKeyword=$_SESSION["discount_searchKeyword"];
+    if($_SESSION["discount_searchBy"]=="disName"){
+        $searchComment="and disName like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="Discount"){
+        $searchComment="and Discount like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="disDescrip"){
+        $searchComment="and disDescrip like '%$searchKeyword%'";
+    }
+    
+}
 
 ?>
 
@@ -188,7 +217,42 @@ $row_RecMember = $RecMember->fetch_assoc();
     <?php include '../parts/head.php';?>
 
     <!-- Start your code here -->
-    <div class="main p-5">
+<div class="main p-5">
+
+    <form class="card p-3 mb-5" method="POST">
+            <div class="w-50 mx-auto">
+                <label for="searchKeyword">
+                    請輸入關鍵字並選擇搜尋欄位：
+                </label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
+                    <select name="searchBy">
+                        <option value="disName">
+                            優惠名稱
+                        </option>
+                        <option value="Discount">
+                            折扣    
+                        </option>
+                        <option value="disDescrip">
+                            內容介紹
+                        </option>
+                        
+                    </select>
+                </div>
+                <button class="btn btn-success mt-3" type="submit" name="startSearch">開始搜尋</button> 
+                <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
+                <p class="mt-3">
+                    <?php 
+                    if(isset($_SESSION["discount_searchKeyword"])){
+                        echo "您正在搜尋：".$_SESSION["discount_searchKeyword"];
+                    }                    
+                     ?>
+                </p>
+            </div>
+        </form>
+
+
+
 
         <form method='post' class="card p-3">
             <div>
@@ -271,7 +335,7 @@ $row_RecMember = $RecMember->fetch_assoc();
 // write table
 
 $commandText = <<<SqlQuery
-                    select disID, disName, disDescrip, Discount, sellerID from coffee.discounts where sellerID='$userID' ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select disID, disName, disDescrip, Discount, sellerID from coffee.discounts where sellerID='$userID' $searchComment ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 
 
@@ -291,6 +355,14 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td><?php echo $row["disDescrip"] ?></td>
                         
                         <td><?php echo $row["Discount"] ?></td>
+
+                        
+
+
+
+
+
+                        
                         
                         <td class="p-0">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
@@ -432,7 +504,7 @@ while ($row = mysqli_fetch_assoc($result)):
         </div>
 
     </div>
-
+</div>
     <!-- End your code here. -->
     <?php include '../parts/footer.php';?>
 

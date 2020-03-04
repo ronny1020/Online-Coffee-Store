@@ -263,7 +263,7 @@ td>input {
 }
 
 .openbtn:hover::after {
-    content:" \5c55\958b\9078\55ae";
+    content: " \5c55\958b\9078\55ae";
     /*展開選單unicode*/
 }
 
@@ -278,6 +278,7 @@ td>input {
     /* padding: 10px 15px; */
     border: none;
 }
+
 .sidebar .hello {
     position: absolute;
     top: 175px;
@@ -420,4 +421,18 @@ footer>p {
 
 .hide {
     display: none;
+}
+
+/* Login page background. (Lee 0304) */
+
+body.login_bg {
+    background: url(image/bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: grey;
+}
+.login_bg > .card{
+    background-color: rgba(255,255,255, 0.5);
 }

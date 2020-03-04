@@ -127,7 +127,7 @@ if (isset($_POST["btnOK"])) {
     <script src="demoutil.js"></script>
 </head>
 
-<body>
+<body class="login_bg">
     <form method='post' action="index.php" class='login card p-5'>
         <div class="form-group">
             <label for="account">輸入帳號:</label>
