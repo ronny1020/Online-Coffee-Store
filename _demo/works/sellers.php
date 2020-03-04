@@ -185,16 +185,16 @@ if (isset($_POST['edModal-submit'])){
         <table class="table table-striped ">
             <thead class="thead-light">
                 <tr>
-                    <th>check</th>
+                    <th>勾選</th>
                     <th>sellerID</th>
-                    <th>sName</th>
-                    <th>sAccount</th>
-                    <th>sPassword</th>
-                    <th>sAddress</th>
-                    <th>sPhone</th>
-                    <th>sMail</th>
-                    <th>sCountry</th>
-                    <th>edit</th>
+                    <th>廠商名稱</th>
+                    <th>帳號</th>
+                    <th>密碼</th>
+                    <th>地址</th>
+                    <th>電話</th>
+                    <th>email</th>
+                    <th>國家/地區</th>
+                    <th>編輯</th>
                 </tr>
             </thead>
             <tbody>
