@@ -210,6 +210,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
     <link rel="stylesheet" type="text/css" href="../style2.css">
     <script src="../demoutil.js"></script>
+    <script src="../demoutil2.js"></script>
 </head>
 
 <body>
@@ -350,11 +351,11 @@ while ($row = mysqli_fetch_assoc($result)):
                             <input type="checkbox" name="<?php echo "selected" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
-                        <td><?php echo $row["disID"] ?></td>
-                        <td><?php echo $row["disName"] ?></td>
-                        <td><?php echo $row["disDescrip"] ?></td>
+                        <td id="<?php echo $row["disID"]."disID" ?>"><?php echo $row["disID"] ?></td>
+                        <td id="<?php echo $row["disID"]."disName" ?>"><?php echo $row["disName"] ?></td>
+                        <td id="<?php echo $row["disID"]."disDescrip" ?>"><?php echo $row["disDescrip"] ?></td>
                         
-                        <td><?php echo $row["Discount"] ?></td>
+                        <td id="<?php echo $row["disID"]."Discount" ?>"><?php echo $row["Discount"] ?></td>
 
                         
 
@@ -367,8 +368,8 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td class="p-0">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                                <input type="button" value="編輯" name="edit" class="btn btn-primary ml-3 mb-3"
-                                data-toggle="modal" data-target="#myModal2">
+                                <input type='button' value="編輯" name="<?php echo "edit" . $row["disID"] ?>"
+                        class="btn btn-primary mb-3" onclick="throwinmodal_DIS(<?php echo "'".$row['disID']."'"?>)">
                         </td>
                     </tr>
                     <?php endwhile?>
@@ -424,7 +425,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
         <!-- Modal Header -->
         <div class="modal-header">
-            <h4 class="modal-title">資料變更:</h4>
+            <h4 class="modal-title">新增資料:</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <form method="post" action=''>
@@ -459,7 +460,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
 <iframe name="thisframe2"></iframe>
 <!-- Modal -->
-<div class="modal fade" id="myModal2">
+<div class="modal fade" id="Modal_edit">
 <div class="modal-dialog">
     <div class="modal-content">
 
@@ -473,16 +474,16 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>disID:<input type="text" name='did2' value="<?php echo $row_RecMember["disID"];?>">
+                    <th>disID:<input type="text" name='did2' id='did2' >
                     </th>
                     <hr>
-                    <th>disName: <input type="text" name='nam2' value="<?php echo $row_RecMember["disName"];?>"></th>
+                    <th>disName: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>disDesrip: <input type="text" name='ddp2' value="<?php echo $row_RecMember["disDescrip"];?>">
+                    <th>disDesrip: <input type="text" name='ddp2' id='ddp2'>
                     </th>
                     <hr>
                     
-                    <th>Discount:<input type="text" name='dct2' value="<?php echo $row_RecMember["Discount"];?>">
+                    <th>Discount:<input type="text" name='dct2'  id='dct2'>
                     </th>
                     <hr>
                     
