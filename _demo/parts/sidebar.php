@@ -39,6 +39,7 @@ $error = "";
 
             
             <a href="../works/orders.php">訂單管理</a>
+            <a href="../works/orders_detail.php">訂單細節</a>
             <a href="../works/products.php">商品管理</a>
             
             
