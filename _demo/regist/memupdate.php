@@ -167,7 +167,7 @@ function checkmail(sMail) {
 
 <table width="780" border="0" align="center" cellpadding="4" cellspacing="0">
   <tr>
-    <td class="tdbline"><img src="images/mlogo3.png" alt="會員系統" width="164" height="67"></td>
+    <td class="tdbline"><img src="images/mlogo5.png" alt="會員系統" width="164" height="67"></td>
   </tr>
   <tr>
     <td class="tdbline"><table width="100%" border="0" cellspacing="0" cellpadding="10">
