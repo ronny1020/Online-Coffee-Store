@@ -1,3 +1,9 @@
+iframe[name=thisframe] {
+    /* background-color: tomato; */
+    display: none;
+}
+
+
 iframe[name=thisframe2] {
     /* background-color: tomato; */
     display: none;
