@@ -232,7 +232,7 @@ td>input {
     background-color: #595959;
 }
 
-.triangle_rotate {
+.triangle_rotate{
     font-size: 80%;
     text-align: center;
     float: right;
@@ -435,4 +435,13 @@ body.login_bg {
 }
 .login_bg > .card{
     background-color: rgba(255,255,255, 0.5);
+}
+
+body.main_bg {
+    background: url(image/main.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: rgb(192, 178, 131, 0.5);
 }

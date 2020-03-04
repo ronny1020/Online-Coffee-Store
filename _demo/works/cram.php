@@ -147,18 +147,18 @@ $ASCorDESC = $_SESSION["ASCorDESC"];
 
 // 2. ORDERBY: 決定以何物排序
 if (isset($_POST["cramID_ASC"]) || isset($_POST["cramID_DESC"])) {
-    $_SESSION["orderby"] = "cramID";
+    $_SESSION["cr_orderby"] = "cramID";
 } else if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
-    $_SESSION["orderby"] = "customerID";
+    $_SESSION["cr_orderby"] = "customerID";
 } else if (isset($_POST["cDate_ASC"]) || isset($_POST["cDate_DESC"])) {
-    $_SESSION["orderby"] = "cDate";
+    $_SESSION["cr_orderby"] = "cDate";
 } else if (isset($_POST["cChecked_ASC"]) || isset($_POST["cChecked_DESC"])) {
-    $_SESSION["orderby"] = "cChecked";
-} else if (isset($_SESSION["orderby"])) {
+    $_SESSION["cr_orderby"] = "cChecked";
+} else if (isset($_SESSION["cr_orderby"])) {
 } else {// Default of orderby: cramID
-    $_SESSION["orderby"] = "cramID";
+    $_SESSION["cr_orderby"] = "cramID";
 }
-$orderby = $_SESSION["orderby"];
+$orderby = $_SESSION["cr_orderby"];
 
 //======= 排序調整: END HERE. =======//
 
