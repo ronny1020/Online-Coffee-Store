@@ -425,6 +425,11 @@ footer>p {
 
 /* Login page background. (Lee 0304) */
 
+td{
+    /*防塞爆*/
+    word-break: break-all;
+}
+
 body.login_bg {
     background: url(image/bg.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;

@@ -448,8 +448,8 @@ if ($lastPage - $page <= 5) {
                     <th>cMobile: <input type="text" name='mob'></th>
                     <hr>
                     <th>cSex: <select name='sex'>
-                        <option value='F'>男</option>
-                        <option value='M'>女</option>
+                        <option value='M'>男</option>
+                        <option value='F'>女</option>
                     </select></th>
             </tr>
         </div>
