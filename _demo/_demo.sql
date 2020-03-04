@@ -170,25 +170,25 @@ INSERT INTO `discounts` VALUES
 -- 刪除已存在之重複table
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
-  `orderID` varchar(5) NOT NULL default '',-- Primary key:流水號
-  `customerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
-  `OrderDate` datetime default NULL, -- 下單日期:
-  PRIMARY KEY  (`orderID`)
+  `OrderID` varchar(5) NOT NULL default '',-- Primary key:流水號
+  `CustomerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
+  `OrderDate` date default NULL, -- 下單日期:
+  `ShippedDate` date default NULL, -- 運送日期:
+  `ShipAddress` varchar(20), -- 運送地址:
+  `ShipRegion` varchar(5), -- 運送區域:
+  `ShipPostCode` varchar(10), -- 運送郵遞區號:
+  `ShipCity` varchar(20), -- 運送城市:
+  `ShipCountry` varchar(20), -- 運送國家:
+  
+  PRIMARY KEY  (`OrderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 預設儲存引擎: InnoDB(after php5.5)
 
 -- add dummy datas:
 INSERT INTO `orders` VALUES
- ('R001','C001','2019-02-18')
-,('R002','C001','2019-01-18')
-,('R003','C001','2019-12-18')
-,('R004','C005','2019-12-08')
-,('R005','C003','2019-11-11')
-,('R006','C002','2020-02-02')
-,('R007','C002','2020-02-02')
-,('R008','C009','2020-02-07')
-,('R009','C003','2020-02-11')
-,('R010','C009','2020-02-15');
+ ('R001','C001','2019-02-18', '2019-02-20', 'A Street', 'Region A', '10455', 'A city', 'A country')
+,('R002','C001','2019-01-18', '2019-02-20', 'B Street', 'Region B', '10400', 'B city', 'B country')
+;
 
 -- table訂單詳細: order details
 -- 刪除已存在之重複table
@@ -207,12 +207,7 @@ INSERT INTO `order details` VALUES
 ,('R002','164413',3,0.75)
 ,('R003','164414',2,0.85)
 ,('R004','164414',5,0.95)
-,('R005','164415',10,0.5)
-,('R006','164416',20,0.5)
-,('R007','164416',1,0.8)
-,('R008','164416',1,0.9)
-,('R009','164417',3,1)
-,('R010','164417',3,1);
+;
 
 -- table商品: products
 -- 刪除已存在之重複table
