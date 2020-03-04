@@ -67,27 +67,7 @@ foreach ($_POST as $i => $j) {
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
-    } //Right edit button:
-    // elseif (substr($i, 0, 4) == "edit") {
-    //     //獲得customerID
-    //     $editItem = ltrim($i, "edit");
-    //     $editCommandText = <<<SqlQuery
-    //     select customerID, cName, cAccount, cSex, cBirthDate, cAddress, cMobile
-    //     from coffee.customers WHERE customerID IN ('$editItem')
-    //     SqlQuery;
-    //     $result = mysqli_query($link, $editCommandText);
-    //     while ($row = mysqli_fetch_assoc($result)) {
-    //         $_SESSION["modal_cid"] = $row["customerID"];
-    //         $_SESSION["modal_nam"] = $row["cName"];
-    //         $_SESSION["modal_acc"] = $row["cAccount"];
-    //         $_SESSION["modal_sex"] = $row["cSex"];
-    //         $_SESSION["modal_bid"] = $row["cBirthDate"];
-    //         $_SESSION["modal_adr"] = $row["cAddress"];
-    //         $_SESSION["modal_mob"] = $row["cMobile"];
-    //     }
-    //     ;
-    //     // header('location:' . $_SERVER['REQUEST_URI'] . '');
-    // }
+    } 
 }
 
 //ADD NEW DATA TO FORM! :
@@ -167,7 +147,7 @@ if (isset($_POST["deleteSelected"])) {
 // if ASC triggered:
 
     if (isset($_POST["customerID_ASC"]) ||
-    isset($_POST["cAccount_ASC"]) ||
+    isset($_POST["cName_ASC"]) ||
     isset($_POST["cSex_ASC"]) ||
     isset($_POST["cBirthDate_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
@@ -175,7 +155,7 @@ if (isset($_POST["deleteSelected"])) {
 //elseif DESC triggered:
 } else if (
     isset($_POST["customerID_DESC"]) ||
-    isset($_POST["cAccount_DESC"]) ||
+    isset($_POST["cName_DESC"]) ||
     isset($_POST["cSex_DESC"]) ||
     isset($_POST["cBirthDate_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
@@ -188,8 +168,8 @@ $ASCorDESC = $_SESSION["ASCorDESC"];
 // 2. ORDERBY: 決定以何物排序
 if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
     $_SESSION["cu_orderby"] = "customerID";
-} else if (isset($_POST["cAccount_ASC"]) || isset($_POST["cAccount_DESC"])) {
-    $_SESSION["cu_orderby"] = "cAccount";
+} else if (isset($_POST["cName_ASC"]) || isset($_POST["cName_DESC"])) {
+    $_SESSION["cu_orderby"] = "cName";
 } else if (isset($_POST["cSex"]) || isset($_POST["cSex_DESC"])) {
     $_SESSION["cu_orderby"] = "cSex";
 } else if (isset($_POST["cBirthDate_ASC"]) || isset($_POST["cBirthDate_DESC"])) {
@@ -278,16 +258,16 @@ $orderby = $_SESSION["cu_orderby"];
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cName</p>
+                                <div class="DESC-ASC ml-2">
+                                <input type="submit" class="d-block btn btn-DESC" value="▲" name="cName_DESC">
+                                <input type="submit" class="d-block btn btn-ASC" value="▼" name="cName_ASC">
+                                </div>
                             </div>
                         </th>
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cAccount</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cAccount_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cAccount_ASC">
-                                </div>
+                                <p class="m-1">cAccaount</p>
                             </div>
 
                         </th>

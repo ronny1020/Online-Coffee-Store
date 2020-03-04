@@ -201,6 +201,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
     <link rel="stylesheet" type="text/css" href="../style2.css">
     <script src="../demoutil.js"></script>
+    <script src="../demoutil2.js"></script>
 </head>
 
 <body>
@@ -268,7 +269,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                 </span>
             </div>
 
-            <table class="table table-striped ">
+            <table class="table table-striped table-bordered data_main_table">
                 <thead class="thead-light">
                     <tr>
                         <th>
@@ -297,7 +298,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">資訊描述</p>
+                                <p class="m-1">資訊內容</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="" name="infoDescript_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="" name="infoDescript_ASC">
@@ -328,15 +329,15 @@ while ($row = mysqli_fetch_assoc($result)):
                             <input type="checkbox" name="<?php echo "selected" . $row["infoID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
-                        <td><?php echo $row["infoID"] ?></td>
-                        <td><?php echo $row["infoName"] ?></td>
-                        <td><?php echo $row["infoDescrip"] ?></td>
+                        <td id="<?php echo $row["infoID"]."infoID" ?>"><?php echo $row["infoID"] ?></td>
+                        <td id="<?php echo $row["infoID"]."infoName" ?>"><?php echo $row["infoName"] ?></td>
+                        <td id="<?php echo $row["infoID"]."infoDescrip" ?>"><?php echo $row["infoDescrip"] ?></td>
                         
                         <td class="p-0">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["infoID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                                <input type="button" value="編輯" name="edit" class="btn btn-primary ml-3 mb-3"
-                                data-toggle="modal" data-target="#myModal2">
+                                <input type='button' value="編輯" name="<?php echo "edit" . $row["infoID"] ?>"
+                        class="btn btn-primary mb-3" onclick="throwinmodal_INFO(<?php echo "'".$row['infoID']."'"?>)">
                         </td>
                     </tr>
                     <?php endwhile?>
@@ -423,7 +424,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
 <iframe name="thisframe2"></iframe>
 <!-- Modal -->
-<div class="modal fade" id="myModal2">
+<div class="modal fade" id="Modal_edit">
 <div class="modal-dialog">
     <div class="modal-content">
 
@@ -437,12 +438,12 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>infoID:<input type="text" name='did2' value="<?php echo $row_RecMember["infoID"];?>">
+                    <th>infoID:<input type="text" name='did2' id='did2' >
                     </th>
                     <hr>
-                    <th>infoName: <input type="text" name='nam2' value="<?php echo $row_RecMember["infoName"];?>"></th>
+                    <th>infoName: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>infoDescrip: <input type="text" name='ddp2' value="<?php echo $row_RecMember["infoDescrip"];?>">
+                    <th>infoDescrip: <input type="text" name='ddp2' id='ddp2' >
                     </th>
                     <hr>
                     

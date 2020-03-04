@@ -28,7 +28,8 @@ if (isset($_POST["insert"])) {
         $iii= str_repeat("0",3-(strlen($i))).$i;
         // $sellerId=rand(1,5);
         // $sellerId= str_repeat("0",3-(strlen($sellerId))).$sellerId;
-        $cid = str_repeat("0",3-(strlen($i))).rand(1,200);
+        $tmp_rand = rand(1,200);
+        $cid = str_repeat("0",3-(strlen($tmp_rand))).$tmp_rand;
         $cacc = "dummy" . $i;
         $cpwd = "pwd" . $i;
         $csex = "F";
@@ -37,7 +38,7 @@ if (isset($_POST["insert"])) {
         $tmp_bool = rand(1,2);
         if ($tmp_bool === 1) $csex = "Y";
         else $csex = "N";
-        $insertItem = "('CR$iii','大名$cid','$cbirthdate','$crCONT','$csex')";
+        $insertItem = "('CR$iii','C$cid','$cbirthdate','$crCONT','$csex')";
         $insertList = $insertList . "," . "$insertItem";
     }
     //1997-01-01 00:00:00

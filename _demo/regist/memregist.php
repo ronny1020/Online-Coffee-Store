@@ -32,7 +32,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="join")){
       GetSQLValueString($_POST["sName"], 'string'),
       GetSQLValueString($_POST["sellerID"], 'string'),
 			GetSQLValueString($_POST["sAccount"], 'string'),
-			password_hash($_POST["sPassword"], PASSWORD_DEFAULT),
+			GetSQLValueString($_POST["sPassword"], 'string'),
 			
       GetSQLValueString($_POST["sPhone"], 'string'),
       GetSQLValueString($_POST["sMail"], 'string'),
@@ -130,7 +130,7 @@ window.location.href='../index.php';
 <?php }?>
 <table width="780" border="0" align="center" cellpadding="4" cellspacing="0">
   <tr>
-    <td class="tdbline"><img src="images/mlogo2.png" alt="會員系統" width="164" height="67"></td>
+    <td class="tdbline"><img src="images/mlogo4.png" alt="會員系統" width="164" height="67"></td>
   </tr>
   <tr>
     <td class="tdbline"><table width="100%" border="0" cellspacing="0" cellpadding="10">
@@ -156,7 +156,7 @@ window.location.href='../index.php';
             <input name="sellerID" type="text" class="form-control" placeholder="請輸入序號" id="sellerID">
             <br>
             <hr size="1" />
-            <p class="heading">公司資料</p>
+            <p class="heading">基本資料</p>
             <p><font color="#FF0000">*</font>公司名稱：
             <input name="sName" type="text" class="form-control" placeholder="請輸入公司名稱" id="sName">
             <br>

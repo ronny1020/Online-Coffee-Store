@@ -1,5 +1,27 @@
 <?php
 
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+header("Content-Type:text/html; charset=utf-8");
+function ChineseName($length = 1){
+    $characters = array('王','李','張','劉','陳','楊','趙','吳','周','徐',
+    '孫','馬','朱','胡','郭','何','林','高','羅','鄭','梁','謝');
+    $charactersLength = sizeof($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+
+}
+
 //connect to SQL
 header("content-type:text/html; charset=utf-8");
 $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
@@ -18,15 +40,16 @@ if (isset($_POST["insert"])) {
         $iii= str_repeat("0",3-(strlen($i))).$i;
         // $sellerId=rand(1,5);
         // $sellerId= str_repeat("0",3-(strlen($sellerId))).$sellerId;
-        $cacc = "dummy".str_repeat("0",3-(strlen($i))).$i;
-        $cpwd = "pwd".str_repeat("0",3-(strlen($i))).$i;
+        $name = ChineseName().rand(1,9).rand(1,9);
+        $cacc = generateRandomString(10);
+        $cpwd = generateRandomString(10);
         $tmp_bool = rand(1,2);
         if ($tmp_bool === 1) $csex = "F";
         else $csex = "M";
         $cbirthdate = "1997-" . rand(1, 12) . "-" . rand(1, 31);
         $caddress = "my_dummy_adrs" . rand(1, 100);
         $cmoblie = "0900-00" . rand(1, 9) . "-00" . rand(1, 9);
-        $insertItem = "('C$iii','大名$iii','$cacc','$cpwd','$csex','$cbirthdate','$caddress','$cmoblie')";
+        $insertItem = "('C$iii','$name','$cacc','$cpwd','$csex','$cbirthdate','$caddress','$cmoblie')";
         $insertList = $insertList . "," . "$insertItem";
     }
     //1997-01-01 00:00:00
