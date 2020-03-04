@@ -130,7 +130,7 @@ window.location.href='../index.php';
 <?php }?>
 <table width="780" border="0" align="center" cellpadding="4" cellspacing="0">
   <tr>
-    <td class="tdbline"><img src="images/mlogo2.png" alt="會員系統" width="164" height="67"></td>
+    <td class="tdbline"><img src="images/mlogo4.png" alt="會員系統" width="164" height="67"></td>
   </tr>
   <tr>
     <td class="tdbline"><table width="100%" border="0" cellspacing="0" cellpadding="10">
