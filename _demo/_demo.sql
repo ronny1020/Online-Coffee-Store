@@ -28,7 +28,7 @@ CREATE TABLE `customers` (
   `cAccount` varchar(20) NOT NULL unique, -- 買家帳號
   `cPassword` varchar(60) NOT NULL unique, -- 買家密碼: 加密後可能加長故取60
   `cSex` enum('F','M') collate utf8_unicode_ci NOT NULL, -- 買家性別
-  `cBirthDate` datetime default NULL, -- 買家生日
+  `cBirthDate` date default NULL, -- 買家生日
   `cAddress` varchar(60) default NULL, -- 買家地址
   `cMobile` varchar(24) default NULL, -- 買家手機
   PRIMARY KEY  (`customerID`)
@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `crams`;
 CREATE TABLE `crams` (
   `cramID` varchar(5) NOT NULL default '',-- 流水號
   `customerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
-  `cDate` datetime default NULL, -- 客訴日期
+  `cDate` date default NULL, -- 客訴日期
   `cramContent` varchar(300) default NULL, -- 客訴內容
   `cChecked` enum('Y','N') collate utf8_unicode_ci NOT NULL, -- 已處理與否
   PRIMARY KEY  (`cramID`)
@@ -136,12 +136,21 @@ INSERT INTO `infomations` VALUES
 ,('I004','新品上市','上島咖啡深焙咖啡豆將於3月6日準時開賣','S004')
 ,('I005','講座通知','小樽咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S005')
 ,('I006','夥伴招募','星巴克公司將於6月14日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S001')
-,('I007','夥伴招募','露易莎咖啡將於3月24日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S002')
-,('I008','夥伴招募','伯朗咖啡將於3月24日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S003')
+,('I007','夥伴招募','露易莎咖啡將於7月24日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S002')
+,('I008','夥伴招募','伯朗咖啡將於7月28日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S003')
 ,('I009','試喝會','上島咖啡深焙咖啡豆將於6月5日舉行試喝會','S004')
-,('I010','講座舉辦','小樽咖啡將於7月8日於國家圖書館舉行咖啡產地講座','S005')
+,('I010','講座舉辦','小樽咖啡將於8月8日於國家圖書館舉行咖啡產地講座','S005')
 ,('I011','試喝會','為獎勵學員辛勞學習，資策會咖啡將5月5日舉行試喝會','S006')
-,('I012','講座舉辦','資策會咖啡將於6月8日於國家圖書館舉行咖啡產地講座','S006');
+,('I012','新品上市','星巴克公司冰滴咖啡將於3月6日準時開賣','S001')
+,('I013','休館通知','為防治武漢肺炎擴散，露易莎敦北店將於3月1日至3月3日進行消毒作業暫停營業','S003')
+,('I014','新品上市','伯朗咖啡深焙咖啡豆將於3月6日準時開賣','S003')
+,('I015','講座通知','星巴克公司將於6月7日於國家圖書館舉行咖啡產地講座','S001')
+,('I016','儲備幹部招募','星巴克公司將於6月14日舉行幹部招募，歡迎管理人才加入本公司','S001')
+,('I017','儲備幹部招募','露易莎咖啡將於6月24日舉行幹部招募，歡迎管理人才加入本公司','S002')
+,('I018','儲備幹部招募','上島咖啡將於7月24日舉行幹部招募，歡迎管理人才加入本公司','S004')
+,('I019','試喝會','伯朗咖啡深焙咖啡豆將於6月5日舉行試喝會','S003')
+,('I020','講座舉辦','上島咖啡將於9月8日於國家圖書館舉行咖啡產地講座','S004')
+,('I021','講座舉辦','資策會咖啡將於6月8日於國家圖書館舉行咖啡產地講座','S006');
 
 
 DROP TABLE IF EXISTS `discounts`;
@@ -159,41 +168,55 @@ CREATE TABLE `discounts` (
 
 -- add dummy datas:
 INSERT INTO `discounts` VALUES
- ('D001','折扣優惠','星巴克公司現時曼特寧咖啡75折','S001','0.75')
-,('D002','折扣優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75')
-,('D003','折扣優惠','伯朗咖啡現時拿鐵咖啡85折','S003','0.85')
-,('D004','折扣優惠','上島咖啡6月6日起瑪奇朵咖啡85折','S004','0.85')
-,('D005','折扣優惠','小樽咖啡現時瑪奇朵咖啡85折','S005','0.85')
-,('D006','折扣優惠','資策會咖啡現時瑪奇朵咖啡85折','S006','0.85');
+ ('D001','曼特寧優惠','星巴克公司現時曼特寧咖啡75折','S001','0.75')
+,('D002','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75')
+,('D003','拿鐵優惠','伯朗咖啡現時拿鐵咖啡85折','S003','0.85')
+,('D004','瑪奇朵優惠','上島咖啡6月6日起瑪奇朵咖啡85折','S004','0.85')
+,('D005','瑪奇朵優惠','小樽咖啡現時瑪奇朵咖啡85折','S005','0.85')
+,('D006','瑪奇朵優惠','露易莎咖啡4月3日起瑪奇朵咖啡75折','S002','0.75')
+,('D007','瑪奇朵優惠','伯朗咖啡現時瑪奇朵咖啡85折','S003','0.85')
+,('D008','拿鐵優惠','上島咖啡6月6日起拿鐵咖啡85折','S004','0.85')
+,('D009','拿鐵優惠','星巴克公司現時拿鐵咖啡85折','S001','0.85')
+,('D010','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75')
+,('D011','曼特寧優惠','伯朗咖啡現時曼特寧咖啡85折','S003','0.85')
+,('D012','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85')
+,('D013','冰滴咖啡優惠','小樽咖啡現時冰滴咖啡85折','S005','0.85')
+,('D014','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85')
+,('D015','冰摩卡優惠','小樽咖啡現時冰摩卡咖啡85折','S005','0.85')
+,('D016','冰摩卡優惠','露易莎咖啡4月3日起冰摩卡咖啡75折','S002','0.75')
+,('D017','冰摩卡優惠','星巴克公司現時冰摩卡咖啡85折','S001','0.85')
+,('D018','利比瑞卡優惠','上島咖啡6月6日起利比瑞卡咖啡85折','S004','0.85')
+,('D019','利比瑞卡優惠','小樽咖啡現時利比瑞卡咖啡85折','S005','0.85')
+,('D020','利比瑞卡優惠','資策會咖啡現時利比瑞卡咖啡85折','S006','0.85');
 
 -- table訂單: orders
 -- 刪除已存在之重複table
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
-  `orderID` varchar(5) NOT NULL default '',-- Primary key:流水號
-  `customerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
-  `OrderDate` datetime default NULL, -- 下單日期:
-  PRIMARY KEY  (`orderID`)
+  `OrderID` varchar(5) NOT NULL default '',-- Primary key:流水號
+  `CustomerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
+  `OrderDate` date default NULL, -- 下單日期:
+  `ShippedDate` date default NULL, -- 運送日期:
+  `ShipAddress` varchar(20), -- 運送地址:
+  `ShipRegion` varchar(5), -- 運送區域:
+  `ShipPostCode` varchar(10), -- 運送郵遞區號:
+  `ShipCity` varchar(20), -- 運送城市:
+  `ShipCountry` varchar(20), -- 運送國家:
+  
+  PRIMARY KEY  (`OrderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 預設儲存引擎: InnoDB(after php5.5)
 
 -- add dummy datas:
 INSERT INTO `orders` VALUES
- ('R001','C001','2019-02-18')
-,('R002','C001','2019-01-18')
-,('R003','C001','2019-12-18')
-,('R004','C005','2019-12-08')
-,('R005','C003','2019-11-11')
-,('R006','C002','2020-02-02')
-,('R007','C002','2020-02-02')
-,('R008','C009','2020-02-07')
-,('R009','C003','2020-02-11')
-,('R010','C009','2020-02-15');
+ ('R001','C001','2019-02-18', '2019-02-20', 'A Street', 'Region A', '10455', 'A city', 'A country')
+,('R002','C001','2019-01-18', '2019-02-20', 'B Street', 'Region B', '10400', 'B city', 'B country')
+;
 
--- table訂單詳細: order details
+-- table訂單詳細: orders_detail
 -- 刪除已存在之重複table
-DROP TABLE IF EXISTS `order details`;
-CREATE TABLE `order details` (
+DROP TABLE IF EXISTS `orders_detail`;
+CREATE TABLE `orders_detail` (
   `orderID` varchar(5) NOT NULL default '',-- Primary key:流水號(訂單)
   `productID` int(10) NOT NULL,-- Primary key:流水號(商品)
   `Quantity` smallint(6) NOT NULL default '0',-- 數量
@@ -202,17 +225,12 @@ CREATE TABLE `order details` (
 -- 預設儲存引擎: InnoDB(after php5.5)
 
 -- add dummy datas:
-INSERT INTO `order details` VALUES
+INSERT INTO `orders_detail` VALUES
  ('R001','164413',2,0.75)
 ,('R002','164413',3,0.75)
 ,('R003','164414',2,0.85)
 ,('R004','164414',5,0.95)
-,('R005','164415',10,0.5)
-,('R006','164416',20,0.5)
-,('R007','164416',1,0.8)
-,('R008','164416',1,0.9)
-,('R009','164417',3,1)
-,('R010','164417',3,1);
+;
 
 -- table商品: products
 -- 刪除已存在之重複table

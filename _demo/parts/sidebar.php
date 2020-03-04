@@ -28,17 +28,21 @@ $error = "";
             <a class='triangle_title' href="sellers.php">廠商管理<div class="triangle_rotate">▶</div></a>
         <?php } elseif ($_SESSION['AorS'] === 1) {?>
             
-            <a class='triangle_title' type="button" data-toggle="collapse" data-target="#member"
-               onclick="rotateTarget('triangle_rotate')">
+            <a class='triangle_title' type="button" data-toggle="collapse" data-target="#regist">
                資料管理<div class="triangle_rotate">▶</div></a>
-            <div id="member" class="collapse">
+            <div id="regist" class="collapse">
             <a href="../regist/memupdate.php">註冊管理</a>
             <a href="../works/infomations.php">訊息管理</a>
             <a href="../works/discounts.php">優惠管理</a>
             </div>
 
+            <a class='triangle_title' type="button" data-toggle="collapse" data-target="#order">
+               訂單管理<div class="triangle_rotate">▶</div></a>
+            <div id="order" class="collapse">
+            <a href="../works/orders.php">訂單內容</a>
+            <a href="../works/orders_detail.php">訂單細節</a>    
+            </div>
             
-            <a href="../works/orders.php">訂單管理</a>
             <a href="../works/products.php">商品管理</a>
             
             

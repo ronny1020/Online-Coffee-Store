@@ -161,6 +161,47 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+//========== 欄位排序調整: ==========//
+//Adjusted by 2 SESSION:
+// 1. ASCorDESC: 決定升序抑或降序
+// if ASC triggered:
+
+    if (isset($_POST["customerID_ASC"]) ||
+    isset($_POST["cAccount_ASC"]) ||
+    isset($_POST["cSex_ASC"]) ||
+    isset($_POST["cBirthDate_ASC"])) {
+    $_SESSION["ASCorDESC"] = "ASC";
+
+//elseif DESC triggered:
+} else if (
+    isset($_POST["customerID_DESC"]) ||
+    isset($_POST["cAccount_DESC"]) ||
+    isset($_POST["cSex_DESC"]) ||
+    isset($_POST["cBirthDate_DESC"])) {
+    $_SESSION["ASCorDESC"] = "DESC";
+} else if (isset($_SESSION["ASCorDESC"])) {
+} else {// Default of ASCorDESC: ASC(升序)
+    $_SESSION["ASCorDESC"] = "ASC";
+}
+$ASCorDESC = $_SESSION["ASCorDESC"];
+
+// 2. ORDERBY: 決定以何物排序
+if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
+    $_SESSION["cu_orderby"] = "customerID";
+} else if (isset($_POST["cAccount_ASC"]) || isset($_POST["cAccount_DESC"])) {
+    $_SESSION["cu_orderby"] = "cAccount";
+} else if (isset($_POST["cSex"]) || isset($_POST["cSex_DESC"])) {
+    $_SESSION["cu_orderby"] = "cSex";
+} else if (isset($_POST["cBirthDate_ASC"]) || isset($_POST["cBirthDate_DESC"])) {
+    $_SESSION["cu_orderby"] = "cBirthDate";
+} else if (isset($_SESSION["cu_orderby"])) {
+} else {// Default of orderby: cramID
+    $_SESSION["cu_orderby"] = "customerID";
+}
+$orderby = $_SESSION["cu_orderby"];
+
+//======= 排序調整: END HERE. =======//
+
 ?>
 <!DOCTYPE html>
 <title>管理後台</title>
@@ -215,33 +256,92 @@ if (isset($_POST["deleteSelected"])) {
                     </span>
                 </div>
 
-    <table class="table table-striped">
+    <!--======= Main table標題⬇: =======-->
+    <table class="table table-striped ">
     <thead class="bg-color-silk">
-            <tr>
-                <th>
-                <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
-                <label for="selectAll">全選</label>
-                </th>
-                <th>customerID</th>
-                <th>cName</th>
-                <th>cAccount</th>
-                <th>cPassword</th>
-                <th>cSex</th>
-                <th>cBirthDate</th>
-                <th>cAddress</th>
-                <th>cMobile</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
+                            <label for="selectAll">全選</label>
+                        </th>
 
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
+                                <p class="m-1">customerID</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="customerID_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="customerID_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cName</p>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cAccount</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cAccount_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cAccount_ASC">
+                                </div>
+                            </div>
+
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cPassword</p>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cSex</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cSex_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cSex_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cBirthDate</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cBirthDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cBirthDate_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cAddress</p>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cMobile</p>
+                            </div>
+                        </th>
+
+                        <th>
+                        </th>
+                </thead>
+        <tbody>
+<!--======= Main table標題⬆: =======-->
 <?php
 // write table
 // $commandText: $str
 // 受所允許之總欄數調控
 $commandText = <<<SqlQuery
 select customerID, cName, cAccount, cPassword, cSex, cBirthDate, cAddress, cMobile
-from coffee.customers ORDER BY customerID LIMIT $rowNum OFFSET $tableOffSet
+from coffee.customers ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
@@ -261,15 +361,15 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         <td id="<?php echo $row["customerID"]."cBirthDate" ?>" ><?php echo $row["cBirthDate"] ?></td>
                         <td id="<?php echo $row["customerID"]."cAddress" ?>" ><?php echo $row["cAddress"] ?></td>
                         <td id="<?php echo $row["customerID"]."cMobile" ?>" ><?php echo $row["cMobile"] ?></td>
-                        <td>
                         
+                        <td>  
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["customerID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["customerID"] ?>"
                         class="btn btn-primary mb-3" onclick="throwinmodal_MEMBERS(<?php echo "'".$row['customerID']."'"?>)">
                         </td>
-            </tr>
+</tr>
             <?php endwhile?>
         </tbody>
     </table>
@@ -348,8 +448,8 @@ if ($lastPage - $page <= 5) {
                     <th>cMobile: <input type="text" name='mob'></th>
                     <hr>
                     <th>cSex: <select name='sex'>
-                        <option value='F'>男</option>
-                        <option value='M'>女</option>
+                        <option value='M'>男</option>
+                        <option value='F'>女</option>
                     </select></th>
             </tr>
         </div>

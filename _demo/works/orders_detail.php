@@ -63,7 +63,7 @@ foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
         $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.ordrs_detail WHERE OrderID IN ('$deleteItem')
+        DELETE FROM coffee.orders_detail WHERE OrderID IN ('$deleteItem')
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
@@ -94,16 +94,12 @@ foreach ($_POST as $i => $j) {
 //ADD NEW DATA TO FORM! :
 if (isset($_POST['modal_submit'])) {
    $tmp_oid = $_POST['oid'];
-   $tmp_cid = $_POST['cid'];
-   $tmp_OrderD = $_POST['OrderD'];
-   $tmp_ShippedD = $_POST['ShippedD'];
-   $tmp_ShippedA = $_POST['ShippedA'];
-   $tmp_ShipR = $_POST['ShipR'];
-   $tmp_ShipPost = $_POST['ShipPost'];
-   $tmp_ShipCity = $_POST['ShipCity'];
-   $tmp_ShipCountry = $_POST['ShipCountry'];
+   $tmp_pid = $_POST['pid'];
+   $tmp_Quan = $_POST['Quan'];
+   $tmp_Dis = $_POST['Dis'];
+
    $insertCommandText = <<<SqlQuery
-   insert into coffee.orders VALUES ('$tmp_oid','$tmp_cid','$tmp_OrderD','$tmp_ShippedD','$tmp_ShippedA','$tmp_ShipR','$tmp_ShipPost','$tmp_ShipCity','$tmp_ShipCountry')
+   insert into coffee.orders_detail VALUES ('$tmp_oid','$tmp_pid','$tmp_Quan','$tmp_Dis')
    SqlQuery;
    
 
@@ -135,7 +131,7 @@ if (isset($_POST["deleteSelected"])) {
     }
     $selectedList = ltrim($selectedList, "!,");
     $deleteSelectedCommandText = <<<SqlQuery
-    DELETE FROM coffee.ordrs_detail WHERE OrderID IN ($selectedList)
+    DELETE FROM coffee.orders_detail WHERE OrderID IN ($selectedList)
     SqlQuery;
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
@@ -191,14 +187,10 @@ if (isset($_POST["deleteSelected"])) {
             <tr>
             <th><input type="checkbox" id="selectAll" onclick="selectAllCheckbox()"><label for="selectAll">全選</label></th>
                 <th>OrderID</th>
-                <th>CustomerID</th>
-                <th>OrderDate</th>
-                <th>ShippedDate</th>
-                <th>ShipAddress</th>
-                <th>ShipRegion</th>
-                <th>ShipPostCode</th>
-                <th>ShipCity</th>
-                <th>ShipCountry</th>
+                <th>ProductID</th>
+                <th>Quantity</th>
+                <th>Discount</th>
+
                 <th></th>
 
 
@@ -214,8 +206,7 @@ if (isset($_POST["deleteSelected"])) {
 // $commandText: $str
 // 受所允許之總欄數調控
 $commandText = <<<SqlQuery
-select OrderID, CustomerID,  OrderDate, ShippedDate, 
-ShipAddress, ShipRegion, ShipPostCode, ShipCity, ShipCountry from coffee.orders 
+select OrderID, ProductID,  Quantity, Discount from coffee.orders_detail 
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
@@ -227,14 +218,10 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         style='position: relative;'>
                 </td>
                 <td id="<?php echo $row["OrderID"]."OrderID" ?>"><?php echo $row["OrderID"] ?></td>
-                <td id="<?php echo $row["OrderID"]."CustomerID" ?>"><?php echo $row["CustomerID"] ?></td>
-                <td id="<?php echo $row["OrderID"]."OrderDate" ?>"><?php echo $row["OrderDate"] ?></td>
-                <td id="<?php echo $row["OrderID"]."ShippedDate" ?>"><?php echo $row["ShippedDate"] ?></td>
-                <td id="<?php echo $row["OrderID"]."ShipAddress" ?>"><?php echo $row["ShipAddress"] ?></td>
-                <td id="<?php echo $row["OrderID"]."ShipRegion" ?>"><?php echo $row["ShipRegion"] ?></td>
-                <td id="<?php echo $row["OrderID"]."ShipPostCode" ?>"><?php echo $row["ShipPostCode"] ?></td>
-                <td id="<?php echo $row["OrderID"]."ShipCity" ?>"><?php echo $row["ShipCity"] ?></td>
-                <td id="<?php echo $row["OrderID"]."ShipCountry" ?>"><?php echo $row["ShipCountry"] ?></td>
+                <td id="<?php echo $row["OrderID"]."ProductID" ?>"><?php echo $row["ProductID"] ?></td>
+                <td id="<?php echo $row["OrderID"]."Quantity" ?>"><?php echo $row["Quantity"] ?></td>
+                <td id="<?php echo $row["OrderID"]."Discount" ?>"><?php echo $row["Discount"] ?></td>
+                
                
                 <td>
 
@@ -271,26 +258,19 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                     <th>OrderID:<input type="text" name='oid'>
                     </th>
                     <hr>
-                    <th>CustomerID: <input type="text" name='cid'></th>
+                    <th>ProductID: <input type="text" name='pid'></th>
                     <hr>
-                    <th>OrderDate: <input type="date" name='OrderD'>
+                    <th>Quantity: <input type="int" name='Quan'>
                     </th>
                     <hr>
-                    <th>ShippedDate: <input type="date" name='ShippedD'>
+                    <th>Discount: <input type="float" name='Dis'>
                     </th>
                     <hr>
-                    <th>ShipAddress: <input type="text" name='ShippedA'></th>
-                    <hr>
-                    <th>ShipRegion:<input type="text" name='ShipR'>
-                    </th>
-                    <hr>
+
+
+
                     
-                    
-                    <th>ShipPostCode: <input type="text" name='ShipPost'></th>
-                    <hr>
-                    <th>ShipCity: <input type="text" name='ShipCity'></th>
-                    <hr>
-                    <th>ShipCountry: <input type="text" name='ShipCountry'></th>
+
 
 
             </tr>
@@ -332,26 +312,15 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                     <th>OrderID:<input type="text" name='oid'>
                     </th>
                     <hr>
-                    <th>CustomerID: <input type="text" name='cid'></th>
+                    <th>ProductID: <input type="text" name='pid'></th>
                     <hr>
-                    <th>OrderDate: <input type="date" name='OrderD'>
+                    <th>Quantity: <input type="int" name='Quan'>
                     </th>
                     <hr>
-                    <th>ShippedDate: <input type="date" name='ShippedD'>
+                    <th>Discount: <input type="float" name='Dis'>
                     </th>
                     <hr>
-                    <th>ShipAddress: <input type="text" name='ShippedA'></th>
-                    <hr>
-                    <th>ShipRegion:<input type="text" name='ShipR'>
-                    </th>
-                    <hr>
-                    
-                    
-                    <th>ShipPostCode: <input type="text" name='ShipPost'></th>
-                    <hr>
-                    <th>ShipCity: <input type="text" name='ShipCity'></th>
-                    <hr>
-                    <th>ShipCountry: <input type="text" name='ShipCountry'></th>
+
 
 
             </tr>

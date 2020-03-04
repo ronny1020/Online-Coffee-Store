@@ -148,6 +148,34 @@ $query_RecMember = "SELECT * FROM infomations WHERE sellerID='$userID'";
 $RecMember = $link->query($query_RecMember);	
 $row_RecMember = $RecMember->fetch_assoc();
 
+
+// search function
+if (isset($_POST["startSearch"])) {
+    if($_POST["searchKeyword"]!=""){
+        $_SESSION["infomation_searchKeyword"] = $_POST["searchKeyword"];
+    }
+    $_SESSION["infomation_searchBy"] = $_POST["searchBy"];
+    header('location:infomations.php');
+}
+
+// clear search
+if (isset($_POST["clearSearch"])) {
+    unset($_SESSION["infomation_searchKeyword"]);
+    unset($_SESSION["infomation_searchBy"]);
+    header('location:infomations.php');
+}
+$searchComment="";
+
+if(isset($_SESSION["infomation_searchKeyword"])) {
+    $searchKeyword=$_SESSION["infomation_searchKeyword"];
+    if($_SESSION["infomation_searchBy"]=="infoName"){
+        $searchComment="and infoName like '%$searchKeyword%'";
+    }else if($_SESSION["infomation_searchBy"]=="infoDescrip"){
+        $searchComment="and infoDescrip like '%$searchKeyword%'";
+    }
+    
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -181,6 +209,40 @@ $row_RecMember = $RecMember->fetch_assoc();
 
     <!-- Start your code here -->
     <div class="main p-5">
+
+    <form class="card p-3 mb-5" method="POST">
+            <div class="w-50 mx-auto">
+                <label for="searchKeyword">
+                    請輸入關鍵字並選擇搜尋欄位：
+                </label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
+                    <select name="searchBy">
+                        <option value="infoName">
+                        資訊名稱
+                        </option>
+                       
+                        <option value="infoDescrip">
+                        資訊內容
+                        </option>
+                        
+                    </select>
+                </div>
+                <button class="btn btn-success mt-3" type="submit" name="startSearch">開始搜尋</button> 
+                <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
+                <p class="mt-3">
+                    <?php 
+                    if(isset($_SESSION["infomation_searchKeyword"])){
+                        echo "您正在搜尋：".$_SESSION["infomation_searchKeyword"];
+                    }                    
+                     ?>
+                </p>
+            </div>
+        </form>
+
+
+
+
 
         <form method='post' class="card p-3">
             <div>
@@ -253,7 +315,7 @@ $row_RecMember = $RecMember->fetch_assoc();
 // write table
 
 $commandText = <<<SqlQuery
-                    select infoID, infoName, infoDescrip, sellerID from coffee.infomations where sellerID='$userID' ORDER BY infoID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select infoID, infoName, infoDescrip, sellerID from coffee.infomations where sellerID='$userID' $searchComment ORDER BY infoID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 $result = mysqli_query($link, $commandText);
 
@@ -329,7 +391,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
         <!-- Modal Header -->
         <div class="modal-header">
-            <h4 class="modal-title">資料變更:</h4>
+            <h4 class="modal-title">新增資料:</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <form method="post" action=''>
@@ -398,14 +460,8 @@ while ($row = mysqli_fetch_assoc($result)):
 </div>
 
 
-
-
-
-
-
-        </div>
-
-    </div>
+</div>
+</div>
 
     <!-- End your code here. -->
     <?php include '../parts/footer.php';?>
