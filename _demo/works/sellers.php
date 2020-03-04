@@ -202,9 +202,8 @@ if (isset($_POST['edModal-submit'])){
     // write table
     $commandText = <<<SqlQuery
         select sellerID, sName, sAccount, sPassword, sAddress, sPhone, sMail, sCountry
-        from coffee.sellers
+        from coffee.sellers LIMIT $rowNum OFFSET $tableOffSet
         SqlQuery;
-    
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)): $temp = "'"; ?>
                 <tr><!-- <label class="form-check-label"> -->
