@@ -416,8 +416,9 @@
         width: 300px;
         height: 200px;
         object-fit: cover;
-        /* Login page background. (Lee 0304) */
     }
+
+    /* Login page background. (Lee 0304) */
     
     td {
         /*防塞爆*/
@@ -436,12 +437,9 @@
     .login_bg>.card {
         background-color: rgba(255, 255, 255, 0.5);
     }
-    
-    body.main_bg {
-        background: url(image/main.png) no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-        background-color: rgb(192, 178, 131, 0.5);
+
+    .card > .welcome{
+        text-align: center;
+        font-size: 150%;
+        font-weight: bolder;
     }
