@@ -262,16 +262,20 @@ if (isset($_POST["exportSelected"])) {
         $output .='"' . $row["description"] . '",';
         $output .="\n";
         }
+
+
+        
+        $filename = "ProductList". date('Y-m-d H:i:s').".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
         echo $output;
-    
+  
     }
     // Download the file
 
-    $filename = "ProductList". date('Y-m-d H:i:s').".csv";
-    header('Content-Encoding: UTF-8');
-    header("Content-Type: text/csv; charset=UTF-8");
-    header('Content-Disposition: attachment; filename=' . $filename);
-    echo "\xEF\xBB\xBF"; 
+
 
  
     exit;
