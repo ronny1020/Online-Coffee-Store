@@ -190,10 +190,10 @@ INSERT INTO `orders` VALUES
 ,('R002','C001','2019-01-18', '2019-02-20', 'B Street', 'Region B', '10400', 'B city', 'B country')
 ;
 
--- table訂單詳細: order details
+-- table訂單詳細: orders_detail
 -- 刪除已存在之重複table
-DROP TABLE IF EXISTS `order details`;
-CREATE TABLE `order details` (
+DROP TABLE IF EXISTS `orders_detail`;
+CREATE TABLE `orders_detail` (
   `orderID` varchar(5) NOT NULL default '',-- Primary key:流水號(訂單)
   `productID` int(10) NOT NULL,-- Primary key:流水號(商品)
   `Quantity` smallint(6) NOT NULL default '0',-- 數量
@@ -202,7 +202,7 @@ CREATE TABLE `order details` (
 -- 預設儲存引擎: InnoDB(after php5.5)
 
 -- add dummy datas:
-INSERT INTO `order details` VALUES
+INSERT INTO `orders_detail` VALUES
  ('R001','164413',2,0.75)
 ,('R002','164413',3,0.75)
 ,('R003','164414',2,0.85)
