@@ -298,7 +298,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">資訊描述</p>
+                                <p class="m-1">資訊內容</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="" name="infoDescript_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="" name="infoDescript_ASC">

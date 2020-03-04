@@ -156,7 +156,7 @@ window.location.href='../index.php';
             <input name="sellerID" type="text" class="form-control" placeholder="請輸入序號" id="sellerID">
             <br>
             <hr size="1" />
-            <p class="heading">公司資料</p>
+            <p class="heading">基本資料</p>
             <p><font color="#FF0000">*</font>公司名稱：
             <input name="sName" type="text" class="form-control" placeholder="請輸入公司名稱" id="sName">
             <br>

@@ -231,12 +231,13 @@ if(isset($_SESSION["discount_searchKeyword"])) {
                         <option value="disName">
                             優惠名稱
                         </option>
-                        <option value="Discount">
-                            折扣    
-                        </option>
                         <option value="disDescrip">
                             優惠內容
                         </option>
+                        <option value="Discount">
+                            折數    
+                        </option>
+                        
                         
                     </select>
                 </div>
@@ -308,7 +309,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">優惠描述</p>
+                                <p class="m-1">優惠內容</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
                                     <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
