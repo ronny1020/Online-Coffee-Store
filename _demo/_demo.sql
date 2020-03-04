@@ -28,7 +28,7 @@ CREATE TABLE `customers` (
   `cAccount` varchar(20) NOT NULL unique, -- 買家帳號
   `cPassword` varchar(60) NOT NULL unique, -- 買家密碼: 加密後可能加長故取60
   `cSex` enum('F','M') collate utf8_unicode_ci NOT NULL, -- 買家性別
-  `cBirthDate` datetime default NULL, -- 買家生日
+  `cBirthDate` date default NULL, -- 買家生日
   `cAddress` varchar(60) default NULL, -- 買家地址
   `cMobile` varchar(24) default NULL, -- 買家手機
   PRIMARY KEY  (`customerID`)
@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `crams`;
 CREATE TABLE `crams` (
   `cramID` varchar(5) NOT NULL default '',-- 流水號
   `customerID` varchar(5) NOT NULL default '',-- Primary key:流水號(買家)
-  `cDate` datetime default NULL, -- 客訴日期
+  `cDate` date default NULL, -- 客訴日期
   `cramContent` varchar(300) default NULL, -- 客訴內容
   `cChecked` enum('Y','N') collate utf8_unicode_ci NOT NULL, -- 已處理與否
   PRIMARY KEY  (`cramID`)

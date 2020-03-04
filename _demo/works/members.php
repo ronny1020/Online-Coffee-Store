@@ -217,24 +217,91 @@ if (isset($_POST["deleteSelected"])) {
 
     <table class="table table-striped">
     <thead class="bg-color-silk">
-            <tr>
-                <th>
-                <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
-                <label for="selectAll">全選</label>
-                </th>
-                <th>customerID</th>
-                <th>cName</th>
-                <th>cAccount</th>
-                <th>cPassword</th>
-                <th>cSex</th>
-                <th>cBirthDate</th>
-                <th>cAddress</th>
-                <th>cMobile</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
+                            <label for="selectAll">全選</label>
+                        </th>
 
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
+                                <p class="m-1">customerID</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cramID_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cramID_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cNameID</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="customerID_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="customerID_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cAccount</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cDate_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cPassword</p>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cSex</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cBirthDate</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cAddress</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cMobile</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
+                                </div>
+                            </div>
+                        </th>
+                        <th>
+                        </th>
+                </thead>
+        <tbody>
 <?php
 // write table
 // $commandText: $str
@@ -261,15 +328,15 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         <td id="<?php echo $row["customerID"]."cBirthDate" ?>" ><?php echo $row["cBirthDate"] ?></td>
                         <td id="<?php echo $row["customerID"]."cAddress" ?>" ><?php echo $row["cAddress"] ?></td>
                         <td id="<?php echo $row["customerID"]."cMobile" ?>" ><?php echo $row["cMobile"] ?></td>
-                        <td>
                         
+                        <td>  
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["customerID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["customerID"] ?>"
                         class="btn btn-primary mb-3" onclick="throwinmodal_MEMBERS(<?php echo "'".$row['customerID']."'"?>)">
                         </td>
-            </tr>
+</tr>
             <?php endwhile?>
         </tbody>
     </table>

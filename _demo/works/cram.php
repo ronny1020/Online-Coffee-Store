@@ -1,14 +1,13 @@
 <?php
 session_start();
 
-//Prevents direct connection.
+//========== Prevents direct connection. ==========//
 if ($_SESSION['username'] == '' || $_SESSION['AorS'] != 0) {
     header('Location: ../index.php');
     //echo "<script type='text/javascript'>alert('請先登入！');</script>";
 }
 
-//Logout:
-//清空SESSION
+//========== Logout:清空SESSION ==========//
 if (isset($_POST["logout"])) {
     // session_destroy();
     $_SESSION['username'] = '';
@@ -16,13 +15,78 @@ if (isset($_POST["logout"])) {
     header('Location: ../index.php');
 }
 
-//connect to SQL
+//========== Connect to SQL ==========//
 header("content-type:text/html; charset=utf-8");
 $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
-//========== ADD: ADJUST COLUMN. ==========//
+//========== 右側刪除按鈕 ==========//
+foreach ($_POST as $i => $j) {
+    //Right delete button:
+    if (substr($i, 0, 6) == "delete") {
+        $deleteItem = ltrim($i, "delete");
+        $deleteCommandText = <<<SqlQuery
+        DELETE FROM coffee.crams WHERE cramID IN ('$deleteItem')
+        SqlQuery;
+        mysqli_query($link, $deleteCommandText);
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    } 
+}
+
+//========== 上方刪除按鈕: 一括刪除 ==========//
+if (isset($_POST["deleteSelected"])) {
+    $selectedList = "!";
+
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList = $selectedList . ",'" . $selectedItem . "'";
+        }
+    }
+    $selectedList = ltrim($selectedList, "!,");
+    $deleteSelectedCommandText = <<<SqlQuery
+    DELETE FROM coffee.crams WHERE cramID IN ($selectedList)
+    SqlQuery;
+    mysqli_query($link, $deleteSelectedCommandText);
+    header('location:' . $_SERVER['REQUEST_URI'] . '');
+}
+
+//========== 編輯資料按鈕SUBMIT: 加入新值 ==========//
+if (isset($_POST['modal_submit'])) {
+    $tmp_cri = $_POST['cri'];
+    $tmp_cid = $_POST['cid'];
+    $tmp_dat = $_POST['dat'];
+    $tmp_ccn = $_POST['ccn'];
+    $tmp_ckd = $_POST['ckd'];
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.crams VALUES ('$tmp_cri','$tmp_cid','$tmp_dat','$tmp_ccn','$tmp_ckd')
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
+
+//========== 右側編輯按鈕SUBMIT: 更動舊值 ==========//
+if (isset($_POST['modal_submit_e'])) {
+    $tmp_cri_e = $_POST['cri_e'];
+    $tmp_cid_e = $_POST['cid_e'];
+    $tmp_dat_e = $_POST['dat_e'];
+    $tmp_ccn_e = $_POST['ccn_e'];
+    $tmp_ckd_e = $_POST['ckd_e'];
+
+    //刪除舊資料
+    $insertCommandText = <<<SqlQuery
+    DELETE FROM coffee.crams WHERE cramID IN ('$tmp_cri_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+
+    //插入新資料
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.crams VALUES ('$tmp_cri_e','$tmp_cid_e','$tmp_dat_e','$tmp_ccn_e','$tmp_ckd_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
+
+//========== 欄數/頁數調整: ==========//
 
 // get page
 if (isset($_GET["page"])) {
@@ -55,99 +119,9 @@ if ($showDataEndTo > $total_num_rows) {
 $previousPage = $page - 1;
 $nextPage = $page + 1;
 
-//===== ENDED HERE. =====//
+//===== 欄數/頁數調整: ENDED HERE. =====//
 
-//2 Buttons work here.
-foreach ($_POST as $i => $j) {
-    //Right delete button:
-    if (substr($i, 0, 6) == "delete") {
-        $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.crams WHERE cramID IN ('$deleteItem')
-        SqlQuery;
-        mysqli_query($link, $deleteCommandText);
-        header('location:' . $_SERVER['REQUEST_URI'] . '');
-    } //Right edit button:
-    // elseif (substr($i, 0, 4) == "edit") {
-    //     //獲得customerID
-    //     $editItem = ltrim($i, "edit");
-    //     $editCommandText = <<<SqlQuery
-    //     select customerID, cName, cAccount, cSex, cBirthDate, cAddress, cMobile
-    //     from coffee.customers WHERE customerID IN ('$editItem')
-    //     SqlQuery;
-    //     $result = mysqli_query($link, $editCommandText);
-    //     while ($row = mysqli_fetch_assoc($result)) {
-    //         $_SESSION["modal_cid"] = $row["customerID"];
-    //         $_SESSION["modal_nam"] = $row["cName"];
-    //         $_SESSION["modal_acc"] = $row["cAccount"];
-    //         $_SESSION["modal_sex"] = $row["cSex"];
-    //         $_SESSION["modal_bid"] = $row["cBirthDate"];
-    //         $_SESSION["modal_adr"] = $row["cAddress"];
-    //         $_SESSION["modal_mob"] = $row["cMobile"];
-    //     }
-    //     ;
-    //     // header('location:' . $_SERVER['REQUEST_URI'] . '');
-    // }
-}
-
-//ADD NEW DATA TO FORM! :
-if (isset($_POST['modal_submit'])) {
-    $tmp_cri = $_POST['cri'];
-    $tmp_cid = $_POST['cid'];
-    $tmp_dat = $_POST['dat'];
-    $tmp_ccn = $_POST['ccn'];
-    $tmp_ckd = $_POST['ckd'];
-    $insertCommandText = <<<SqlQuery
-    insert into coffee.crams VALUES ('$tmp_cri','$tmp_cid','$tmp_dat','$tmp_ccn','$tmp_ckd')
-    SqlQuery;
-    mysqli_query($link, $insertCommandText);
-}
-
-//EDIT INNER DATA FROM FROM!
-//整行砍掉再重丟
-if (isset($_POST['modal_submit_e'])) {
-    $tmp_cri_e = $_POST['cri_e'];
-    $tmp_cid_e = $_POST['cid_e'];
-    $tmp_dat_e = $_POST['dat_e'];
-    $tmp_ccn_e = $_POST['ccn_e'];
-    $tmp_ckd_e = $_POST['ckd_e'];
-
-    //刪除舊資料
-    $insertCommandText = <<<SqlQuery
-    DELETE FROM coffee.crams WHERE cramID IN ('$tmp_cri_e');
-    SqlQuery;
-    mysqli_query($link, $insertCommandText);
-
-    //插入新資料
-    $insertCommandText = <<<SqlQuery
-    insert into coffee.crams VALUES ('$tmp_cri_e','$tmp_cid_e','$tmp_dat_e','$tmp_ccn_e','$tmp_ckd_e');
-    SqlQuery;
-    mysqli_query($link, $insertCommandText);
-}
-
-// $editbtn = "<input type='submit' value='編輯' class='btn btn-primary mb-3' name='to_edit'>";
-// $updtbtn = "<input type='submit' value='送出' class='btn btn-primary mb-3' name='to_updt'>";
-// $resultBtn = $editbtn;
-
-// delete selected items:
-if (isset($_POST["deleteSelected"])) {
-    $selectedList = "!";
-
-    foreach ($_POST as $i => $j) {
-        if (substr($i, 0, 8) == "selected") {
-            $selectedItem = ltrim($i, "selected");
-            $selectedList = $selectedList . ",'" . $selectedItem . "'";
-        }
-    }
-    $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
-    DELETE FROM coffee.crams WHERE cramID IN ($selectedList)
-    SqlQuery;
-    mysqli_query($link, $deleteSelectedCommandText);
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
-}
-
-//===== 排序調整: =====//
+//========== 欄位排序調整: ==========//
 //Adjusted by 2 SESSION:
 // 1. ASCorDESC: 決定升序抑或降序
 // if ASC triggered:
@@ -155,15 +129,14 @@ if (isset($_POST["deleteSelected"])) {
 if (isset($_POST["cramID_ASC"]) ||
     isset($_POST["customerID_ASC"]) ||
     isset($_POST["cDate_ASC"]) ||
-    // isset($_POST["cramContent_ASC"]) ||
     isset($_POST["cChecked_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
+
 //elseif DESC triggered:
 } else if (
     isset($_POST["cramID_DESC"]) ||
     isset($_POST["customerID_DESC"]) ||
     isset($_POST["cDate_DESC"]) ||
-    // isset($_POST["cramContent_DESC"]) ||
     isset($_POST["cChecked_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if (isset($_SESSION["ASCorDESC"])) {
@@ -187,7 +160,7 @@ if (isset($_POST["cramID_ASC"]) || isset($_POST["cramID_DESC"])) {
 }
 $orderby = $_SESSION["orderby"];
 
-// 排序調整END HERE. //
+//======= 排序調整: END HERE. =======//
 
 ?>
 <!DOCTYPE html>
@@ -224,12 +197,12 @@ $orderby = $_SESSION["orderby"];
     <div>
         <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
             class="btn btn-danger mb-3">
-        <!--Modal toggled here.-->
+        <!--新增資料: #Modal_add toggled here.-->
         <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#Modal_add">
+                <!--======= 欄數調整列⬇: =======-->
                 <div class='float-right'>
                     <span class="mr-5">
-                    <!-- show where you are -->
                     <?php echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 筆(共 $total_num_rows 筆資料)" ?>
                     </span>
                     <label for="row_num_select">請選擇顯示行數:</label>
@@ -242,7 +215,8 @@ $orderby = $_SESSION["orderby"];
                     <input type="submit" value="確定" name="row_num_submit" class="btn btn-primary ml-3 mb-3">
                     </span>
                 </div>
-<!-- Main table created here. -->
+                <!--======= 欄數調整列⬆: =======-->
+<!--======= Main table標題⬇: =======-->
     <table class="table table-striped ">
     <thead class="bg-color-silk">
                     <tr>
@@ -281,9 +255,13 @@ $orderby = $_SESSION["orderby"];
                             </div>
 
                         </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">cramContent</p>
+                            </div>
                         </th>
-                        <th class=tags>cramContent
-                        </th>
+
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cChecked</p>
@@ -293,11 +271,13 @@ $orderby = $_SESSION["orderby"];
                                 </div>
                             </div>
                         </th>
-                        <!-- here -->
                         <th>
                         </th>
                 </thead>
         <tbody>
+<!--======= Main table標題⬆: =======-->
+
+<!--======= Main table內容⬇: =======-->
 <?php
 
 // write main table
@@ -338,8 +318,9 @@ while ($row = mysqli_fetch_assoc($result)): ?>
             <?php endwhile?>
         </tbody>
     </table>
+<!--======= Main table內容⬆: =======-->
 </form>
-<!--頁尾頁碼&按鈕顯示:-->
+<!--======= 頁尾頁碼&按鈕顯示⬇: =======-->
 <div class="d-flex justify-content-center align-items-center flex-column  m-5">
         <!-- page select -->
         <div class="m-3">
@@ -375,10 +356,10 @@ if ($lastPage - $page <= 5) {
 }
 
 ?>
-<!--頁尾頁碼&按鈕結束-->
+<!--======= 頁尾頁碼&按鈕顯示⬆: =======-->
 </div>
 
-<!-- Modal: Add new-->
+<!--======= 新增資料Modal⬇: =======-->
 <div class="modal fade" id="Modal_add">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -419,8 +400,9 @@ if ($lastPage - $page <= 5) {
     </div>
 </div>
 </div>
+<!--======= 新增資料Modal⬆: =======-->
 
-<!-- Modal: Edit old!-->
+<!--======= 修改資料Modal⬇: =======-->
 <div class="modal fade" id="Modal_edit">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -461,6 +443,7 @@ if ($lastPage - $page <= 5) {
         </div>
     </div>
 </div>
+<!--======= 修改資料Modal⬆: =======-->
 
 </div>
 </div>
