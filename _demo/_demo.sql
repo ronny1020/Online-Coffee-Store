@@ -186,8 +186,17 @@ CREATE TABLE `orders` (
 
 -- add dummy datas:
 INSERT INTO `orders` VALUES
- ('R001','C001','2019-02-18', '2019-02-20', 'A Street', 'Region A', '10455', 'A city', 'A country')
-,('R002','C001','2019-01-18', '2019-02-20', 'B Street', 'Region B', '10400', 'B city', 'B country')
+ ('R001','C001','2019-02-18', '2019-02-21', 'A Street', 'Region A', '10455', 'A city', 'A country')
+,('R002','C002','2019-01-28', '2019-02-22', 'B Street', 'Region B', '10400', 'B city', 'B country')
+,('R003','C002','2020-01-08', '2020-02-10', 'B Street', 'Region B', '10400', 'B city', 'B country')
+,('R004','C003','2018-07-11', '2018-09-27', 'C Street', 'Region C', '12788', 'C city', 'C country')
+,('R005','C003','2017-04-18', '2017-05-12', 'D Street', 'Region D', '16499', 'D city', 'D country')
+,('R006','C004','2016-03-18', '2017-01-30', 'E Street', 'Region F', '10400', 'F city', 'S country')
+,('R007','C004','2018-07-18', '2018-08-20', 'E Street', 'Region F', '10400', 'F city', 'K country')
+,('R008','C004','2019-06-18', '2019-07-20', 'F Street', 'Region C', '15470', 'C city', 'L country')
+,('R009','C005','2011-04-18', '2018-02-20', 'G Street', 'Region A', '19455', 'D city', 'L country')
+,('R010','C005','2013-05-18', '2015-06-02', 'G Street', 'Region V', '51400', 'D city', 'M country')
+,('R011','C006','2018-07-18', '2018-09-20', 'B Street', 'Region N', '60447', 'A city', 'BM country')
 ;
 
 -- table訂單詳細: orders_detail
