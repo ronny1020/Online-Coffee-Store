@@ -313,8 +313,8 @@ if (isset($_POST["exportSelected"])) {
                     class="btn btn-danger mb-3">
                     <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
-                    <input type="submit" value="匯出勾選" class="btn btn-success ml-3 mb-3" name="exportSelected">
-                    <input type="button" value="匯入資料" class="btn btn-info ml-3 mb-3" onclick="importDataUpload()">
+                    <!-- <input type="submit" value="匯出勾選" class="btn btn-success ml-3 mb-3" name="exportSelected">
+                    <input type="button" value="匯入資料" class="btn btn-info ml-3 mb-3" onclick="importDataUpload()"> -->
                     
                 <div class='float-right'>
                     <span class="mr-5">
