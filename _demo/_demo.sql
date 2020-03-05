@@ -544,6 +544,8 @@ CREATE TABLE `discounts` (
   `disDescrip` varchar(250) NOT NULL, -- 折扣描述
   `sellerID` varchar(5) NOT NULL, -- 賣方編碼
   `Discount` float NOT NULL, -- 折扣
+  `startDate` date default NULL, -- 開始日期:
+  `overDate` date default NULL, -- 結束日期:
   
   
   PRIMARY KEY  (`disID`)
