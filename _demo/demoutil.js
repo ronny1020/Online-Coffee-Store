@@ -63,24 +63,22 @@ function selectAllCheckbox() {
     }
 }
 
-//確認密碼:
-var MODAL_PWcheck = function() {
-    if(document.getElementById('pwd').value != ''){
-        if (document.getElementById('pwd').value == 
-                document.getElementById('pwd_check').value) {
+//Modal content verification:
+var PWDcheck = function () {
+    if (document.getElementById('pwd').value != '') {
+        if (document.getElementById('pwd').value ==
+            document.getElementById('pwd_checked').value) {
             document.getElementById('error_msg').style.color = 'green';
             document.getElementById('error_msg').innerHTML = 'matching';
-            document.getElementById('modal_submit').removeAttribute('disabled');
-            } else {
+        } else {
             document.getElementById('error_msg').style.color = 'red';
             document.getElementById('error_msg').innerHTML = 'not matching';
-            document.getElementById('modal_submit').setAttribute('disabled', '');
-            }
-    }else{
-        document.getElementById('error_msg').innerHTML = 'plz insert pwd.';
-        document.getElementById('modal_submit').setAttribute('disabled', '');
-    } 
-  }
+        }
+    }
+}
+
+
+
 //密碼確認結束。
 
 // Lightweight version by LEE.(0303)
@@ -167,7 +165,7 @@ function throwinmodal_MEMBERS(myid) {
 //for Creating & Appending element & give attribute in the same time
 
 
-HTMLElement.prototype.CreateAppend = function(element, context, ...attr) {
+HTMLElement.prototype.CreateAppend = function (element, context, ...attr) {
     e = document.createElement(element)
     if (context != undefined) {
         e.innerHTML = context;

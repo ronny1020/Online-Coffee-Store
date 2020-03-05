@@ -250,7 +250,7 @@ if (isset($_POST["exportSelected"])) {
             $heading = mysqli_fetch_field_direct($exportResult, $i);
             $output .= '"' . $heading->name . '",';
         }
-        $output .="\n";
+        $output =rtrim($output,",")."\n";
  
         // Get Records from the table
 
@@ -263,25 +263,94 @@ if (isset($_POST["exportSelected"])) {
         $output .='"' . $row["UnitsInStock"] . '",';
         $output .='"' . $row["specification"] . '",';
         $output .='"' . $row["description"] . '",';
-        $output .="\n";
+        $output =rtrim($output,",")."\n";   
         }
 
 
             // Download the file
         $filename = "ProductList". date('Y-m-d H:i:s').".csv";
-        header('Content-Encoding: UTF-8');
-        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Encoding: big5');
+        header("Content-Type: text/csv; charset=big5");
         header('Content-Disposition: attachment; filename=' . $filename);
-        echo "\xEF\xBB\xBF";
-        echo $output;
+
+        echo iconv("UTF-8", "big5", $output);
+        // echo "\xEF\xBB\xBF";
+        // echo $output;
 
         exit;
   
     }
+    header('location:' . $_SERVER['REQUEST_URI'] . '');
+}
 
-   
+// import data
+if (isset($_POST["import_data"])) {
+    
+    $import_file = $_FILES["ProductImage_upload"]["tmp_name"];
+    
+    if ($_FILES["ProductImage_upload"]["size"] > 0) {
+        
+        $import_data = fopen($import_file, "r");
 
-  header('location:' . $_SERVER['REQUEST_URI'] . '');
+
+        // while(! feof($import_data)){
+        //     print_r(fgetcsv($import_data));
+        // }
+
+        while (($row = fgetcsv($import_data, 10000, ",")) !== FALSE) {
+ 
+            $row=mb_convert_encoding($row ,"UTF-8","big5");
+            
+            $productID_import=$row[0];
+            $ProductName_import=$row[1];
+            $categoryName_import=$row[2];
+            $UnitPrice_import=$row[3];
+            $UnitsInStock_import=$row[4];
+            $specification_import=$row[5];
+            $description_import=$row[6];
+
+            $findCategoryIDCommend="select CategoryID from coffee.category where categoryName='$categoryName_import';";
+            $findCategoryIDResult = mysqli_query($link, $findCategoryIDCommend);
+            if(mysqli_num_rows($findCategoryIDResult)>0){
+                $CategoryID_import=mysqli_fetch_assoc($findCategoryIDResult)["CategoryID"];
+    
+                if($productID_import=="productID"){
+                
+                }else if($productID_import==""){
+                    $add_time_now = date("Y-m-d H:i:s", time());
+                    $import_comment = "INSERT INTO coffee.products (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`,`UnitsInStock`, `add_time`, `specification`, `description`)  
+                    VALUES  ('$ProductName_import','$userID',$CategoryID_import,$UnitPrice_import,$UnitsInStock_import,'$add_time_now','$specification_import','$description_import');";
+                    mysqli_query($link, $import_comment );
+                    
+                }else{
+                    $checkProductIDExistComment="select productID from coffee.products where productID=$productID_import and sellerID='$userID';";
+                    $checkProductIDExistResult= mysqli_query($link, $checkProductIDExistComment);
+      
+                    if(mysqli_num_rows($checkProductIDExistResult)>0){
+                        $importUpdate_comment = "UPDATE `coffee`.`products` SET 
+                        `ProductName` = '$ProductName_import', 
+                        `CategoryID` = '$CategoryID_import',
+                        `UnitPrice` = $UnitPrice_import, 
+                        `UnitsInStock` = $UnitsInStock_import,
+                        `specification` = '$specification_import',
+                        `description` = '$description_import'
+                        WHERE `productID` = $productID_import;";
+
+                        mysqli_query($link, $importUpdate_comment);
+                    }else{
+                        echo "productID error in ID:$productID_import";
+                    }
+
+                }    
+            }else{
+                if($productID_import != "productID"){
+                echo "category error in ID:$productID_import";
+                }
+            }   
+        }
+
+        fclose($import_data);
+    }
 }
 
 
@@ -296,14 +365,13 @@ function uploadImage($productIDForImage){
     $uploadOk = 1;
     $ImageUploadType = strtolower(pathinfo($ImageUpload_file,PATHINFO_EXTENSION));
     // Check if image file is a actual image or fake image
-    if(isset($_FILES["ProductImage_upload"])) {
-        $check = getimagesize($_FILES["ProductImage_upload"]["tmp_name"]);
-        if($check == false) {
-            echo "File is not an image.";
-            $uploadOk = 0;
-        }
+ 
+    $check = getimagesize($_FILES["ProductImage_upload"]["tmp_name"]);
+    if($check == false) {
+        echo "File is not an image.";
+        $uploadOk = 0;
     }
-
+    
     if($ImageUploadType != "jpg" ) {
     echo "Sorry, only JPG are allowed.";
     $uploadOk = 0;
@@ -342,9 +410,11 @@ if (isset($_POST["create_data"])) {
     $productID_input= str_repeat("0",10-(strlen($productID_input))).$productID_input;
     mysqli_error($link);
 
-    uploadImage($productID_input);
+    if($_FILES["ProductImage_upload"]["name"]!=""){
+        uploadImage($productID_input);
+    }
 
-    foreach ($_POST as $i => $j) {
+foreach ($_POST as $i => $j) {
         if (substr($i, 0, 6) == "newTag" && $j !="" ) {
             $newTag=$j;
             $findTagID = mysqli_query($link, "select tagID from coffee.products_tags WHERE tagName ='$newTag';");
@@ -383,7 +453,9 @@ if (isset($_POST["edit_data"])) {
 
     mysqli_error($link);
 
-    uploadImage($productID_input);
+    if($_FILES["ProductImage_upload"]["name"]!=""){
+        uploadImage($productID_input);
+    }
     // tags delete or create
     foreach ($_POST as $i => $j) {
     // delete tags
