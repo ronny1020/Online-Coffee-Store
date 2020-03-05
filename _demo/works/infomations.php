@@ -175,56 +175,58 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
     
 }
 
-// export selected data
+// Export selected items.
 if (isset($_POST["exportSelected"])) {
 
     $selectedList="('";
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 8) == "selected") {
             $selectedItem = ltrim($i, "selected");
-            $selectedList.=$selectedItem."','";
+            $selectedList .= $selectedItem . "','";
         }
     }
-    $selectedList=rtrim($selectedList,",");
-    $selectedList.="')";
-    echo $selectedList;
+    $selectedList = rtrim($selectedList , ",");
+    $selectedList .= "')";
 
-    if($selectedList = "('')"){
-        // header('location:' . $_SERVER['REQUEST_URI'] . '');
+    //防呆 一個都沒勾的話:
+    if($selectedList == "('')"){
+        // echo "<script>alert('Please select at least 1 column.');</script>";
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
     }
-    
-
-    $exportComment="select infoID, infoName, infoDescrip, sellerID from coffee.infomations 
-    where sellerID='$userID' and infoID in $selectedList ORDER BY infoID;";
+    //多一空欄位 '' 但不影響功能
+    // echo $selectedList;
+    $exportComment = <<<SqlQuery
+    select infoID, infoName, infoDescrip, sellerID from coffee.infomations   
+    where sellerID='$userID' and infoID IN $selectedList ORDER BY infoID
+    SqlQuery;
    
     $exportResult = mysqli_query($link, $exportComment);
-    $columns_total = mysqli_num_fields($exportResult);
-    $exportResult_exist = mysqli_num_rows($exportResult)>0;
-    
-
-    if($exportResult_exist){
-        // Get The Field Name
-        $output ="";
-        for($i = 0; $i < $columns_total; $i++){
-            $heading = mysqli_fetch_field_direct($exportResult, $i);
-            $output .= '"' . $heading->name . '",';
-        }
+    // if($exportResult === FALSE){
+    //     // echo $exportResult;
+    //     // exit;
+    // }
+    // else{
+        $columns_total = mysqli_num_fields($exportResult);
+        $exportResult_exist = mysqli_num_rows($exportResult)>0;
+        if($exportResult_exist){
+            // Get The Field Name
+            $output ="";
+            for($i = 0; $i < $columns_total; $i++){
+                $heading = mysqli_fetch_field_direct($exportResult, $i);
+                $output .= '"' . $heading->name . '",';
+            }
         $output .="\n";
-        
+ 
         // Get Records from the table
-
-        while($row = mysqli_fetch_assoc($exportResult)){
-    
+        while($row = mysqli_fetch_assoc($exportResult)){    
         $output .='"' . $row["infoID"] . '",';
         $output .='"' . $row["infoName"] . '",';
         $output .='"' . $row["infoDescrip"] . '",';
         $output .='"' . $row["sellerID"] . '",';
         $output .="\n";
         }
-        
 
-        
-        $filename = "InfomationList". date('Y-m-d H:i:s').".csv";
+        $filename = "infomationList". date('Y-m-d H:i:s').".csv";
         header('Content-Encoding: UTF-8');
         header("Content-Type: text/csv; charset=UTF-8");
         header('Content-Disposition: attachment; filename=' . $filename);
@@ -232,15 +234,8 @@ if (isset($_POST["exportSelected"])) {
         echo $output;
   
     }
-    // Download the file
-
-
-
- 
     exit;
-
-  // header('location:' . $_SERVER['REQUEST_URI'] . '');
-}
+    }
 
 
 ?>

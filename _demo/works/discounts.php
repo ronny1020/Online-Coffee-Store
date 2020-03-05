@@ -25,9 +25,9 @@ if (isset($_GET["page"])) {
 }
 
 //orderby
-if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["Discount_ASC"])) {
+if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["Discount_ASC"])||isset($_POST["startDate_ASC"])||isset($_POST["overDate_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["disID_DESC"])||isset($_POST["disName_DESC"])||isset($_POST["disDescrip_DESC"])||isset($_POST["Discount_DESC"])) {
+} else if (isset($_POST["disID_DESC"])||isset($_POST["disName_DESC"])||isset($_POST["disDescrip_DESC"])||isset($_POST["Discount_DESC"])||isset($_POST["startDate_DESC"])||isset($_POST["overDate_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if(isset($_SESSION["ASCorDESC"])) {
 } else {
@@ -44,6 +44,10 @@ if (isset($_POST["disID_ASC"])||isset($_POST["disID_DESC"])){
     $_SESSION["orderby"]="disDescrip";
 } else if (isset($_POST["Discount_ASC"])||isset($_POST["Discount_DESC"])){
   $_SESSION["orderby"]="Discount";
+}  else if (isset($_POST["startDate_ASC"])||isset($_POST["startDate_DESC"])){
+    $_SESSION["orderby"]="startDate";
+} else if (isset($_POST["overDate_ASC"])||isset($_POST["overDate_DESC"])){
+    $_SESSION["orderby"]="overDate";
 } else if(isset($_SESSION["orderby"])) {
 } else {
     $_SESSION["orderby"]="disID";
@@ -126,11 +130,12 @@ if (isset($_POST['modal_submit'])) {
     $tmp_did = $_POST['did'];
     $tmp_nam = $_POST['nam'];
     $tmp_ddp = $_POST['ddp'];
-   
     $tmp_dct = $_POST['dct'];
+    $tmp_std = $_POST['std'];
+    $tmp_ovd = $_POST['ovd'];
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp', '$userID' ,'$tmp_dct')
+    insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp', '$userID' ,'$tmp_dct','$tmp_std','$tmp_ovd')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 
@@ -140,11 +145,11 @@ if (isset($_POST['modal_submit2'])) {
     $tmp_did2 = $_POST['did2'];
     $tmp_nam2 = $_POST['nam2'];
     $tmp_ddp2 = $_POST['ddp2'];
-   
     $tmp_dct2 = $_POST['dct2'];
+    $tmp_std2 = $_POST['std2'];
+    $tmp_ovd2 = $_POST['ovd2'];
     
-    
-	$sql_query = "UPDATE discounts SET disName='$tmp_nam2', disDescrip='$tmp_ddp2', Discount='$tmp_dct2' WHERE sellerID='$userID' AND disID='$tmp_did2'";   
+	$sql_query = "UPDATE discounts SET disName='$tmp_nam2', disDescrip='$tmp_ddp2', Discount='$tmp_dct2', startDate='$tmp_std2', overDate='$tmp_ovd2' WHERE sellerID='$userID' AND disID='$tmp_did2'";   
 	$stmt = $link -> prepare($sql_query);
     $stmt -> execute();
 	$stmt -> close();
@@ -181,9 +186,81 @@ if(isset($_SESSION["discount_searchKeyword"])) {
         $searchComment="and Discount like '%$searchKeyword%'";
     }else if($_SESSION["discount_searchBy"]=="disDescrip"){
         $searchComment="and disDescrip like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="startDate"){
+        $searchComment="and startDate like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="overDate"){
+        $searchComment="and overDate like '%$searchKeyword%'";
     }
     
 }
+
+// Export selected items.
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList="('";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList .= $selectedItem . "','";
+        }
+    }
+    $selectedList = rtrim($selectedList , ",");
+    $selectedList .= "')";
+
+    //防呆 一個都沒勾的話:
+    if($selectedList == "('')"){
+        // echo "<script>alert('Please select at least 1 column.');</script>";
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    }
+    //多一空欄位 '' 但不影響功能
+    // echo $selectedList;
+    $exportComment = <<<SqlQuery
+    select disID, disName, disDescrip, sellerID, Discount, startDate, overDate from coffee.discounts   
+    where sellerID='$userID' and disID IN $selectedList ORDER BY disID
+    SqlQuery;
+   
+    $exportResult = mysqli_query($link, $exportComment);
+    // if($exportResult === FALSE){
+    //     // echo $exportResult;
+    //     // exit;
+    // }
+    // else{
+        $columns_total = mysqli_num_fields($exportResult);
+        $exportResult_exist = mysqli_num_rows($exportResult)>0;
+        if($exportResult_exist){
+            // Get The Field Name
+            $output ="";
+            for($i = 0; $i < $columns_total; $i++){
+                $heading = mysqli_fetch_field_direct($exportResult, $i);
+                $output .= '"' . $heading->name . '",';
+            }
+        $output .="\n";
+ 
+        // Get Records from the table
+        while($row = mysqli_fetch_assoc($exportResult)){    
+        $output .='"' . $row["disID"] . '",';
+        $output .='"' . $row["disName"] . '",';
+        $output .='"' . $row["disDescrip"] . '",';
+        $output .='"' . $row["sellerID"] . '",';
+        $output .='"' . $row["Discount"] . '",';
+        $output .='"' . $row["startDate"] . '",';
+        $output .='"' . $row["overDate"] . '",';
+        $output .="\n";
+        }
+
+        $filename = "infomationList". date('Y-m-d H:i:s').".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
+        echo $output;
+  
+    }
+    exit;
+    }
+
+
+
 
 ?>
 
@@ -237,6 +314,12 @@ if(isset($_SESSION["discount_searchKeyword"])) {
                         <option value="Discount">
                             折數    
                         </option>
+                        <option value="startDate">
+                            開始日期    
+                        </option>
+                        <option value="overDate">
+                            結束日期    
+                        </option>
                         
                         
                     </select>
@@ -260,6 +343,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
+                    <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
                     <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
 
@@ -327,6 +411,26 @@ if(isset($_SESSION["discount_searchKeyword"])) {
                             </div>
                         </th>
 
+                        <th>
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">開始日期</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="startDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="startDate_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">結束日期</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="overDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="overDate_ASC">
+                                </div>
+                            </div>
+                        </th>
+
                         </th>
                         <th>                        
                 </thead>
@@ -337,7 +441,7 @@ if(isset($_SESSION["discount_searchKeyword"])) {
 // write table
 
 $commandText = <<<SqlQuery
-                    select disID, disName, disDescrip, Discount, sellerID from coffee.discounts where sellerID='$userID' $searchComment ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select disID, disName, disDescrip, Discount, startDate, overDate, sellerID from coffee.discounts where sellerID='$userID' $searchComment ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 
 
@@ -355,9 +459,9 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td id="<?php echo $row["disID"]."disID" ?>"><?php echo $row["disID"] ?></td>
                         <td id="<?php echo $row["disID"]."disName" ?>"><?php echo $row["disName"] ?></td>
                         <td id="<?php echo $row["disID"]."disDescrip" ?>"><?php echo $row["disDescrip"] ?></td>
-                        
                         <td id="<?php echo $row["disID"]."Discount" ?>"><?php echo $row["Discount"] ?></td>
-
+                        <td id="<?php echo $row["disID"]."startDate" ?>"><?php echo $row["startDate"] ?></td>
+                        <td id="<?php echo $row["disID"]."overDate" ?>"><?php echo $row["overDate"] ?></td>
                         
 
 
@@ -370,6 +474,7 @@ while ($row = mysqli_fetch_assoc($result)):
                         <div class="right_btn" align="center">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
+                                
                                 <input type='button' value="編輯" name="<?php echo "edit" . $row["disID"] ?>"
                         class="btn btn-primary mb-3" onclick="throwinmodal_DIS(<?php echo "'".$row['disID']."'"?>)">
                         </div>
@@ -444,8 +549,13 @@ while ($row = mysqli_fetch_assoc($result)):
                     <th>優惠內容: <input type="text" name='ddp'>
                     </th>
                     <hr>
-                    
                     <th>折數:<input type="text" name='dct'>
+                    </th>
+                    <hr>
+                    <th>開始日期:<input type="date" name='std'>
+                    </th>
+                    <hr>
+                    <th>結束日期:<input type="date" name='ovd'>
                     </th>
                     <hr>
                     
@@ -485,8 +595,13 @@ while ($row = mysqli_fetch_assoc($result)):
                     <th>優惠內容: <input type="text" name='ddp2' id='ddp2'>
                     </th>
                     <hr>
-                    
                     <th>折數:<input type="text" name='dct2'  id='dct2'>
+                    </th>
+                    <hr>
+                    <th>開始日期:<input type="date" name='std2'  id='std2'>
+                    </th>
+                    <hr>
+                    <th>結束日期:<input type="date" name='ovd2'  id='ovd2'>
                     </th>
                     <hr>
                     
