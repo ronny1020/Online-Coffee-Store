@@ -31,17 +31,17 @@ if (isset($_GET["page"])) {
 }
 //number of rows
 if (isset($_POST["row_num_submit"])) {
-    $_SESSION["member_row_num"] = $_POST["row_num"];
+    $_SESSION["seller_row_num"] = $_POST["row_num"];
     header('Location: sellers.php');
-} else if (isset($_SESSION["member_row_num"])) {
+} else if (isset($_SESSION["seller_row_num"])) {
 } else {
 //初始欄數=50
-    $_SESSION["member_row_num"] = 50;
+    $_SESSION["seller_row_num"] = 50;
 }
-$rowNum = $_SESSION["member_row_num"];
+$rowNum = $_SESSION["seller_row_num"];
 
 //總欄數:
-$total_num_rows = mysqli_num_rows(mysqli_query($link, "select customerID from coffee.customers;"));
+$total_num_rows = mysqli_num_rows(mysqli_query($link, "select sellerID from coffee.sellers;"));
 //最後一頁的頁數為:
 $lastPage = floor($total_num_rows / $rowNum) + 1;
 $tableOffSet = $rowNum * ($page - 1);
@@ -91,7 +91,7 @@ if (isset($_POST["modal-submit"])){
     $sid = $_POST['sid'];
     $nam = $_POST['nam'];
     $acc = $_POST['acc'];
-    $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+    $pwd = password_hash($_POST['pwd'], PASSWORD_BCRYPT);
     $adr = $_POST['adr'];
     $phone = $_POST['phone'];
     $mail = $_POST['mail'];
@@ -185,7 +185,7 @@ if (isset($_POST['edModal-submit'])){
         <table class="table table-striped ">
             <thead class="thead-light">
                 <tr>
-                    <th>勾選</th>
+                    <th><input type="checkbox" class="btn btn-danger mb-3" onclick="select()"><label>全選</label></th>
                     <th>sellerID</th>
                     <th>廠商名稱</th>
                     <th>帳號</th>
