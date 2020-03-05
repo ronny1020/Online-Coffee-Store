@@ -27,7 +27,7 @@ if (isset($_GET["page"])) {
 //orderby
 if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["Discount_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])||isset($_POST["Discount_DESC"])) {
+} else if (isset($_POST["disID_DESC"])||isset($_POST["disName_DESC"])||isset($_POST["disDescrip_DESC"])||isset($_POST["Discount_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if(isset($_SESSION["ASCorDESC"])) {
 } else {
@@ -477,7 +477,7 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>優惠編號:<input type="text" name='did2' id='did2' >
+                    <th>優惠編號:<input type="text" name='did2' id='did2' readonly>
                     </th>
                     <hr>
                     <th>優惠名稱: <input type="text" name='nam2' id='nam2' ></th>

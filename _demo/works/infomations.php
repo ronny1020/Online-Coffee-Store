@@ -440,7 +440,7 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>資訊編號:<input type="text" name='did2' id='did2' >
+                    <th>資訊編號:<input type="text" name='did2' id='did2' readonly>
                     </th>
                     <hr>
                     <th>資訊名稱: <input type="text" name='nam2' id='nam2' ></th>
