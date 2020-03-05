@@ -335,7 +335,7 @@ if (isset($_POST["import_data"])) {
                         `specification` = '$specification_import',
                         `description` = '$description_import'
                         WHERE `productID` = $productID_import;";
-echo $importUpdate_comment;
+
                         mysqli_query($link, $importUpdate_comment);
                     }else{
                         echo "productID error in ID:$productID_import";
