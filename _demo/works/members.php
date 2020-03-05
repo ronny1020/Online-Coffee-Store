@@ -466,40 +466,39 @@ if ($lastPage - $page <= 5) {
         <div class="modal-body">
             <tr>
 
-                    <th>customerID:<input type="text" name='cid'>
+                    <th>customerID:<input type="text" name='cid' id='cid' required="required">
                     </th>
                     <hr>
-                    <th>cName: <input type="text" name='nam'></th>
+                    <th>cName: <input type="text" name='nam' id='nam' required="required"></th>
                     <hr>
-                    <th>cAccount: <input type="text" name='acc'>
+                    <th>cAccount: <input type="text" name='acc' id='acc' required="required">
                     </th>
                     <hr>
-                    <th>cEmail: <input type="text" name='eml'>
+                    <th>cEmail: <input type="text" name='eml' id='eml' required="required">
                     </th>
                     <hr>
-                    <th>cBirthDate:<input type="date" name='bid'>
+                    <th>cBirthDate:<input type="date" name='bid' id='bid' required="required">
                     </th>
                     <hr>
-                    <th>cAddress: <input type="text" name='adr'>
+                    <th>cAddress: <input type="text" name='adr' id='adr' required="required">
                     </th>
                     <hr>
-                    <th>cMobile: <input type="text" name='mob'></th>
+                    <th>cMobile: <input type="text" name='mob' id='mob' required="required"></th>
                     <hr>
                     <th>cSex:
-                    <select name='sex'>
+                    <select name='sex' id='sex' required="required">
                         <option value='M'>男</option>
                         <option value='F'>女</option>
                     </select>
                     </th>
                     <hr>
                     <th>
-                    <span style="color:red;">cPassword:</span>
-                    <input type="password" name='pwd' id='pwd' onkeyup='MODAL_PWcheck();'></th>
+                    <span>cPassword:</span>
+                    <input type="password" name='pwd' id='pwd' required="required" onkeyup='PWDcheck();'></th>
                     <hr>
                     <th>
-                    <span style="color:red;">confirm Password:</span>
-                    <input type="password" name='pwd_check' id='pwd_check' onkeyup='MODAL_PWcheck();'></th>
-                    <hr>
+                    <span>confirm Password:</span>
+                    <input type="password" name='pwd_check' id='pwd_check' required="required" onkeyup='PWDcheck();'></th>
                     <th><span id='error_msg' style="font-weight:bolder;"></span></th>
             </tr>
         </div>
@@ -565,11 +564,6 @@ if ($lastPage - $page <= 5) {
 
 </div>
 </div>
-
 <!-- End your code here. -->
 <?php include '../parts/footer.php';?>
 </body>
-
-<script>
-    
-</script>
