@@ -402,12 +402,12 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>infoID:<input type="text" name='iid'>
+                    <th>資訊編號:<input type="text" name='iid'>
                     </th>
                     <hr>
-                    <th>infoName: <input type="text" name='ifn'></th>
+                    <th>資訊名稱: <input type="text" name='ifn'></th>
                     <hr>
-                    <th>infoDescrip: <input type="text" name='ifd'>
+                    <th>資訊內容: <input type="text" name='ifd'>
                     </th>
                     <hr>
                     
@@ -440,12 +440,12 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>infoID:<input type="text" name='did2' id='did2' >
+                    <th>資訊編號:<input type="text" name='did2' id='did2' >
                     </th>
                     <hr>
-                    <th>infoName: <input type="text" name='nam2' id='nam2' ></th>
+                    <th>資訊名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>infoDescrip: <input type="text" name='ddp2' id='ddp2' >
+                    <th>資訊內容: <input type="text" name='ddp2' id='ddp2' >
                     </th>
                     <hr>
                     

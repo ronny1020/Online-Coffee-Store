@@ -436,16 +436,16 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>disID:<input type="text" name='did'>
+                    <th>優惠編號:<input type="text" name='did'>
                     </th>
                     <hr>
-                    <th>disName: <input type="text" name='nam'></th>
+                    <th>優惠名稱: <input type="text" name='nam'></th>
                     <hr>
-                    <th>disDesrip: <input type="text" name='ddp'>
+                    <th>優惠內容: <input type="text" name='ddp'>
                     </th>
                     <hr>
                     
-                    <th>Discount:<input type="text" name='dct'>
+                    <th>折數:<input type="text" name='dct'>
                     </th>
                     <hr>
                     
@@ -477,16 +477,16 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>disID:<input type="text" name='did2' id='did2' >
+                    <th>優惠編號:<input type="text" name='did2' id='did2' >
                     </th>
                     <hr>
-                    <th>disName: <input type="text" name='nam2' id='nam2' ></th>
+                    <th>優惠名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>disDesrip: <input type="text" name='ddp2' id='ddp2'>
+                    <th>優惠內容: <input type="text" name='ddp2' id='ddp2'>
                     </th>
                     <hr>
                     
-                    <th>Discount:<input type="text" name='dct2'  id='dct2'>
+                    <th>折數:<input type="text" name='dct2'  id='dct2'>
                     </th>
                     <hr>
                     
