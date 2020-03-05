@@ -161,21 +161,21 @@ HTMLElement.prototype.CreateAppend = function(element, context, ...attr) {
     this.appendChild(e);
 }
 
-function create_edit_close() {
-    create_edit_window.removeChild(create_edit_context)
-    create_edit_window.setAttribute("class", "window_close");
+function popUp_close() {
+    popUp_window.removeChild(popUp_context)
+    popUp_window.setAttribute("class", "window_close");
 }
 
 
 function create_edit(ID) {
     // create_edit_form.CreateAppend("div", "", "id", "create_edit")
-    create_edit_window.setAttribute("class", "window_open");
-    create_edit_window.CreateAppend("form", "", "class", "card border-0", "id", "create_edit_context", "method", "post", "enctype", "multipart/form-data")
-    create_edit_context.CreateAppend("p", "x", "class", "closebtn", "onclick", "create_edit_close()")
+    popUp_window.setAttribute("class", "window_open");
+    popUp_window.CreateAppend("form", "", "class", "card border-0", "id", "popUp_context", "method", "post", "enctype", "multipart/form-data")
+    popUp_context.CreateAppend("p", "x", "class", "closebtn", "onclick", "popUp_close()")
 
     if (ID == undefined) {
-        create_edit_context.CreateAppend("h2", "新增：", "id", "form-head", "class", "card-header bg-color-gold")
-        create_edit_context.CreateAppend("div", "", "class", "card-body bg-color-Paper  p-5", "id", "create_edit_form")
+        popUp_context.CreateAppend("h2", "新增：", "id", "form-head", "class", "card-header bg-color-gold")
+        popUp_context.CreateAppend("div", "", "class", "card-body bg-color-Paper  p-5", "id", "create_edit_form")
         ProductNameInner = "";
         categoryNameInner = 0;
         UnitPriceInner = "";
@@ -187,52 +187,49 @@ function create_edit(ID) {
     } else {
         ID = ID.toString();
         ID = "0".repeat(10 - ID.length) + ID;
-        create_edit_context.CreateAppend("h2", "修改：", "id", "form-head", "class", "card-header bg-color-gold")
-        create_edit_context.CreateAppend("div", "", "class", "card-body bg-color-Paper  p-5", "id", "create_edit_form")
-        create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "ProductID_ce")
+        popUp_context.CreateAppend("h2", "修改：", "id", "form-head", "class", "card-header bg-color-gold");
+        popUp_context.CreateAppend("div", "", "class", "card-body bg-color-Paper  p-5", "id", "create_edit_form");
+        create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "ProductID_ce");
 
         imagePath = `../image/products/${ID}.jpg`
-        ProductID_ce.CreateAppend("img", "", "class", "product-image img-thumbnail mb-3", "src", imagePath, "onerror", "this.src='../image/products/default.jpg'")
+        ProductID_ce.CreateAppend("img", "", "class", "product-image img-thumbnail mb-3", "src", imagePath, "onerror", "this.src='../image/products/default.jpg'");
 
-        ProductID_ce.CreateAppend("br")
+        ProductID_ce.CreateAppend("br");
 
-        ProductID_ce.CreateAppend("label", "產品ID：", "class", "form-control-label", "for", "ProductID_input")
-        ProductID_ce.CreateAppend("input", "", "type", "text", "value", ID, "class", "form-control", "id", "ProductID_input", "name", "ProductID_input", "readonly")
-            // name
+        ProductID_ce.CreateAppend("label", "產品ID：", "class", "form-control-label", "for", "ProductID_input");
+        ProductID_ce.CreateAppend("input", "", "type", "text", "value", ID, "class", "form-control", "id", "ProductID_input", "name", "ProductID_input", "readonly");
+        // name
         ProductNameID = ID + "ProductName";
-        ProductNameInner = document.getElementById(ProductNameID).innerHTML
-            // category
+        ProductNameInner = document.getElementById(ProductNameID).innerHTML;
+        // category
         categoryNameID = ID + "categoryName";
-        categoryNameInner = document.getElementById(categoryNameID).innerHTML
-            // UnitPrice
+        categoryNameInner = document.getElementById(categoryNameID).innerHTML;
+        // UnitPrice
         UnitPriceID = ID + "UnitPrice";
-        UnitPriceInner = document.getElementById(UnitPriceID).innerHTML.replace(",", "")
-            // UnitsInStock
+        UnitPriceInner = document.getElementById(UnitPriceID).innerHTML.replace(",", "");
+        // UnitsInStock
         UnitsInStockID = ID + "UnitsInStock";
-        UnitsInStockInner = document.getElementById(UnitsInStockID).innerHTML.replace(",", "")
-            // specification
+        UnitsInStockInner = document.getElementById(UnitsInStockID).innerHTML.replace(",", "");
+        // specification
         specificationID = ID + "specification";
-        specificationInner = document.getElementById(specificationID).innerHTML
-            // description
-        descriptionID = ID + "description";
-        descriptionInner = document.getElementById(descriptionID).innerHTML
+        specificationInner = document.getElementById(specificationID).innerHTML;
+        // description
+        descriptionID = ID + "description";;
+        descriptionInner = document.getElementById(descriptionID).innerHTML;
 
         submit_name = "edit_data";
         submit_value = "修改";
     }
 
-    // name
-
+    // upload image
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "ProductImage_ce")
     ProductImage_ce.CreateAppend("label", "圖片上傳：", "class", "form-control-label", "for", "ProductImage_input")
     ProductImage_ce.CreateAppend("input", "", "type", "file", "class", "form-control-file border", "id", "ProductImage_input", "name", "ProductImage_upload")
 
-
-
+    // name
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "ProductName_ce")
     ProductName_ce.CreateAppend("label", "產品名稱(必須)：", "class", "form-control-label", "for", "ProductName_input")
     ProductName_ce.CreateAppend("input", "", "type", "text", "value", ProductNameInner, "class", "form-control", "id", "ProductName_input", "name", "ProductName_input", "required")
-
 
     // category
     create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "categoryName_ce")
@@ -278,22 +275,22 @@ function create_edit(ID) {
     }
 
     // UnitPrice
-    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "UnitPrice_ce")
-    UnitPrice_ce.CreateAppend("label", "單價(必須)：", "class", "form-control-label", "for", "UnitPrice_input")
-    UnitPrice_ce.CreateAppend("input", "", "type", "number", "value", UnitPriceInner, "class", "form-control", "id", "UnitPrice_input", "name", "UnitPrice_input", "required")
-        // UnitsInStock
-    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "UnitsInStock_ce")
-    UnitsInStock_ce.CreateAppend("label", "庫存(必須)：", "class", "form-control-label", "for", "UnitsInStock_input")
-    UnitsInStock_ce.CreateAppend("input", "", "type", "number", "value", UnitsInStockInner, "class", "form-control", "id", "UnitsInStock_input", "name", "UnitsInStock_input", "required")
-        // specification
-    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "specification_ce")
-    specification_ce.CreateAppend("label", "規格：", "class", "form-control-label", "for", "specification_input")
-    specification_ce.CreateAppend("textarea", specificationInner, "type", "number", "class", "form-control", "id", "specification_input", "name", "specification_input")
+    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "UnitPrice_ce");
+    UnitPrice_ce.CreateAppend("label", "單價(必須)：", "class", "form-control-label", "for", "UnitPrice_input");
+    UnitPrice_ce.CreateAppend("input", "", "type", "number", "value", UnitPriceInner, "class", "form-control", "id", "UnitPrice_input", "name", "UnitPrice_input", "required");
+    // UnitsInStock
+    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "UnitsInStock_ce");
+    UnitsInStock_ce.CreateAppend("label", "庫存(必須)：", "class", "form-control-label", "for", "UnitsInStock_input");
+    UnitsInStock_ce.CreateAppend("input", "", "type", "number", "value", UnitsInStockInner, "class", "form-control", "id", "UnitsInStock_input", "name", "UnitsInStock_input", "required");
+    // specification
+    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "specification_ce");
+    specification_ce.CreateAppend("label", "規格：", "class", "form-control-label", "for", "specification_input");
+    specification_ce.CreateAppend("textarea", specificationInner, "type", "number", "class", "form-control", "id", "specification_input", "name", "specification_input");
 
     // description
-    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "description_ce")
-    description_ce.CreateAppend("label", "介紹：", "class", "form-control-label", "for", "description_input")
-    description_ce.CreateAppend("textarea", descriptionInner, "type", "number", "class", "form-control", "id", "description_input", "name", "description_input")
+    create_edit_form.CreateAppend("div", "", "class", "form-group", "id", "description_ce");
+    description_ce.CreateAppend("label", "介紹：", "class", "form-control-label", "for", "description_input");
+    description_ce.CreateAppend("textarea", descriptionInner, "type", "number", "class", "form-control", "id", "description_input", "name", "description_input");
 
 
     // tags
@@ -321,7 +318,7 @@ function create_edit(ID) {
     tags_ce.CreateAppend("input", "", "type", "button", "value", "新增TAG欄位", "class", "btn bg-color-gold m-3", "onclick", "createNewTag()");
     tags_ce.CreateAppend("input", "", "type", "button", "value", "刪除TAG欄位", "class", "btn bg-color-gold m-3", "onclick", "deleteNewTag()");
     // footer submit
-    create_edit_context.CreateAppend("div", "", "class", "card-footer bg-color-Paper", "id", "create_edit_footer");
+    popUp_context.CreateAppend("div", "", "class", "card-footer bg-color-Paper", "id", "create_edit_footer");
     create_edit_footer.CreateAppend("input", "", "type", "submit", "class", "btn btn-primary", "value", submit_value, "name", submit_name, "onclick", `return confirm('你確定要${submit_value}資料嗎？')`);
     create_edit_footer.CreateAppend("input", "", "type", "button", "class", "btn btn-danger ml-3", "value", "取消", "onclick", "create_edit_close()");
 
@@ -343,4 +340,32 @@ function deleteNewTag() {
         newTagNo = "newTag" + newTagNumber.toString();
         document.getElementById(newTagNo).remove();
     }
+}
+
+
+function importDataUpload() {
+    // create_edit_form.CreateAppend("div", "", "id", "create_edit")
+    popUp_window.setAttribute("class", "window_open");
+    popUp_window.CreateAppend("form", "", "class", "card border-0", "id", "popUp_context", "method", "post", "enctype", "multipart/form-data");
+    popUp_context.CreateAppend("p", "x", "class", "closebtn", "onclick", "popUp_close()");
+
+    // Head
+    popUp_context.CreateAppend("h2", "匯入：", "id", "form-head", "class", "card-header bg-color-gold");
+    // body
+    popUp_context.CreateAppend("div", "", "class", "card-body bg-color-Paper  p-5", "id", "import_form");
+
+    // name
+    import_form.CreateAppend("div", "", "class", "form-group", "id", "importDataInput");
+    importDataInput.CreateAppend("label", "匯入資料上傳：", "class", "form-control-label", "for", "ProductImage_input");
+    importDataInput.CreateAppend("input", "", "type", "file", "class", "form-control-file border", "id", "ProductImage_input", "name", "ProductImage_upload");
+
+    import_form.CreateAppend("p", "注意：匯入資料檔案僅接受csv檔，請確認檔案中產品ID是否正確，若找不到對應產品將匯入錯誤，若要新增資料請留空。");
+
+
+    // footer submit
+    popUp_context.CreateAppend("div", "", "class", "card-footer bg-color-Paper", "id", "import_footer");
+    import_footer.CreateAppend("input", "", "type", "submit", "class", "btn btn-primary", "value", "匯入", "name", "import_data", "onclick", `return confirm('你確定要匯入資料嗎？')`);
+    import_footer.CreateAppend("input", "", "type", "button", "class", "btn btn-danger ml-3", "value", "取消", "onclick", "popUp_close()");
+
+
 }
