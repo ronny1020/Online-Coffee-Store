@@ -217,7 +217,9 @@ if (isset($_POST["deleteSelected"])) {
 
     <!-- I edited these stuffs.      Used in the "Edit modal on the right button..."-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
+    <script src="../demoutil.js"></script>
     <script src="../orders_need.js"></script>
+
 </head>
 
 <body>
