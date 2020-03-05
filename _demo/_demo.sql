@@ -27,7 +27,7 @@ CREATE TABLE `customers` (
   `cName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 買家姓名
   `cAccount` varchar(20) NOT NULL unique, -- 買家帳號
   `cEmail` varchar(20) NOT NULL unique, -- 買家電郵
-  `cPassword` varchar(100) NOT NULL unique, -- 買家密碼: 加密後可能加長故取60
+  `cPassword` varchar(100) NOT NULL, -- 買家密碼: 加密後可能加長故取60
   `cSex` enum('F','M') collate utf8_unicode_ci NOT NULL, -- 買家性別
   `cBirthDate` date default NULL, -- 買家生日
   `cAddress` varchar(60) default NULL, -- 買家地址
