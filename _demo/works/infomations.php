@@ -148,7 +148,6 @@ $query_RecMember = "SELECT * FROM infomations WHERE sellerID='$userID'";
 $RecMember = $link->query($query_RecMember);	
 $row_RecMember = $RecMember->fetch_assoc();
 
-
 // search function
 if (isset($_POST["startSearch"])) {
     if($_POST["searchKeyword"]!=""){
@@ -175,6 +174,69 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
     }
     
 }
+
+// Export selected items.
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList="('";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList .= $selectedItem . "','";
+        }
+    }
+    $selectedList = rtrim($selectedList , ",");
+    $selectedList .= "')";
+
+    //防呆 一個都沒勾的話:
+    if($selectedList == "('')"){
+        // echo "<script>alert('Please select at least 1 column.');</script>";
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    }
+    //多一空欄位 '' 但不影響功能
+    // echo $selectedList;
+    $exportComment = <<<SqlQuery
+    select infoID, infoName, infoDescrip, sellerID from coffee.infomations   
+    where sellerID='$userID' and infoID IN $selectedList ORDER BY infoID
+    SqlQuery;
+   
+    $exportResult = mysqli_query($link, $exportComment);
+    // if($exportResult === FALSE){
+    //     // echo $exportResult;
+    //     // exit;
+    // }
+    // else{
+        $columns_total = mysqli_num_fields($exportResult);
+        $exportResult_exist = mysqli_num_rows($exportResult)>0;
+        if($exportResult_exist){
+            // Get The Field Name
+            $output ="";
+            for($i = 0; $i < $columns_total; $i++){
+                $heading = mysqli_fetch_field_direct($exportResult, $i);
+                $output .= '"' . $heading->name . '",';
+            }
+        $output .="\n";
+ 
+        // Get Records from the table
+        while($row = mysqli_fetch_assoc($exportResult)){    
+        $output .='"' . $row["infoID"] . '",';
+        $output .='"' . $row["infoName"] . '",';
+        $output .='"' . $row["infoDescrip"] . '",';
+        $output .='"' . $row["sellerID"] . '",';
+        $output .="\n";
+        }
+
+        $filename = "infomationList". date('Y-m-d H:i:s').".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
+        echo $output;
+  
+    }
+    exit;
+    }
+
 
 ?>
 
@@ -249,6 +311,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
+                    <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
                     <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
 

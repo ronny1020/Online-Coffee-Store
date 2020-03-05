@@ -63,6 +63,26 @@ function selectAllCheckbox() {
     }
 }
 
+//確認密碼:
+var MODAL_PWcheck = function() {
+    if(document.getElementById('pwd').value != ''){
+        if (document.getElementById('pwd').value == 
+                document.getElementById('pwd_check').value) {
+            document.getElementById('error_msg').style.color = 'green';
+            document.getElementById('error_msg').innerHTML = 'matching';
+            document.getElementById('modal_submit').removeAttribute('disabled');
+            } else {
+            document.getElementById('error_msg').style.color = 'red';
+            document.getElementById('error_msg').innerHTML = 'not matching';
+            document.getElementById('modal_submit').setAttribute('disabled', '');
+            }
+    }else{
+        document.getElementById('error_msg').innerHTML = 'plz insert pwd.';
+        document.getElementById('modal_submit').setAttribute('disabled', '');
+    } 
+  }
+//密碼確認結束。
+
 // Lightweight version by LEE.(0303)
 // 1. 更改table使各欄位附加上id
 // 2. onclick button觸發函數讀值進入modal
@@ -112,8 +132,8 @@ function throwinmodal_MEMBERS(myid) {
     var throw_cName = document.getElementById(cName).innerHTML;
     var cAccount = myid + "cAccount";
     var throw_cAccount = document.getElementById(cAccount).innerHTML;
-    var cPassword = myid + "cPassword";
-    var throw_cPassword = document.getElementById(cPassword).innerHTML;
+    var cEmail = myid + "cEmail";
+    var throw_cEmail = document.getElementById(cEmail).innerHTML;
     var cSex = myid + "cSex";
     var throw_cSex = document.getElementById(cSex).innerHTML;
 
@@ -130,7 +150,7 @@ function throwinmodal_MEMBERS(myid) {
     document.getElementById('cid_e').value = throw_customerID;
     document.getElementById('nam_e').value = throw_cName;
     document.getElementById('acc_e').value = throw_cAccount;
-    document.getElementById('pwd_e').value = throw_cPassword;
+    document.getElementById('eml_e').value = throw_cEmail;
     document.getElementById('sex_e').value = throw_cSex;
     document.getElementById('bid_e').value = throw_cBirthDate[0];
     document.getElementById('adr_e').value = throw_cAddress;

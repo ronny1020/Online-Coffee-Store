@@ -42,14 +42,16 @@ if (isset($_POST["insert"])) {
         // $sellerId= str_repeat("0",3-(strlen($sellerId))).$sellerId;
         $name = ChineseName().rand(1,9).rand(1,9);
         $cacc = generateRandomString(10);
-        $cpwd = generateRandomString(10);
+        $eml = generateRandomString(10) . "@gmail.com";
+        $cpwd = 'pwd' . str_repeat("0",3-(strlen($i))).$i;;
+        $hashedpwd = password_hash($cpwd, PASSWORD_BCRYPT);
         $tmp_bool = rand(1,2);
         if ($tmp_bool === 1) $csex = "F";
         else $csex = "M";
         $cbirthdate = "1997-" . rand(1, 12) . "-" . rand(1, 31);
         $caddress = "my_dummy_adrs" . rand(1, 100);
         $cmoblie = "0900-00" . rand(1, 9) . "-00" . rand(1, 9);
-        $insertItem = "('C$iii','$name','$cacc','$cpwd','$csex','$cbirthdate','$caddress','$cmoblie')";
+        $insertItem = "('C$iii','$name','$cacc','$eml','$hashedpwd','$csex','$cbirthdate','$caddress','$cmoblie')";
         $insertList = $insertList . "," . "$insertItem";
     }
     //1997-01-01 00:00:00

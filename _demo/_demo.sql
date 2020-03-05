@@ -26,7 +26,8 @@ CREATE TABLE `customers` (
   `customerID` varchar(5) NOT NULL default '',-- Primary key:流水號
   `cName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 買家姓名
   `cAccount` varchar(20) NOT NULL unique, -- 買家帳號
-  `cPassword` varchar(60) NOT NULL unique, -- 買家密碼: 加密後可能加長故取60
+  `cEmail` varchar(20) NOT NULL unique, -- 買家電郵
+  `cPassword` varchar(100) NOT NULL, -- 買家密碼: 加密後可能加長故取60
   `cSex` enum('F','M') collate utf8_unicode_ci NOT NULL, -- 買家性別
   `cBirthDate` date default NULL, -- 買家生日
   `cAddress` varchar(60) default NULL, -- 買家地址
@@ -37,206 +38,207 @@ CREATE TABLE `customers` (
 
 -- add dummy datas:
 INSERT INTO `customers` VALUES
-('C001', '大名01', 'dummy01', 'pwd01', 'M', '1997-01-01', 'my_dummy_adrs01', '0900-000-001'),
-('C002', '大名02', 'dummy02', 'pwd02', 'F', '1997-02-01', 'my_dummy_adrs02', '0900-000-002'),
-('C003', '大名03', 'dummy03', 'pwd03', 'F', '1997-03-01', 'my_dummy_adrs03', '0900-000-003'),
-('C004', '大名04', 'dummy04', 'pwd04', 'F', '1997-04-01', 'my_dummy_adrs04', '0900-000-004'),
-('C005', '大名05', 'dummy05', 'pwd05', 'F', '1997-05-01', 'my_dummy_adrs05', '0900-000-005'),
-('C006', '大名06', 'dummy06', 'pwd06', 'F', '1997-06-01', 'my_dummy_adrs06', '0900-000-006'),
-('C007', '大名07', 'dummy07', 'pwd07', 'M', '1997-07-01', 'my_dummy_adrs07', '0900-000-007'),
-('C008', '大名08', 'dummy08', 'pwd08', 'M', '1997-08-01', 'my_dummy_adrs08', '0900-000-008'),
-('C009', '大名09', 'dummy09', 'pwd09', 'F', '1997-09-01', 'my_dummy_adrs09', '0900-000-009'),
-('C010', '何23', 'mP48YAZAPM', 'kgxlmLaXPF', 'F', '1997-07-25', 'my_dummy_adrs62', '0900-005-004'),
-('C011', '趙32', 'oYJhVhtk3r', '1FxBKLFdjP', 'M', '1997-12-24', 'my_dummy_adrs89', '0900-004-006'),
-('C012', '劉99', 'IK4JRzLL9J', 'SIg2SbOehH', 'M', '1997-08-29', 'my_dummy_adrs74', '0900-004-004'),
-('C013', '王13', 'ZDtG3mQGLt', 'Uwovv1ReKW', 'M', '1997-02-18', 'my_dummy_adrs5', '0900-009-009'),
-('C014', '周59', 'AUPqkoE3W2', 'D0sRV6VAWr', 'F', '1997-03-19', 'my_dummy_adrs90', '0900-007-003'),
-('C015', '徐88', 'dEZeKlyMZ2', 'j21Yx2hTmr', 'F', '1997-06-26', 'my_dummy_adrs49', '0900-007-003'),
-('C016', '王89', '7WwByRPyZn', 'MDlmRmhnuc', 'M', '1997-07-17', 'my_dummy_adrs39', '0900-006-009'),
-('C017', '孫89', 'hRQ0iTXDPO', 'aBjlJEth4V', 'F', '1997-04-17', 'my_dummy_adrs56', '0900-002-004'),
-('C018', '謝17', '8iZqxCDo5R', 'uUtK8we6Jl', 'M', '1997-12-14', 'my_dummy_adrs84', '0900-005-005'),
-('C019', '郭37', 'id0HsDBLlD', '2cWSPJbdz6', 'F', '1997-08-18', 'my_dummy_adrs25', '0900-002-007'),
-('C020', '徐95', '7UCK7fBpVd', '46e9RAvDwA', 'F', '1997-10-10', 'my_dummy_adrs91', '0900-007-004'),
-('C021', '王18', 'JMm99fkIck', 'CNq1hgpml7', 'F', '1997-02-24', 'my_dummy_adrs94', '0900-007-009'),
-('C022', '郭37', 'wYyrGbtxmb', 'Yk0mdBNSQs', 'M', '1997-04-10', 'my_dummy_adrs50', '0900-004-007'),
-('C023', '何95', 'bGBEVsVLJB', 'vcGIOFY3kn', 'M', '1997-08-28', 'my_dummy_adrs97', '0900-008-008'),
-('C024', '梁14', 'svXIdpb7SF', 'X8Z1fTqcbs', 'M', '1997-02-09', 'my_dummy_adrs90', '0900-005-002'),
-('C025', '王83', '9RcMfm2tLu', '0R6cip0PG7', 'F', '1997-02-15', 'my_dummy_adrs84', '0900-005-007'),
-('C026', '謝76', 'jQz722aUy8', 'Zy67OBy3QE', 'F', '1997-08-27', 'my_dummy_adrs28', '0900-003-008'),
-('C027', '胡51', 'AQjsRPmkf3', 'GmP5z2LH4H', 'F', '1997-11-19', 'my_dummy_adrs82', '0900-007-002'),
-('C028', '胡35', 'mGYVJGvegu', 'MwL5oaMFJr', 'M', '1997-10-01', 'my_dummy_adrs14', '0900-002-003'),
-('C029', '吳72', 'Uy7XuHMBI1', 'i5CqX65Imm', 'F', '1997-06-08', 'my_dummy_adrs38', '0900-008-009'),
-('C030', '胡49', '9dTbetyyrl', '9UexA2IC2O', 'M', '1997-11-27', 'my_dummy_adrs34', '0900-008-005'),
-('C031', '徐58', 'FOaKUgPuBQ', 'hNNrRdi6Cy', 'F', '1997-11-17', 'my_dummy_adrs7', '0900-004-004'),
-('C032', '李79', 'MTF2QiIsUp', '0IqwYVWI2i', 'F', '1997-10-27', 'my_dummy_adrs63', '0900-004-007'),
-('C033', '林54', 'I7UAEtBYRz', 'Mdqi2lLPzg', 'F', '1997-10-16', 'my_dummy_adrs95', '0900-001-001'),
-('C034', '梁65', 'WyEq86cfsG', 'lQOZ8SmTx0', 'F', '1997-04-06', 'my_dummy_adrs89', '0900-002-007'),
-('C035', '何68', 'QEwBLj3l0J', 'jYdfjYOV4D', 'M', '1997-06-27', 'my_dummy_adrs81', '0900-004-004'),
-('C036', '何36', 'X6bfJ34WYr', 'mXFCAuBCKe', 'F', '1997-01-30', 'my_dummy_adrs23', '0900-006-004'),
-('C037', '林86', '1jgwlRGSXI', 'ZEgHWGcvrq', 'M', '1997-11-30', 'my_dummy_adrs41', '0900-005-005'),
-('C038', '羅44', 'gsjbsjSoYQ', 'FkCvzNrwKp', 'M', '1997-07-10', 'my_dummy_adrs48', '0900-004-001'),
-('C039', '陳83', 'yUofGGamiR', 'FNtn9R4jBa', 'F', '1997-01-16', 'my_dummy_adrs91', '0900-007-005'),
-('C040', '胡59', 'rLCCrwPLTQ', 'N5HJETOSo5', 'M', '1997-06-19', 'my_dummy_adrs100', '0900-009-004'),
-('C041', '趙95', 'bjhxBG3Rup', 'hwChqczVlI', 'F', '1997-12-07', 'my_dummy_adrs46', '0900-005-007'),
-('C042', '李28', 'nx527LRtez', 'YP3rLuB7B8', 'M', '1997-10-27', 'my_dummy_adrs3', '0900-004-005'),
-('C043', '陳43', 'znC7NkZQsv', '49aGXN7LHG', 'F', '1997-08-11', 'my_dummy_adrs88', '0900-001-002'),
-('C044', '林48', 'PKvTl1mchY', 'FgObuCNl0Q', 'F', '0000-00-00', 'my_dummy_adrs92', '0900-007-004'),
-('C045', '孫29', '2TR93l0d5a', 'Evsr6UPUtg', 'M', '1997-06-16', 'my_dummy_adrs27', '0900-009-008'),
-('C046', '楊13', 'XmPo4bsyW2', 'HuHahoGV6k', 'F', '1997-03-16', 'my_dummy_adrs40', '0900-009-007'),
-('C047', '馬81', 'A1BnBgqOxJ', 'Txx4E9rqk3', 'F', '1997-10-22', 'my_dummy_adrs94', '0900-005-001'),
-('C048', '徐63', 'g3uzNKhMex', 'ki8tnUYy4w', 'F', '1997-08-01', 'my_dummy_adrs10', '0900-004-006'),
-('C049', '朱72', 'tBQd7x8Mtm', 'gBsFQE7a6V', 'F', '1997-06-03', 'my_dummy_adrs96', '0900-003-009'),
-('C050', '徐18', 'bXKXsdDIKT', 'ZdPhz5oyZl', 'F', '1997-04-18', 'my_dummy_adrs23', '0900-005-005'),
-('C051', '朱12', 'HvPB99ECbX', 's5H0MMOdXW', 'M', '1997-02-21', 'my_dummy_adrs56', '0900-006-002'),
-('C052', '高87', 'B0lydcRt0w', 'kkOJKrfvKe', 'F', '1997-01-19', 'my_dummy_adrs21', '0900-001-004'),
-('C053', '徐71', 'XsMZqCdd8Y', 'LWdcL3Lspd', 'F', '1997-06-24', 'my_dummy_adrs97', '0900-007-003'),
-('C054', '王94', 'fuEcV43376', '8GUjHQX8tC', 'F', '1997-11-13', 'my_dummy_adrs29', '0900-002-005'),
-('C055', '張32', '5pStjsMvtv', 'l1jMK8wQuD', 'F', '1997-03-27', 'my_dummy_adrs40', '0900-008-001'),
-('C056', '謝17', 'xyo8lYYDOl', 'VxjzDUvRem', 'F', '1997-04-28', 'my_dummy_adrs29', '0900-008-002'),
-('C057', '李91', 'F0n8r9qIj5', 'D7ojANSbTe', 'F', '1997-04-15', 'my_dummy_adrs91', '0900-004-006'),
-('C058', '趙88', 'FL8D1SejD7', 'nAJFHPgJ6n', 'F', '1997-04-29', 'my_dummy_adrs7', '0900-003-003'),
-('C059', '郭62', 'e5oFgkHtyZ', 'lXoFSNsw0D', 'M', '1997-07-19', 'my_dummy_adrs8', '0900-001-009'),
-('C060', '梁85', 'aOPmM3qcb6', 'y6QSTDVZJG', 'F', '1997-07-10', 'my_dummy_adrs99', '0900-009-009'),
-('C061', '劉32', 'asK2h6IAgl', 'xYH0mQv4BJ', 'M', '1997-05-23', 'my_dummy_adrs46', '0900-007-001'),
-('C062', '孫75', 'QsYVxeth2g', 'IzZjgwTysK', 'M', '1997-12-13', 'my_dummy_adrs52', '0900-008-003'),
-('C063', '羅46', 'UAuUKLWVJ9', 'V2oPxZT7TK', 'F', '1997-09-09', 'my_dummy_adrs16', '0900-006-005'),
-('C064', '吳63', 'm4XTjE1tmg', 'eLPNRnhlLK', 'F', '0000-00-00', 'my_dummy_adrs63', '0900-008-004'),
-('C065', '高27', 'o21FPt6Mq0', 'xv5raESf1z', 'F', '1997-07-27', 'my_dummy_adrs62', '0900-008-009'),
-('C066', '張25', 'PAbsorxsEJ', 'y0msz6b055', 'F', '1997-11-07', 'my_dummy_adrs68', '0900-008-005'),
-('C067', '羅14', 'WmoIVB0oJC', 'PClPvEHAEN', 'F', '1997-01-06', 'my_dummy_adrs55', '0900-003-003'),
-('C068', '何86', 'DKv3iEEo04', 'e10uxUKEfX', 'M', '1997-09-22', 'my_dummy_adrs76', '0900-008-007'),
-('C069', '趙99', 'aei7YkpXFC', 'WHZzXC6J6r', 'F', '1997-12-15', 'my_dummy_adrs84', '0900-001-005'),
-('C070', '王72', '2x10KFZS4a', '5NEE6nJ28B', 'M', '1997-02-05', 'my_dummy_adrs87', '0900-008-009'),
-('C071', '楊49', 'Q1lex0D49I', 'xvwpRPfHrZ', 'F', '1997-02-25', 'my_dummy_adrs77', '0900-002-006'),
-('C072', '楊82', 'yjfYf9nEo9', 'YdNV4hus8e', 'F', '1997-01-27', 'my_dummy_adrs7', '0900-003-001'),
-('C073', '謝76', 'A1xpPNFdIL', '4hiiySEiWo', 'F', '1997-12-13', 'my_dummy_adrs27', '0900-009-007'),
-('C074', '劉43', 'Ub8X7a8cqC', 'e1p1TsBctX', 'M', '1997-01-02', 'my_dummy_adrs17', '0900-001-003'),
-('C075', '胡31', 'psK2FIbDSR', 'jtQ5mgPTOY', 'M', '1997-11-27', 'my_dummy_adrs9', '0900-008-002'),
-('C076', '梁81', 'k8TQRZ0dGT', 'XiOV1v9875', 'M', '1997-03-10', 'my_dummy_adrs79', '0900-008-009'),
-('C077', '張84', 's4OK498FJo', 'CpbJqgQi3g', 'M', '1997-05-04', 'my_dummy_adrs29', '0900-006-006'),
-('C078', '吳28', '8YXhm1MNZz', 'gLQfZFtiTp', 'F', '1997-06-03', 'my_dummy_adrs64', '0900-001-007'),
-('C079', '李82', 'qPsjIVmwN2', 'HzvwFdaVbX', 'M', '1997-01-13', 'my_dummy_adrs83', '0900-002-004'),
-('C080', '周41', 'GnMvCx2Ssp', 'rkfyyhyKL3', 'M', '1997-11-23', 'my_dummy_adrs48', '0900-009-006'),
-('C081', '胡94', 'L8UubCKRCZ', 'DDx2Zy05q9', 'M', '1997-09-13', 'my_dummy_adrs31', '0900-008-004'),
-('C082', '梁68', '95KU2Sn4iu', '4NWSg5pgYu', 'F', '1997-03-31', 'my_dummy_adrs54', '0900-008-009'),
-('C083', '孫83', 'EbHrbxqZRz', 'ivldwXqMDU', 'F', '1997-03-15', 'my_dummy_adrs29', '0900-003-008'),
-('C084', '林99', 'p8CLgBPGOJ', 'WnorKGuiyM', 'M', '1997-09-11', 'my_dummy_adrs42', '0900-003-003'),
-('C085', '張85', 'rbeTXXEEMW', 'BQEk2o37m3', 'M', '1997-09-22', 'my_dummy_adrs99', '0900-001-009'),
-('C086', '徐54', 'HNQfQ4HMrA', 'q7QVskdFuX', 'M', '1997-11-27', 'my_dummy_adrs70', '0900-008-009'),
-('C087', '謝37', 'EbaAEtLrEn', 'yl2hePuDPS', 'F', '1997-06-09', 'my_dummy_adrs47', '0900-007-004'),
-('C088', '馬42', '046SQX0KKn', 'LaaisXrNwr', 'M', '1997-10-05', 'my_dummy_adrs60', '0900-006-009'),
-('C089', '林14', '8ZA0R3ocot', '8IRm4Fel8n', 'F', '1997-08-22', 'my_dummy_adrs85', '0900-007-004'),
-('C090', '鄭51', 'qRnj7p1Efs', 'LkfpVjKDGY', 'M', '1997-07-07', 'my_dummy_adrs31', '0900-004-004'),
-('C091', '郭23', '9l5ipc5oFn', '3SuWIf6crI', 'M', '1997-10-02', 'my_dummy_adrs27', '0900-007-009'),
-('C092', '張97', 'zmM0xjtCKZ', '3b6uNLTUXX', 'M', '1997-08-18', 'my_dummy_adrs80', '0900-006-009'),
-('C093', '徐95', 'zDFY5nMiGQ', 'PcqAAuCl6Z', 'M', '1997-08-08', 'my_dummy_adrs79', '0900-003-007'),
-('C094', '羅41', 'yZfIqjNlxX', '9MFjmpdspJ', 'F', '1997-02-11', 'my_dummy_adrs37', '0900-008-005'),
-('C095', '謝25', 'cZn0l1fPl9', 'RZJRC0Q3Wp', 'M', '1997-01-18', 'my_dummy_adrs36', '0900-008-001'),
-('C096', '郭15', 'zSiq6LCIjC', '16eeEFSGsc', 'M', '1997-07-29', 'my_dummy_adrs56', '0900-007-006'),
-('C097', '何64', 'JMUrx8lgi6', 'tcy86R9nrN', 'F', '1997-09-13', 'my_dummy_adrs8', '0900-007-001'),
-('C098', '徐45', 'zGPm9zhYcI', 'fWpB8Ll870', 'F', '1997-06-01', 'my_dummy_adrs88', '0900-002-001'),
-('C099', '何72', '3j8o8A8ICP', 'iXVWpxsUIG', 'F', '1997-10-17', 'my_dummy_adrs63', '0900-008-004'),
-('C100', '高29', 'f193afpMYR', 'g5MEoMEBsR', 'F', '1997-05-05', 'my_dummy_adrs81', '0900-005-007'),
-('C101', '羅25', 'gCk7pcSIrB', 'AJ5SFG6olV', 'M', '1997-01-01', 'my_dummy_adrs77', '0900-004-004'),
-('C102', '楊69', 'tiBtKutouz', 'l8x6SSd50L', 'M', '1997-10-25', 'my_dummy_adrs93', '0900-001-008'),
-('C103', '孫41', 'DsGybX0wZ5', 'wuQFe8JE4p', 'M', '1997-02-15', 'my_dummy_adrs95', '0900-004-006'),
-('C104', '李99', 'm1psKq7YHn', 'MSOtzL0Wvc', 'F', '1997-01-20', 'my_dummy_adrs87', '0900-004-006'),
-('C105', '李71', 'ajizzsYVc0', 'VqupQwGunF', 'M', '1997-01-15', 'my_dummy_adrs53', '0900-005-007'),
-('C106', '林19', 'dgw1Zt87Sl', '5bpolgSZwy', 'M', '1997-03-13', 'my_dummy_adrs1', '0900-003-004'),
-('C107', '郭62', 'jwdTD7sFAF', 'meuXb4ATmw', 'F', '1997-02-28', 'my_dummy_adrs42', '0900-006-001'),
-('C108', '張25', 'wFABoCZWz6', 'K3ZT1PFosL', 'F', '1997-11-24', 'my_dummy_adrs33', '0900-002-005'),
-('C109', '梁26', 'Ju2pKH1euR', 'LQHamFFj1V', 'M', '1997-10-23', 'my_dummy_adrs7', '0900-008-005'),
-('C110', '孫49', 'YquiQGKkcD', 'JBNTFBmj3m', 'F', '1997-10-10', 'my_dummy_adrs43', '0900-003-001'),
-('C111', '何25', 'bju0CHfUSg', 'fY2OgYl2Zr', 'F', '1997-11-09', 'my_dummy_adrs5', '0900-002-001'),
-('C112', '陳37', 'mpw4gDwUff', '1WBAAHG7PA', 'F', '1997-05-06', 'my_dummy_adrs65', '0900-003-008'),
-('C113', '羅28', '42mbBBWKKt', 'p7C52FRSo7', 'F', '1997-11-08', 'my_dummy_adrs45', '0900-009-004'),
-('C114', '張14', 'PtFXFrUGrr', 'E96H4Uk3Gx', 'M', '1997-04-14', 'my_dummy_adrs62', '0900-004-003'),
-('C115', '楊56', 'kP5mxvzdp4', 'isp4tb4Diy', 'F', '1997-08-08', 'my_dummy_adrs81', '0900-007-007'),
-('C116', '謝83', '3wVfKdkd0C', 'appDdADfsI', 'F', '0000-00-00', 'my_dummy_adrs21', '0900-001-001'),
-('C117', '朱28', 'RiPP4YmcLH', 'kCCcu7gszW', 'M', '1997-06-06', 'my_dummy_adrs67', '0900-008-008'),
-('C118', '吳63', 'dvtPJqb6Mr', '5l0M9xbsyR', 'M', '1997-01-18', 'my_dummy_adrs7', '0900-003-005'),
-('C119', '趙63', 'J75NeEYKxO', 'hgbnLEqkMl', 'M', '1997-01-31', 'my_dummy_adrs87', '0900-002-008'),
-('C120', '陳81', 'Gmz3Flbt3h', 'DBwkXXkiyc', 'F', '1997-02-21', 'my_dummy_adrs86', '0900-004-005'),
-('C121', '楊43', 'DlUkVb8oXZ', 'jzdwfXQY2P', 'F', '1997-12-04', 'my_dummy_adrs100', '0900-001-009'),
-('C122', '陳77', 'dOnDJJMLQs', 'JBD072v3L9', 'F', '1997-03-15', 'my_dummy_adrs66', '0900-006-002'),
-('C123', '劉58', 'Pz7f4W8sEK', 'twpIizIQhc', 'M', '1997-01-06', 'my_dummy_adrs32', '0900-005-005'),
-('C124', '林77', '1lRNYSCG78', 'zVrKcQAnii', 'M', '1997-08-10', 'my_dummy_adrs78', '0900-003-009'),
-('C125', '楊77', 'UvAK1B2W6G', 'wgmafxmf16', 'M', '0000-00-00', 'my_dummy_adrs25', '0900-007-001'),
-('C126', '胡64', 'HgRILzdyTj', '05ItaKZd8E', 'F', '1997-06-11', 'my_dummy_adrs30', '0900-006-007'),
-('C127', '林46', '7W3RfMGtaE', 'U2eUOOvDtK', 'M', '1997-05-10', 'my_dummy_adrs25', '0900-009-006'),
-('C128', '何97', 'uNbmxRA0oz', 'H7p0tYtYO4', 'F', '1997-09-20', 'my_dummy_adrs24', '0900-003-002'),
-('C129', '王72', 'pignGyD7kq', 'kuCnXErNkv', 'M', '1997-04-02', 'my_dummy_adrs6', '0900-009-003'),
-('C130', '孫41', 'seP8AOInLh', 'Cr2vne66d1', 'M', '1997-08-28', 'my_dummy_adrs70', '0900-003-005'),
-('C131', '李13', 'vGcHtKdyoJ', 'Y5OKIJwObr', 'F', '1997-02-19', 'my_dummy_adrs14', '0900-005-006'),
-('C132', '高72', 'dKzJ0xPrQv', 'Q98fOaQ16Y', 'M', '1997-03-12', 'my_dummy_adrs68', '0900-004-002'),
-('C133', '趙97', '0ClXLGVjaC', 'TLCMr3h8MX', 'F', '1997-10-24', 'my_dummy_adrs95', '0900-007-007'),
-('C134', '何33', 'RuoBUgWpAe', 'zCAZ6uKleS', 'M', '1997-07-02', 'my_dummy_adrs50', '0900-008-004'),
-('C135', '高92', '2h0URmMVlF', '7h2XVntjdJ', 'F', '1997-03-14', 'my_dummy_adrs40', '0900-003-005'),
-('C136', '謝36', 'qSUOgy5Y3C', 'A6zaXn97t2', 'F', '1997-08-20', 'my_dummy_adrs34', '0900-004-001'),
-('C137', '朱39', 'SYnLWXvsjH', 'cLPgzIxm5E', 'F', '1997-12-28', 'my_dummy_adrs19', '0900-007-002'),
-('C138', '馬95', 'j2rz4oS7lw', 'zodXaKCEtl', 'F', '1997-09-21', 'my_dummy_adrs66', '0900-006-002'),
-('C139', '周99', '1RA6XTPe7v', 'OyYoIVpzU3', 'F', '1997-05-03', 'my_dummy_adrs42', '0900-003-008'),
-('C140', '郭36', '3A3O6srFNj', 'x6VuPwtEJW', 'F', '1997-03-05', 'my_dummy_adrs17', '0900-002-001'),
-('C141', '謝11', 'J75TcTLL2h', 'o78kTfngYy', 'M', '1997-05-28', 'my_dummy_adrs28', '0900-001-007'),
-('C142', '趙19', 'M0DM9lonLo', 'pNiMMbeuG9', 'F', '1997-06-03', 'my_dummy_adrs59', '0900-007-008'),
-('C143', '梁49', '4gBsr6UPaw', '17ObYKBvA6', 'M', '1997-07-12', 'my_dummy_adrs3', '0900-001-009'),
-('C144', '馬41', 'aOEwWXVPlM', 'sPdwJ5YmSS', 'F', '1997-08-12', 'my_dummy_adrs39', '0900-001-005'),
-('C145', '馬52', 'S0OzHH8EW9', 'wiHk4b5dwT', 'F', '1997-06-08', 'my_dummy_adrs35', '0900-006-003'),
-('C146', '李22', 'mjUMvdjrCz', 'hyKlFSv3L6', 'M', '1997-03-17', 'my_dummy_adrs71', '0900-005-009'),
-('C147', '周64', 'yy5xVwn2k4', 'gEACAZG06C', 'F', '1997-03-20', 'my_dummy_adrs60', '0900-006-006'),
-('C148', '胡73', 'hfKApPqIL1', 'f3RUFE2xWp', 'M', '1997-09-27', 'my_dummy_adrs31', '0900-002-008'),
-('C149', '朱72', 'epdcwLCHtm', 'lpFDNTp9jF', 'F', '1997-07-20', 'my_dummy_adrs9', '0900-005-001'),
-('C150', '林58', 'Z6Vb2GJw0b', 'QiSa6qNg0J', 'M', '1997-04-24', 'my_dummy_adrs100', '0900-006-007'),
-('C151', '郭94', 'kZSjggoVjQ', '1Iirf7qfhD', 'F', '1997-09-03', 'my_dummy_adrs58', '0900-008-005'),
-('C152', '胡23', '1tgqvnlpjw', '3N9bNvQOAx', 'F', '1997-09-07', 'my_dummy_adrs2', '0900-007-006'),
-('C153', '朱11', 'Y2YIRfqlNN', 'sBx9UxSr3u', 'F', '1997-11-05', 'my_dummy_adrs38', '0900-007-002'),
-('C154', '朱35', 'FD2PK7Efrj', 'Xvn090AC5E', 'F', '1997-02-20', 'my_dummy_adrs83', '0900-008-001'),
-('C155', '徐83', 'FrVa6VH2hz', 'Kng7ZMm8Nf', 'F', '1997-09-15', 'my_dummy_adrs9', '0900-009-006'),
-('C156', '梁43', 'NSAmWY2v32', 'SpkHGqSPHk', 'F', '1997-06-04', 'my_dummy_adrs81', '0900-006-009'),
-('C157', '王15', '2SUtAJOf2p', 'J9pJw5KPG8', 'F', '1997-05-04', 'my_dummy_adrs34', '0900-009-001'),
-('C158', '胡88', 'PMfrztNBmp', 'UeaE17pI1f', 'F', '1997-11-04', 'my_dummy_adrs16', '0900-008-006'),
-('C159', '吳59', 'ruDm6kdJFv', '4mubtjRrK7', 'F', '1997-01-14', 'my_dummy_adrs78', '0900-008-002'),
-('C160', '林46', 'fDyXVjTqxo', 'KVBXt3Cg3f', 'M', '1997-04-29', 'my_dummy_adrs43', '0900-008-009'),
-('C161', '林79', 'YZVJw760t6', 'ZOvYXUY2sT', 'M', '1997-03-02', 'my_dummy_adrs85', '0900-007-002'),
-('C162', '陳94', 'W04Hq9QTUs', 'DlI3a1wvhI', 'M', '1997-12-02', 'my_dummy_adrs20', '0900-006-008'),
-('C163', '鄭79', 'qy2854W12E', 'KsM90u8X1e', 'F', '1997-04-13', 'my_dummy_adrs30', '0900-006-005'),
-('C164', '張49', 'hCxdhskcri', '1wPiwvZlkc', 'F', '1997-10-07', 'my_dummy_adrs50', '0900-006-001'),
-('C165', '高15', 'PHlXxcUmM9', 'ZF5GyIG0LD', 'M', '1997-12-01', 'my_dummy_adrs68', '0900-003-007'),
-('C166', '馬82', 'jCISJ97dlx', 'ZJfVYlhYds', 'F', '1997-03-09', 'my_dummy_adrs93', '0900-007-003'),
-('C167', '謝36', 'm8VLcY0IRC', 'NLb7CYQYNF', 'F', '1997-05-11', 'my_dummy_adrs42', '0900-003-004'),
-('C168', '孫56', 'jXgRDbsh7z', 'h9PEADFprC', 'F', '1997-03-17', 'my_dummy_adrs53', '0900-002-001'),
-('C169', '陳53', 'G3rlrV75h7', 'drjUUHxwcc', 'M', '1997-09-12', 'my_dummy_adrs95', '0900-009-009'),
-('C170', '孫14', 'te4g19vSrl', 'eBNFfrKWzE', 'F', '1997-08-16', 'my_dummy_adrs16', '0900-003-004'),
-('C171', '徐63', 'YhAmYBn7bv', 'riq5jYYvHP', 'F', '1997-08-11', 'my_dummy_adrs51', '0900-001-003'),
-('C172', '謝26', 'tcpcIhZ4Zq', 'wjzlXdrK2K', 'F', '1997-12-21', 'my_dummy_adrs47', '0900-008-005'),
-('C173', '馬62', 'ZylamZ8Nib', 'eVmh8ivNLp', 'M', '1997-11-13', 'my_dummy_adrs41', '0900-001-006'),
-('C174', '張82', 'rjixOPhRZa', 'qyyjTK9Z25', 'F', '1997-10-09', 'my_dummy_adrs49', '0900-001-001'),
-('C175', '胡18', '65lT6Fh4ne', '0ZOAu3X8Na', 'F', '1997-04-29', 'my_dummy_adrs41', '0900-002-005'),
-('C176', '李45', 'ygMYsXmhPY', 'qpnoEsCyyu', 'M', '1997-04-15', 'my_dummy_adrs28', '0900-003-006'),
-('C177', '吳87', 'EtdpoGMOpi', 'DpphO4DcvP', 'M', '1997-01-30', 'my_dummy_adrs84', '0900-003-006'),
-('C178', '羅61', 'sJ2lq6ZNYl', 'JD3WvCf10p', 'M', '1997-11-08', 'my_dummy_adrs3', '0900-002-001'),
-('C179', '周86', '9o0evsQVS3', 'rQXuh7sqve', 'F', '1997-07-02', 'my_dummy_adrs1', '0900-004-009'),
-('C180', '楊96', 'VYbE9mKt03', 'rWyujY6O0f', 'F', '1997-06-25', 'my_dummy_adrs94', '0900-009-003'),
-('C181', '陳54', 'zTufdOzzxz', 'LjtELliwyg', 'M', '1997-06-03', 'my_dummy_adrs15', '0900-005-007'),
-('C182', '馬76', 'C0wVqzkOPr', 'DPiSMJSY1a', 'M', '1997-06-21', 'my_dummy_adrs58', '0900-004-001'),
-('C183', '張23', 'Wjp1pR0ZbG', '4LPvrZmcyi', 'M', '1997-10-09', 'my_dummy_adrs72', '0900-001-008'),
-('C184', '張94', 'Wrt0zLYg7h', 'Bbnq61e2go', 'F', '1997-04-30', 'my_dummy_adrs72', '0900-009-009'),
-('C185', '林38', 'YwVUUnf6Y6', 'da6JErRJNz', 'M', '1997-12-16', 'my_dummy_adrs80', '0900-003-002'),
-('C186', '劉63', 'aXx28aIMgm', '30IACIHR0k', 'F', '1997-02-02', 'my_dummy_adrs3', '0900-003-002'),
-('C187', '劉84', 'O4JWsvOipD', 'guHy3nStlK', 'F', '1997-07-11', 'my_dummy_adrs67', '0900-003-002'),
-('C188', '張16', 'spSLIHO2Rt', 'irfCK20OTN', 'F', '1997-04-06', 'my_dummy_adrs34', '0900-003-005'),
-('C189', '陳39', 'VcBWfB4BdA', '0UHRUTNwcN', 'F', '1997-08-01', 'my_dummy_adrs16', '0900-008-005'),
-('C190', '李18', 'R3ueWmBpYk', 'M1Zi6jACpy', 'M', '1997-03-22', 'my_dummy_adrs89', '0900-003-005'),
-('C191', '高47', 'Zo1biVIw30', 'crq7l1V7GZ', 'F', '1997-03-05', 'my_dummy_adrs31', '0900-003-007'),
-('C192', '鄭55', 'ciblD0Sa6d', 'gR1acjqR28', 'F', '1997-07-15', 'my_dummy_adrs14', '0900-004-004'),
-('C193', '張38', 'PzzYRk2xSP', '2opdjdxF8D', 'F', '1997-01-24', 'my_dummy_adrs73', '0900-004-001'),
-('C194', '謝92', 'VmbbNZDxlZ', 'dHpo851cZY', 'F', '1997-01-09', 'my_dummy_adrs34', '0900-002-008'),
-('C195', '馬68', 'C9c8UX391n', 'YmLXcadrNh', 'M', '1997-09-15', 'my_dummy_adrs48', '0900-004-003'),
-('C196', '馬77', 'Yr4zIWMFo4', 'vM7taD1xSN', 'F', '1997-09-04', 'my_dummy_adrs32', '0900-004-004'),
-('C197', '林82', 'z9KteSGX8t', 'wIOfJxijWr', 'F', '1997-05-11', 'my_dummy_adrs51', '0900-009-001'),
-('C198', '馬21', 'hK9RdhLe0p', 'FfKdz4OHps', 'F', '1997-04-12', 'my_dummy_adrs30', '0900-005-001'),
-('C199', '羅24', '9pqPgUvfSn', '52iWWgLwhq', 'M', '1997-07-09', 'my_dummy_adrs94', '0900-002-003'),
-('C200', '劉62', 'aZsE1nTPoV', 'aDGBF2DXv4', 'F', '1997-12-08', 'my_dummy_adrs19', '0900-003-006');
+('C001', '吳16', 'Q3E7T2bDDK', 'H6CuyhBaGi@gmail.com', '$2y$10$7U5o6grWP0hfhhyyZrEPCu7wcDp78DNYU3lahDuOCGzfCxHw2F/Se', 'F', '1997-11-23', 'my_dummy_adrs86', '0900-005-007'),
+('C002', '周11', 'cttYDSZvag', 'qlA3yunucJ@gmail.com', '$2y$10$NexiWuecoXOe7zICkDmCmO2BqD5yaFRc/q/oTh26.LjD3Od51u2Du', 'M', '1997-05-25', 'my_dummy_adrs29', '0900-006-007'),
+('C003', '鄭87', 'Rz4NPZ12Fy', '7DSZRiEXLW@gmail.com', '$2y$10$9bVoVTajHzrzIaVqAM3vnO9G7KqvM8MvB3OYuzXrIFcphbV4b7TEO', 'M', '1997-01-14', 'my_dummy_adrs59', '0900-001-007'),
+('C004', '李25', '0k02bIwQ1q', '7iaXLktydy@gmail.com', '$2y$10$DP2TXGpr3uUy6rVbevMNZOkH6aWU4zAAdbJ.ua9w/tRdLyb7l9Cve', 'M', '1997-05-01', 'my_dummy_adrs40', '0900-007-001'),
+('C005', '高95', '5iNNFeLgzF', 'AA5oR16tJb@gmail.com', '$2y$10$Id0wzzDtyBXWDM6F6NDcg./mG7zLloPB1L62v8txFf3CvNHRCZabW', 'M', '1997-06-09', 'my_dummy_adrs5', '0900-009-004'),
+('C006', '馬46', '5pZmd8bNEO', 'y3i64KOMc5@gmail.com', '$2y$10$CYv9hcGmWdVPC7D.guuT8uRdVcTouqGneVShPX2OVBTdWifSLZ4uy', 'M', '1997-10-02', 'my_dummy_adrs89', '0900-006-003'),
+('C007', '徐14', 'IqgMOvWoe8', '7kTiuNblgz@gmail.com', '$2y$10$Q/dYBDtasQkgu8i7.21cye5vUGqc.d0ZJOE3BC3EjGVgazuZCUgwO', 'F', '1997-04-16', 'my_dummy_adrs90', '0900-001-007'),
+('C008', '王11', 'phLBeWdVCp', 'Lg1CIyTQo7@gmail.com', '$2y$10$UlYwB0f7bnwpQogrmBIL1.FydkOG5U2DWcL5PYui1fVf00ywWPMfy', 'F', '1997-08-19', 'my_dummy_adrs3', '0900-003-005'),
+('C009', '楊17', 'uzM5WOXHDe', '44s6h2gKk0@gmail.com', '$2y$10$qQdt18kIj.9jYwOo9Un0Du2mOPj0OhGQeKWks8bIzh1TdwJD3gjgq', 'M', '1997-11-26', 'my_dummy_adrs40', '0900-004-004'),
+('C010', '鄭62', 'UiHE8ByPop', 'FKfclAV5La@gmail.com', '$2y$10$lWv.OAo7vMo9w7pqKu/V3eUJIpo7Tvxw7toP/POZFYUI4rcbakeZq', 'F', '1997-10-31', 'my_dummy_adrs38', '0900-008-006'),
+('C011', '梁86', 'WMSaVDT6wv', '3cDguryOhZ@gmail.com', '$2y$10$ulQygj.ftsx6h.qU/mbZbefjJGwI2FGzkMNlBkA4VG9X0Xahz6DJm', 'M', '1997-11-15', 'my_dummy_adrs46', '0900-001-009'),
+('C012', '郭93', 'B9um1wXh69', 'GEqCnsrXaK@gmail.com', '$2y$10$NoG1CzjnEL0RZJhYgD8vLO.uUZpYMsvbxVZeHv4rV6BbsCWG79ea2', 'F', '1997-12-16', 'my_dummy_adrs26', '0900-001-007'),
+('C013', '朱85', 'RasySsYPyS', '0N1ut9H7i2@gmail.com', '$2y$10$Ras0eRfCw6lr0GD1ntXsCeodxg6CBa7aKM8RxiQ3m5CmVe6T24fVK', 'F', '1997-03-17', 'my_dummy_adrs88', '0900-001-006'),
+('C014', '張39', '0llRdPeC2n', '7KMRgWb6Tu@gmail.com', '$2y$10$oIP0rFNUW26MQfWD/UtxFuXWM15fohzmY1zyH02KJJjVicaQ0j8T2', 'M', '1997-10-30', 'my_dummy_adrs36', '0900-009-004'),
+('C015', '胡63', 'kf6k4fAXpg', 'm3YTH9giuk@gmail.com', '$2y$10$UwuGCS/D0XlL46RtyJIKXeZQx1LmXeM395okR.7Lc4YMK1oVyCMLS', 'M', '1997-11-10', 'my_dummy_adrs25', '0900-001-002'),
+('C016', '李49', 'G7DY1whZMg', 'uqGyZAbiGm@gmail.com', '$2y$10$1Tz6TwlCJVx3817Ub16py.VJmmQ8OEHieLJB9kzoFsdJ0Qkj3BKZ2', 'F', '1997-03-29', 'my_dummy_adrs28', '0900-002-003'),
+('C017', '趙75', 'nQ71fYK7lg', 'r83ROZDRuW@gmail.com', '$2y$10$de.rWIqnosInb/ZgTEMX9.NtEP3qdUMcaE6x7WQC3jAa7TBUINwwW', 'F', '1997-05-09', 'my_dummy_adrs26', '0900-002-009'),
+('C018', '梁62', '9oYdOTMFuO', 'gjjUz8H8Ir@gmail.com', '$2y$10$9raxu1U.RyhFo7dNZ2zCVuPAEr1E29NkhIXeVEx1pINqp.p.Ze302', 'F', '1997-06-20', 'my_dummy_adrs78', '0900-002-008'),
+('C019', '孫62', 'GAPY6r16dc', 'gPJPgwqHXc@gmail.com', '$2y$10$U1X.1M4IDmX6YPZVr.NoIOhRRCMd4HWni2.Z17NrR1ZKCRB2WtNsC', 'F', '1997-07-27', 'my_dummy_adrs9', '0900-003-009'),
+('C020', '楊34', 'Wt3Vou4KMH', '4LNMmTqxRx@gmail.com', '$2y$10$OQh71UeZfACOu.APie2ji.KHhE3qUexqNwpRvLcrGrOoLIw/k9az.', 'F', '1997-12-03', 'my_dummy_adrs73', '0900-003-004'),
+('C021', '胡82', 'DuQmugmHuy', '4XsjRCatAW@gmail.com', '$2y$10$v3EdbUQBDO0/38olwybSLO5TP8MwysuSjAcOFG4uX8AHZubdMFybm', 'M', '1997-10-01', 'my_dummy_adrs42', '0900-006-002'),
+('C022', '周62', 'ZnO3m9xa4i', 'gmmhNoQIhB@gmail.com', '$2y$10$6K1FMoAyfE7R.hgooA23ZegiSb4ykjKvayg5G/V5.ogGbEtaLvKNu', 'M', '1997-10-16', 'my_dummy_adrs52', '0900-003-007'),
+('C023', '馬29', 'j3KpBsTMvN', 'S7XsqvcrB3@gmail.com', '$2y$10$HdypfVFnIVIuVep3qPkrgOmMXLLmTTIFzdF8POPIYCJXwfsSfrP2.', 'F', '1997-06-19', 'my_dummy_adrs91', '0900-002-002'),
+('C024', '徐22', 'jq4iAZH9N4', 'v4AJrb9jIS@gmail.com', '$2y$10$I9jlvKK897liuzMQxOGtaOsCLFbOjlvuqpp0x4.Y/ZLHn6EawtUJK', 'M', '1997-01-11', 'my_dummy_adrs30', '0900-008-008'),
+('C025', '梁25', 'bGYHL6BtYh', 'XniEaQHdJt@gmail.com', '$2y$10$Sv.eQqK5Tshi0Ah8wemCNu3Fn3ibkX8QarBiGM6bSCnjn1Q1CP96O', 'M', '1997-05-30', 'my_dummy_adrs59', '0900-002-001'),
+('C026', '高65', 'gaZtuM6Cfw', 'cXiB7XjIOI@gmail.com', '$2y$10$p7uMRvuBIC6olymvDSRGo.4xgJdzI9CWX54SpgSQsvt32RQ1NDwla', 'M', '1997-08-28', 'my_dummy_adrs38', '0900-009-002'),
+('C027', '林37', '8F6xKn1fbk', 'bgdRSm9PC7@gmail.com', '$2y$10$FtCc/mEcacCBDsUfChJLrOnBKGwQnTgbrVa6p631ZS3MT1r2nwjXi', 'M', '1997-06-28', 'my_dummy_adrs85', '0900-004-003'),
+('C028', '胡15', 'qx4ot38nnO', 'ELVDtDVTai@gmail.com', '$2y$10$Ig8hKYXjyeTtAnFssjeC7O86PJUJo6anVpo7xpBv9zCEbR8K3deOK', 'F', '1997-08-21', 'my_dummy_adrs49', '0900-001-002'),
+('C029', '謝71', 'FSKIPk9oci', 'g5Bf21NFLG@gmail.com', '$2y$10$wd3KiSdezVbZ48sXo36gcOOYgN6PSG9abvs3f3BuiyeLVDIrU91mK', 'F', '1997-08-30', 'my_dummy_adrs18', '0900-008-002'),
+('C030', '楊45', 'IasiJlBt9t', 'e4BTYGv9oh@gmail.com', '$2y$10$cy//fy40N8o4vcVJEGsMD.8sFIzMPI/U21wBxxwueXD9CCh97RL1y', 'F', '1997-02-20', 'my_dummy_adrs73', '0900-009-005'),
+('C031', '周77', '0TXdag2kFQ', 'qSE2igRRFV@gmail.com', '$2y$10$9zp0sy.HsUJPCSKdtprFn.eBZuKfb4ty8qc15Aw6itBF6r2luDoWS', 'M', '1997-01-19', 'my_dummy_adrs28', '0900-003-005'),
+('C032', '趙99', 'LXOHe6hnzd', 'TfK6P8jzBk@gmail.com', '$2y$10$O89IiXvh1.NS79NPtwwgheKolFFPCw2yVVVdpGU9fnhWChqOIpx1W', 'M', '1997-03-12', 'my_dummy_adrs80', '0900-006-001'),
+('C033', '朱58', 'oXTYs1cHAc', 'MLbOwdiAOq@gmail.com', '$2y$10$5W1edJ.COehtNMRvJYVXMOTym5eIV4HYntjyZ6vtGuwd4AQ9jyVhu', 'F', '1997-12-10', 'my_dummy_adrs71', '0900-004-009'),
+('C034', '梁43', 'A2dLy9cVZy', 'bhIZfu2BhO@gmail.com', '$2y$10$4LYx9VdcugCZp0HaA1ewEu24mnlz0nTU.f.RbZ7vZaQ0Uma1/IjtO', 'M', '1997-09-06', 'my_dummy_adrs59', '0900-001-008'),
+('C035', '趙55', 'pGKRfPp53B', 'Hx4wkXFnO9@gmail.com', '$2y$10$PeS2V99/Y.ZCh8kSwa.jzeAg.ZDdtFnk01ilWtRn8zIBrb3ORrgAW', 'M', '1997-12-13', 'my_dummy_adrs18', '0900-008-001'),
+('C036', '楊78', 'anvIONxvsE', '17YQCB05re@gmail.com', '$2y$10$FkNqF8eZwh80ubL5NGo4meoEPFMFLFsUXNKPLncj6jC19d.LjkXBy', 'M', '1997-01-17', 'my_dummy_adrs28', '0900-006-004'),
+('C037', '胡45', 'ecihdkk6j3', 'kz6LOZwuaJ@gmail.com', '$2y$10$y39VTmnZKzOtlbd0StppDeRTUCIEBtEodQZBm4qDQ1eRYmFAUinzm', 'F', '1997-02-16', 'my_dummy_adrs59', '0900-009-004'),
+('C038', '胡18', 'wC2sF7RkZ3', '2sgqzAXR4x@gmail.com', '$2y$10$Ko8vLokDIsYM2uTRFZanEuNfFYoVTau0kBpSxP/Bp/Nozd3/Q32da', 'F', '1997-07-24', 'my_dummy_adrs70', '0900-009-002'),
+('C039', '林47', 'yFyGRD1pyC', 'zvK4gueAl8@gmail.com', '$2y$10$scGjyPXnrdizP8q8Yj3oNezUaonfWYX5NkjziBOZVxurW05T1.5aW', 'M', '1997-12-11', 'my_dummy_adrs74', '0900-007-004'),
+('C040', '劉58', 'XrixIxM6HN', 'Biiog6xJGa@gmail.com', '$2y$10$DMDf.VVa8Dz0AlhT.IWaI.gP2OiS.Zr1YIAcUIve4aiVE3QszTQsS', 'M', '1997-05-14', 'my_dummy_adrs92', '0900-001-003'),
+('C041', '張84', 'xq4gZYBPth', 'Vv8E1NSOCY@gmail.com', '$2y$10$gh604zCGGv.1okl7wpdwK.J9Q/hW.XMxqBr.4VVgO2fs68DPImnVG', 'M', '1997-12-13', 'my_dummy_adrs19', '0900-001-006'),
+('C042', '鄭69', 'RAzdZEUdEv', 'ok1oihuyvm@gmail.com', '$2y$10$6NvbWt0jJGPyS5aIWKq1ke4pKzedfMZRuiIYSo9fZjDu.p53Ua9Vy', 'F', '1997-10-23', 'my_dummy_adrs37', '0900-006-003'),
+('C043', '胡11', 'vkkg3rXnyR', 'di2267QpXn@gmail.com', '$2y$10$Zzh.Z27hY4LxFPZmndt53eNNC8nfyJrOCIMo300CZdQwJLv5dRhJq', 'F', '1997-04-01', 'my_dummy_adrs2', '0900-009-005'),
+('C044', '高13', 'yB0VODx9LW', 'Ocvs8ixxWo@gmail.com', '$2y$10$vQ63RxZn8Pcv0zFgE7DLx.//jnM5V2HjWfm8fCjq.NqTpvF8vj7Ty', 'M', '1997-12-20', 'my_dummy_adrs63', '0900-009-007'),
+('C045', '劉86', 'eTCmqljRGk', 'A9OVH22pTg@gmail.com', '$2y$10$jHTNBhwzFUHWyS7gZVuNDOhmqNOxDode8EuQfbvYq2PbkrRaLWYLm', 'M', '1997-01-22', 'my_dummy_adrs43', '0900-007-005'),
+('C046', '楊96', 'i8wcR83Wcs', 'mh0vOfoCEK@gmail.com', '$2y$10$aMphVj5Duala.brPgCElQeL83JmjZDl05SQaa2UFNyEFFQvKK7BqS', 'M', '1997-06-13', 'my_dummy_adrs69', '0900-008-009'),
+('C047', '馬53', 'D31fPQgpdT', 'IXd1I8QjHt@gmail.com', '$2y$10$R7E5PgX/jdg1VOb65uOSO.fNiFBP//nd9APQ8QIwg7/mwcK9tdx7a', 'F', '1997-09-24', 'my_dummy_adrs70', '0900-002-003'),
+('C048', '陳41', 'aXmKuYckfo', 'GI90nsMiKo@gmail.com', '$2y$10$x15gZ7MnDJRovuZrz/xD0uSGo7SF86sfQyY0xcqX6czmCB5aiXm/m', 'F', '1997-09-22', 'my_dummy_adrs37', '0900-002-009'),
+('C049', '林22', 'vWj7iOhvLa', 'MURp4bi3T4@gmail.com', '$2y$10$7IQ9k8oDWchoWPibkd3ncemzVXdZbPygOPFQA4rm.yTV7rS59jk5q', 'F', '1997-03-25', 'my_dummy_adrs5', '0900-003-003'),
+('C050', '陳74', 'A5RP2kCfny', 'FB8JRI8Hym@gmail.com', '$2y$10$vEXlr5XPuaBQQv/Rqb16l.Y/WTcfOmtQAr/pzzaZpvvRPdc8t1fE2', 'M', '1997-01-18', 'my_dummy_adrs98', '0900-005-001'),
+('C051', '胡89', 'cKHPl8pXgs', 'DbsUtE6OcR@gmail.com', '$2y$10$NL0IB/RJY544zCzv5XY2OOmVFNwHNOUbLus.NBL2KMFXoDrDzPXj6', 'F', '0000-00-00', 'my_dummy_adrs72', '0900-001-003'),
+('C052', '馬79', 'MkO7bkIZA0', 'LpL6lc8PT2@gmail.com', '$2y$10$KdHbS9Zsb./5ogVhjKLS/OZL.UjADLxjcZhatEE.BdAydNcqAPgF6', 'M', '1997-08-07', 'my_dummy_adrs64', '0900-009-002'),
+('C053', '孫16', 'us1sxgAAk2', 'qRBU5bi4m2@gmail.com', '$2y$10$Ul6mcE5Hs6VJyqPidcIs1OwlSPuGl3eVVisiKMyQUuYT28qC3aPo6', 'M', '1997-09-14', 'my_dummy_adrs18', '0900-004-001'),
+('C054', '何22', '2V6priR2mf', 'pUImEldaXG@gmail.com', '$2y$10$NYMuXTxiK4DOerjAZ9zMpu.lNjSlwUK3nYcogaD3cSArCN3JUlGiq', 'F', '1997-01-16', 'my_dummy_adrs76', '0900-002-002'),
+('C055', '張11', 'lP9bMgF3Nu', 'm1vZJaIB7F@gmail.com', '$2y$10$ZdMeuO/lK6sBKK4lHlIkU.qXokBbRbnSzR5XL2bV5QO8PfdNvN0Pi', 'F', '1997-11-15', 'my_dummy_adrs76', '0900-009-003'),
+('C056', '孫76', 'VPdH4a45js', 'h2jarqJE3U@gmail.com', '$2y$10$3Ed6nch6PA7RjgOMYAOt3e0rvyJUHQNSZjq4ELbzcIP69mBayzzFe', 'F', '1997-02-04', 'my_dummy_adrs2', '0900-009-007'),
+('C057', '何44', 'zNBMwOGShI', '4Noc3cmLT5@gmail.com', '$2y$10$/35Id9NnOef2nkSx5B5H8u9uhQRfkcpkqr8Cbk.RAPAVjdHxbruvu', 'F', '1997-09-28', 'my_dummy_adrs55', '0900-009-003'),
+('C058', '鄭56', 'e27CcfmnnA', '9J3sND6Jr6@gmail.com', '$2y$10$SnFe5xGewLSay4YZFZU5Z.K46J2awb048psYZ98wGcMGJsZl8pMlO', 'M', '1997-11-08', 'my_dummy_adrs94', '0900-001-009'),
+('C059', '楊73', 'XJq5piwALx', 'K8bM160Jpv@gmail.com', '$2y$10$2DZfKX41yam4y/vnFJj7m.aymdZhRdtEom70qeG5X.oI/dBNDYa7W', 'M', '1997-11-15', 'my_dummy_adrs20', '0900-009-004'),
+('C060', '張14', '5SpQfI0pnT', 'xu8KbsjiEw@gmail.com', '$2y$10$kk086FrqmHF7g63tJwH9sOvizj7hPoAxS3b.bh6fYqoivBMUjwBMC', 'F', '1997-06-05', 'my_dummy_adrs60', '0900-006-002'),
+('C061', '徐72', 'vrIVNw3BgJ', '2JQO2sjkCs@gmail.com', '$2y$10$fJ5kUujfR8w/q1gHtkP4c..6oKgQD9OzMI1JzOFOubHmK1aP35/vG', 'F', '1997-05-09', 'my_dummy_adrs4', '0900-001-001'),
+('C062', '高88', 'rFieLhKWLe', 'IW42Lo7mAJ@gmail.com', '$2y$10$LUwZDyUSEzN.12g5/WjlkOunTDaxdroZiWADvyozGELe92byV/yMi', 'M', '1997-04-05', 'my_dummy_adrs59', '0900-005-009'),
+('C063', '周75', 'c3X70Ei9kA', 'o3oNh4U2fz@gmail.com', '$2y$10$hIstPcAOs0IqLaqtzBJqK.ZLgUqnQ8ndiroQIdOA3GkgiA28TB7dy', 'M', '0000-00-00', 'my_dummy_adrs56', '0900-008-008'),
+('C064', '孫45', 'uJJrZxW09j', 'lpITBK4QxA@gmail.com', '$2y$10$MMInOL1bX2jJfP9klLT37ebvwoB0a838Q7eRqSX/IqJCB6xgbaAie', 'M', '1997-05-17', 'my_dummy_adrs29', '0900-006-006'),
+('C065', '謝73', 'GMphFmSaM8', 'oA4Irxf8z4@gmail.com', '$2y$10$sia5TKeao2IyvRIkY3E5XO0oapxtROVJVoep01IilejgNKpdGli0y', 'M', '1997-06-15', 'my_dummy_adrs82', '0900-006-003'),
+('C066', '周27', 'EA65Df2Ptn', 'x88Znl6YP5@gmail.com', '$2y$10$oReWSg0wmaMcA.YahoRP9u6dvDqr2LP5/ZvqifT2PzEkqw2fSjPai', 'F', '1997-01-14', 'my_dummy_adrs44', '0900-006-007'),
+('C067', '高36', '8ondZlUGZN', 'eDKxRHZ8aL@gmail.com', '$2y$10$XN286E2HOZ6DxTbOodfK/eu//.cJa39tywpw9lRHG4wzDFTtuulhO', 'M', '1997-03-04', 'my_dummy_adrs22', '0900-009-009'),
+('C068', '梁93', 'fszo8bH894', 'SQrraIOgU3@gmail.com', '$2y$10$LmrDGXzb6WYhpL3E/CF..uEdczi/N/utf0NG5My4RdShotMdG0A2S', 'M', '1997-01-02', 'my_dummy_adrs82', '0900-003-008'),
+('C069', '羅32', 'OWP0ILuWh6', 'RMlHXOml1h@gmail.com', '$2y$10$X.jCIDT4v07ngBaBzp0wee9WO0LqzdIj4HJRhx99sHGqaS1c0A5wu', 'M', '1997-03-05', 'my_dummy_adrs10', '0900-006-007'),
+('C070', '王12', 'gEHAzfmfi7', 'fmKjK9snvE@gmail.com', '$2y$10$89JOQhP5EXPic1rII7Ik/uyaCBD.uVNd0uCtw66mYvALaQrqQIV5O', 'M', '1997-09-16', 'my_dummy_adrs50', '0900-007-001'),
+('C071', '陳53', 'bUNV6Lx32r', 'w9y27Lg2c7@gmail.com', '$2y$10$HOKysCzJQnZSMIQUa5U44OTwcwMKlFuwQdwH/J35wroCBcQO8Iy5q', 'F', '1997-05-12', 'my_dummy_adrs33', '0900-005-008'),
+('C072', '劉48', 'SCyub4XNXi', 'GFcBTft9PV@gmail.com', '$2y$10$KEbPooq7Ur38HFVtY/suFenEybnNhX.utEbdeGZTWz9NX6p6a/Apq', 'F', '1997-05-14', 'my_dummy_adrs63', '0900-004-004'),
+('C073', '周73', '2001PBsWGD', 'Gdi9q0W14L@gmail.com', '$2y$10$WgC3XdOl5kuyTfqlVRXL7OpndFYDoLUhYoxxBC48g5j0XZCOMnvJC', 'F', '1997-12-15', 'my_dummy_adrs47', '0900-007-001'),
+('C074', '楊98', '4Vw8tJAtdn', 'bcvcAYAnXc@gmail.com', '$2y$10$2BkS4fvzUz9kx5XOrW.VIueaq9BSzERHstqybuUteeKFw9VWJPknK', 'M', '1997-12-04', 'my_dummy_adrs19', '0900-004-008'),
+('C075', '胡85', 'brGRxvcFq7', 'DfTaluLbaH@gmail.com', '$2y$10$p42KbIBAq17uPWn4gv3Nt.imX0b9JbSg9C.9IUFQGeNb5lAwQv54a', 'M', '1997-08-23', 'my_dummy_adrs27', '0900-008-004'),
+('C076', '馬21', 'HnZM42t1LU', 'qSqvyAdW02@gmail.com', '$2y$10$hGgDikLw/uOrOgRbFxDnU./rSB/wXpsdsOHUOMWFv8SzWXt7miK/i', 'F', '1997-02-21', 'my_dummy_adrs14', '0900-005-003'),
+('C077', '林52', '8oClpMHFcx', 'Y5awV0VxrO@gmail.com', '$2y$10$3m/G5SB.d7XuQbWfVZ8ynuWmCVKdM0S2YD4HCpWw6jVV5kgdHwMU.', 'M', '1997-07-31', 'my_dummy_adrs62', '0900-004-005'),
+('C078', '鄭92', 'BeI71IfprO', 'FoBNk8vpQZ@gmail.com', '$2y$10$Jg4pJRJ0yu8wAYKoKhDjIOHvVZzN/FcBiQbpju2Ur1z5mPh6SoYdW', 'F', '1997-07-11', 'my_dummy_adrs53', '0900-005-008'),
+('C079', '馬71', 'Gt0tRvX0pi', '2DUd0wTDVj@gmail.com', '$2y$10$CVIwBBoa5CO83sFYVbJsi.WKsrL/UCK1CcVcj6u9mIAVc/sMUke3K', 'F', '1997-07-07', 'my_dummy_adrs88', '0900-004-009'),
+('C080', '楊93', 'k7SmIjlYlR', 'eFOkvausAq@gmail.com', '$2y$10$9VbU25qa46VYRQNeeLn1EOBe6Vu60neyYwmOwiuTDoZwnctyXA2xK', 'M', '1997-04-02', 'my_dummy_adrs90', '0900-009-005'),
+('C081', '何25', 'iPjZvKiHvL', 'zd32jC8ULZ@gmail.com', '$2y$10$lBbKbWQGkwWa1LPpmPHr5epPA27RX9Hbu/BoeR7rviGhKNQTFyrq2', 'F', '1997-07-23', 'my_dummy_adrs67', '0900-003-002'),
+('C082', '何88', '4f8siO8Hk6', 'GS35Lsthfs@gmail.com', '$2y$10$2S99TmJY0ifkcEhyWutaZOSHLrfGQ2R3bnWjH10B/J8vIIn1i6IqK', 'F', '1997-05-11', 'my_dummy_adrs97', '0900-008-009'),
+('C083', '胡67', '9rAYgtP0jh', 'VE9ia7elD7@gmail.com', '$2y$10$MPgbW2I/oh88sRYYoGyahOfpmWXHH2gs1NKpfR4.R5vM7KMq00ZXy', 'M', '1997-05-03', 'my_dummy_adrs11', '0900-001-009'),
+('C084', '李83', 'puAIsEYaSn', 'iGS5u8RmIz@gmail.com', '$2y$10$6149fa23a9Dj9JLGjM3HN.j16..Lj2IY0AESXjN1y7P7FKlWeuBZi', 'M', '1997-01-18', 'my_dummy_adrs90', '0900-003-006'),
+('C085', '羅13', 'd5to9IsZAk', 'YPeViWt5FH@gmail.com', '$2y$10$H7HWWKYhFu3VrGjUeFEYHu/./SUco.a3soV/lQRGTxVRgKWp1/Soq', 'F', '1997-06-21', 'my_dummy_adrs2', '0900-007-004'),
+('C086', '陳95', 'rZv3sljIOf', 'Xf7eMXd09E@gmail.com', '$2y$10$wO86IlTsNA3aJRwJcMdUeei4tY6KL8k529LrIsT0Iby4kqH7P4zJu', 'F', '1997-06-01', 'my_dummy_adrs57', '0900-009-003'),
+('C087', '馬91', 'ThpHlvDuiA', 'QWpKksA2Tl@gmail.com', '$2y$10$PRagRKtBBqZOAQS/UYLxaO6jlmSyPZ19zRKhbBC65LlYFRBHSx9uu', 'F', '1997-08-25', 'my_dummy_adrs35', '0900-009-001'),
+('C088', '胡68', 'rxcEEFwatx', 'WYQU8byqDF@gmail.com', '$2y$10$4JR2gi3waG1vqx3J4x33o.SridxeYyBjuZZ8zEKfOvtXwSVCJyxPO', 'M', '1997-03-06', 'my_dummy_adrs47', '0900-002-004'),
+('C089', '趙65', 'TxznBAgzru', '6eXtzBWPmH@gmail.com', '$2y$10$dpSAa.VPVhR0NZiXIyVR1eT1W2V9YzhrRlwTG4Ypq57JbiKEyE8Q2', 'F', '1997-05-08', 'my_dummy_adrs20', '0900-008-001'),
+('C090', '孫16', 'ZDuVeWwDKe', 'FZk8ksi2hU@gmail.com', '$2y$10$M/9YYzKgO4GoinZZFFEBX.wF9AXxMp9Q7Lb2Y6e9Gx5V19RQ1S6PO', 'M', '1997-01-11', 'my_dummy_adrs57', '0900-007-003'),
+('C091', '李74', 'kNEG3FWnPy', 'elTEzXWHoh@gmail.com', '$2y$10$ygte2DyWx5z.ycDm4UxTEOvWRFFL8KaryVWh8k1dfeMwYvED1j9Um', 'F', '1997-09-21', 'my_dummy_adrs20', '0900-002-001'),
+('C092', '高82', 'tjLGIu0Ygo', 'OPoR2L3XBM@gmail.com', '$2y$10$qbNXq5/B4Yiu8piVdE14iuBTuMO.DsFEl37cKmr1JzP0.3lRY/2mi', 'F', '1997-12-25', 'my_dummy_adrs69', '0900-003-005'),
+('C093', '吳94', 'WfzRatdx8E', 'nrHjotCsgT@gmail.com', '$2y$10$B2zPGuHTmQFVuaZ53wkmdugdKTJqowGNT3NinoI3MFmhTgcxJCKfC', 'F', '1997-05-26', 'my_dummy_adrs62', '0900-002-006'),
+('C094', '朱35', '17EYgVqGaZ', 'dwu9E36GEa@gmail.com', '$2y$10$p3Li3IfPxeDdhWYweRM8A.5HiGNAcnZSwvPtqM81K8/y2b6Zup5sO', 'F', '1997-03-05', 'my_dummy_adrs79', '0900-004-007'),
+('C095', '陳97', '3agjPvm6FB', '54GNS7wCsb@gmail.com', '$2y$10$WoMgBweAqOehGB8xIHit7Ouxl20od.R4RzH1oALvz.0oFGew9.D92', 'M', '1997-06-26', 'my_dummy_adrs45', '0900-001-006'),
+('C096', '徐26', 'zya08I7CJQ', 'rypvF1mBT0@gmail.com', '$2y$10$pi.Ttj7WSCskQARJsMqKcO1FI7wnK86MOIXAdZxPy4PWOYRFkWcjm', 'F', '1997-11-02', 'my_dummy_adrs31', '0900-006-003'),
+('C097', '周48', 'gIqCjDKIWP', 'TUaYdvoztY@gmail.com', '$2y$10$9mwQ9aZgWsxPn/iL2ctu7.kcehKSnnDvfiUKI3G30s4cTd5nEI3fC', 'F', '1997-03-14', 'my_dummy_adrs51', '0900-005-007'),
+('C098', '羅79', 'f1jONMnUaG', 'P4fYnFfEle@gmail.com', '$2y$10$dl7O6v9LpyenPbh/.p8u6uEHEwW/3A1lyZTvqThMQ2qtcBMTzCZ8m', 'F', '1997-03-24', 'my_dummy_adrs51', '0900-005-004'),
+('C099', '劉82', '636FcFsre2', 'G48BfzNvEk@gmail.com', '$2y$10$L9HgozWOAi5Sie4lrVYtbOgkVLLJo1329S3SxxIsztm2g0my8hdr6', 'F', '1997-07-01', 'my_dummy_adrs33', '0900-003-004'),
+('C100', '羅39', 'aTN7Z36XKa', 'HxJbCeep0L@gmail.com', '$2y$10$z1wuRdvIz1XIPAVIR0iH1.TOY9nDlCHKznIAnVbFr/aDbXLxsGAXq', 'F', '1997-08-08', 'my_dummy_adrs88', '0900-004-002'),
+('C101', '劉81', 'l4DajvXAjH', 'nLPiThR0vS@gmail.com', '$2y$10$inemnVM0.Nr8lXwHrRdnNOsQKtotY.iLjcbwuXP4Z3KkmIGgCKVGu', 'F', '1997-06-28', 'my_dummy_adrs65', '0900-004-009'),
+('C102', '梁45', 'URszO3QALH', '8LUC6DxJG3@gmail.com', '$2y$10$gwcgZosY0hP7.00zsp9jVuZyOIlEjNpUmNbSWv91v9AyN4xpoz9Ba', 'M', '1997-04-28', 'my_dummy_adrs69', '0900-005-002'),
+('C103', '徐98', 'IkGbFmHKFh', 'Gx7AuQMY7y@gmail.com', '$2y$10$3LFRfvK862TxHotQBdujhuzRhaudu/RhP/jDWtwWGC.V789Zw/Ofe', 'M', '1997-09-11', 'my_dummy_adrs92', '0900-004-007'),
+('C104', '朱93', 'vWdu2WIMik', 'N8wTWdhcYc@gmail.com', '$2y$10$ciaVVSLVx7uWcWSHjjLFP.BJGAxHcv.uU8Z1ZNinkL9w51ApZgWru', 'M', '1997-10-20', 'my_dummy_adrs34', '0900-003-008'),
+('C105', '馬26', 'mQ02auPjSB', 'zzHJLetYZQ@gmail.com', '$2y$10$yt8zupdSPsL6Ify1gC0m7.dny5HjGTDpqQZs8N.WnrZU6uHf5lMSy', 'F', '1997-04-29', 'my_dummy_adrs73', '0900-005-005'),
+('C106', '李66', 'MV7kHl7gsu', 'F82ZXLxuJO@gmail.com', '$2y$10$HsTqagbgtRPJttDKiZhRSOg5a4Lt9sdYFeORL2eyxNg9I2h2s/JkO', 'M', '1997-09-08', 'my_dummy_adrs59', '0900-001-009'),
+('C107', '林42', 'wfq25RRErV', '5B9f3q7JWV@gmail.com', '$2y$10$msFVIzC63PSkGHADPyjNCOmx4Y/lQTx0JztmjfTofJ0sWfzFcv1Qm', 'F', '1997-05-23', 'my_dummy_adrs67', '0900-008-004'),
+('C108', '周59', 'BtYPu1U6d2', 'yl2xZVozsq@gmail.com', '$2y$10$EOAL9Wgr12wDVDoH1Gwwqu9Y3jtPIX.tx2B.0.TiUAttlvYe2238m', 'F', '1997-05-11', 'my_dummy_adrs52', '0900-005-004'),
+('C109', '朱79', '96DrtdFV8u', '4lmUY5Qja1@gmail.com', '$2y$10$yaYJ1XT2N7270E/eMoMJge1NektYGXt1uglEvNYY27ZxhikrBhhny', 'M', '1997-05-22', 'my_dummy_adrs95', '0900-002-008'),
+('C110', '鄭38', 'iZl7bg16qM', 'N8RZvKk8eJ@gmail.com', '$2y$10$WtZxCSAwhOKhnsMV1strGOuTj.bD80SowFZW2hCit8Q2vJ8NmK.DG', 'M', '1997-07-30', 'my_dummy_adrs58', '0900-006-009'),
+('C111', '林53', '81caOuZJQu', 'U4hgcAm00n@gmail.com', '$2y$10$WrHA9Mb1mZADZRi6BYZ8b.xkFOlKZ9C8E2/MMnRLivMdm2e3rA8U2', 'F', '1997-11-20', 'my_dummy_adrs15', '0900-007-007'),
+('C112', '周23', '3jxyQsyJfp', 'J0iRCXdMQ2@gmail.com', '$2y$10$RjrrxZCLzCKJSTKJoPjrkeflie28VqtW8JbU7jduIxEim.qpKHuwS', 'F', '1997-08-04', 'my_dummy_adrs36', '0900-007-001'),
+('C113', '郭32', 'QqIsRTxijK', 'nMiSMSOZCt@gmail.com', '$2y$10$ayE9njczA2eoKnSnRveIL.ZBz.zhYg3gLci9SeW50uJW6Tb9/EpkS', 'M', '1997-08-21', 'my_dummy_adrs29', '0900-005-002'),
+('C114', '朱78', 'J30ImByKoP', '5vssmZO5ph@gmail.com', '$2y$10$TfhArvwnXSK.pw2.6ioPt.hOw2ZR3BVjgdHsL9pCct6tkCtde9Drq', 'M', '1997-09-23', 'my_dummy_adrs94', '0900-001-005'),
+('C115', '郭28', 'Urh9hRmv4N', 'arpOL7AXWe@gmail.com', '$2y$10$3dVjROb7WljKWjcnij5OmeP.RzOZxNMywAn6dsr.1VZGx02zt/822', 'F', '1997-05-04', 'my_dummy_adrs28', '0900-001-003'),
+('C116', '周73', 'dwH9cPMs9t', '99CDb39GUg@gmail.com', '$2y$10$dcoW2ODLi6.Cpm1kNJRQVeHRH7Qejb4IOiVST1HifLUSL3Df1zt/W', 'M', '1997-04-17', 'my_dummy_adrs48', '0900-001-005'),
+('C117', '劉93', 'p5awzT4r9H', 'c7fHQEAv2T@gmail.com', '$2y$10$NBX5fCR7ZZo9lYNrXhDppOBes8HboSUVoWVHNohSlqKUrPRvTs0Km', 'F', '0000-00-00', 'my_dummy_adrs95', '0900-008-002'),
+('C118', '何44', 'hjnJ358QP8', 'RxF4fHz6ZT@gmail.com', '$2y$10$spvYkwxe9wltSx.AlZ6avu8vNjdx4nV16IxubQFujNcC/j1/zyhLa', 'M', '1997-03-24', 'my_dummy_adrs64', '0900-004-001'),
+('C119', '何16', 'G6VWpZ9MXo', 'jNqNxwy475@gmail.com', '$2y$10$ukkpOI4CPq.seHbkZIfTR.u4D1IeKWB92dOQhXx1eUkzbvmF4zJVe', 'M', '1997-12-22', 'my_dummy_adrs71', '0900-008-001'),
+('C120', '周31', 'DeDvI607YV', 'oSPEtPVlNT@gmail.com', '$2y$10$W6AsenXU0d47m9QYueihcuAphbOUfJky4pzWWat.tZZVQZAwBgw6.', 'F', '1997-07-08', 'my_dummy_adrs30', '0900-007-008'),
+('C121', '孫77', 'J5J2wwRFMt', '4fcp2vLbGG@gmail.com', '$2y$10$YbDx8NnXDe0Cin2tVDkBiuKHFRWUOSmCHYFasxig0da.4.rzw2qD6', 'F', '0000-00-00', 'my_dummy_adrs34', '0900-008-004'),
+('C122', '胡76', '9NeISxtmRZ', '7Ia8CiKYuC@gmail.com', '$2y$10$aTaT1Uwk8XlH0YcxzfrTPO/TOSIS6lobQgBJIJyAsE83zSim4otfS', 'F', '1997-10-03', 'my_dummy_adrs36', '0900-003-005'),
+('C123', '周32', 'UU6hWZ9xYS', 'ftgdmhw6mD@gmail.com', '$2y$10$5PEUGzYUem1eLfyxHaXIt.AAji1FQaq/BhhBItHyBQfAwucw7ZoQa', 'F', '1997-12-09', 'my_dummy_adrs6', '0900-005-003'),
+('C124', '楊86', 'aC6OXH1tou', '3Yxe9eDfRO@gmail.com', '$2y$10$2voTYLPxbcKPsALqP9DZ7.EYq1.tyIKUM5uDMrGg18neLG9A.Iljq', 'F', '1997-12-06', 'my_dummy_adrs61', '0900-006-004'),
+('C125', '楊72', '0Ng5G6vbUo', 'zSrWxgUoEH@gmail.com', '$2y$10$5FZYb5Jg8U9J2s4n/yZ1ceYily81vhiwOzYT09Sx3LuPQFMTeBpvq', 'F', '1997-03-17', 'my_dummy_adrs81', '0900-009-007'),
+('C126', '鄭91', 'cKT172IOTN', 'd3wxUbpxhw@gmail.com', '$2y$10$F.9LG4NOswT.VNT8K1gi8OYRE6HEinWLTBI7hxcG3k30M.udBk56W', 'M', '1997-03-08', 'my_dummy_adrs94', '0900-004-009'),
+('C127', '張16', 'huwLICftqM', 'Mq09ww5IDs@gmail.com', '$2y$10$uReRy937aepuWqJ/nOo.leKG5lbJReApJYmFVlwefRF0.0Cp59vjO', 'M', '1997-09-23', 'my_dummy_adrs51', '0900-007-009'),
+('C128', '羅12', 'CpgVc0DVrU', '8QBkLvfPaw@gmail.com', '$2y$10$xFeD.3xDass9bvVinQkYoOmf4uY7W2Qy6OkJknvFxS/1c9rTOJLUi', 'M', '1997-07-31', 'my_dummy_adrs70', '0900-008-005'),
+('C129', '楊31', 'dCoybnAmWz', 'IcfueIRJfD@gmail.com', '$2y$10$FMn9.F95ApHt72sI7UJ9B.0I.0MDGa8E8g3LRtkyayCozCPs1qTm.', 'M', '1997-10-15', 'my_dummy_adrs95', '0900-008-003'),
+('C130', '高39', 'xCc0cqUKjy', 'WCamFMc3QX@gmail.com', '$2y$10$QZXhHPiFz8E5Hmnjf.zraeTEzGLKSTAfqX.X3cFoh7V3aDM/3P3s6', 'F', '1997-01-06', 'my_dummy_adrs73', '0900-008-007'),
+('C131', '朱99', 'dSFHYTT8dn', 'QFL8qjWgKJ@gmail.com', '$2y$10$6fsZvGRrn92hIxwTwrmB3u6mhFBnFydzLysKOh0Tem6MUOrIjX/8i', 'F', '1997-10-19', 'my_dummy_adrs91', '0900-005-004'),
+('C132', '吳73', 'd0UzwRjuIj', 'pfgv0jb95e@gmail.com', '$2y$10$GG12lujFZlsEIyS2k69aD.uz9vpOY4H34yxbnFQyGd4YQBcKMTtYy', 'M', '1997-08-24', 'my_dummy_adrs71', '0900-008-009'),
+('C133', '朱45', 'FFWhyHnuqD', 'wU18wHjDM8@gmail.com', '$2y$10$3VhScZRGp.pEHlW0gw2dxeoHTydvPZGbPY1emTDt6kFad740y5AJe', 'M', '1997-07-17', 'my_dummy_adrs20', '0900-003-006'),
+('C134', '梁95', 'Ry2Q02VLQ9', 'gUfCo96I8i@gmail.com', '$2y$10$pxYopyJQNbV5MXLlzt677.qVdKmxO.ik57A0TA4QEXjG5/UgAgF1y', 'M', '1997-06-26', 'my_dummy_adrs38', '0900-006-009'),
+('C135', '謝58', 'zsKjW0kHMy', 'BVuEqztntO@gmail.com', '$2y$10$7v/Xc6dQkfWpgTMMKEQAkufDzsk81xDyWmbkddtnj8Q8znV5T31s2', 'F', '1997-04-15', 'my_dummy_adrs54', '0900-004-001'),
+('C136', '何92', 'YsQjuRYkIy', 'y3JIyhrG7Z@gmail.com', '$2y$10$hkhzxbXDUP1wQAw3Ph3IW.wK58d/zSXwHGsx/6a8R0FABuQ4gQH2q', 'F', '1997-08-12', 'my_dummy_adrs15', '0900-006-007'),
+('C137', '張85', 'ZgLwWJP9Av', 'asdICFl1TX@gmail.com', '$2y$10$ZGyx73lDc7qR2gPs7r5dKOMb.8osy60XQ5/pcpsVsmNiIDvIt524.', 'M', '1997-10-22', 'my_dummy_adrs21', '0900-003-007'),
+('C138', '吳16', 'veGbtUfobd', '6fK0ZfP8n2@gmail.com', '$2y$10$rGef5nVfLqosQ/u7ja4CUuf8mKHrwOz9/shdHwHWusXR9TpzDeiki', 'F', '1997-10-20', 'my_dummy_adrs82', '0900-009-005'),
+('C139', '周57', 'N4LdumCR2u', 'nClSp8sUVH@gmail.com', '$2y$10$/0G.yXP0/YbZzHtS54ccB.WkY2nEMoLlx3loXNnCvwAiblkX0xMyW', 'M', '1997-09-10', 'my_dummy_adrs15', '0900-007-006'),
+('C140', '胡82', 'NqZ8Le3X12', '9wZoMlgkCz@gmail.com', '$2y$10$qHQt3tlqYfIeWkbpLGgxiu14GC.KcNf/Xu3CEkfUzLOM6uY0fQUHO', 'M', '1997-07-09', 'my_dummy_adrs38', '0900-006-003'),
+('C141', '馬26', 'aTwTtMPclI', 'wsHKQPINxj@gmail.com', '$2y$10$WlRJbZ9N6mIf.ygJC2CyK.2O7WAZ0tZBr.BaJ0GtdVOFmQ/v.sVpa', 'M', '1997-12-14', 'my_dummy_adrs64', '0900-005-001'),
+('C142', '吳43', '8YKNvw3jf8', 'FGHs89k5Dk@gmail.com', '$2y$10$qO7rj30g3u9WPBRDjPCiQ.4hn/QH9Om8his49g10nsk/gkl.x3Bpi', 'M', '1997-06-20', 'my_dummy_adrs39', '0900-003-009'),
+('C143', '周91', 'aXaudZY4u2', 'C7N4LAAw85@gmail.com', '$2y$10$icDlh3vp3TVT07UpMOQ7ru2iFNW6.ExvBXaat5Sk0UHgdHyhzdPjy', 'F', '1997-04-04', 'my_dummy_adrs90', '0900-005-003'),
+('C144', '吳27', 'X6xaSdQHBe', 'DH4WMwKwuu@gmail.com', '$2y$10$0747vWgPOgOnhzKjEz04CehpUFxoapSqLf3aKOj9hctcH29T3dMqW', 'F', '1997-12-27', 'my_dummy_adrs96', '0900-006-004'),
+('C145', '林81', 'PfnOLGAmoL', 'cm9k9EJ9Zo@gmail.com', '$2y$10$maUOBxkqRWFcGZCC9ZdvuOXYaBC5ePfgbFHagvGVLrs/IpYWFqdr.', 'F', '1997-04-15', 'my_dummy_adrs28', '0900-004-009'),
+('C146', '周78', 'cjEqQATZdf', '6YHf6CQAFn@gmail.com', '$2y$10$CZvvKDn1rYIE3.CcC0wucu/ogOZc2iYQn6kJyNVAhIAWBUlhLQSFq', 'M', '1997-03-25', 'my_dummy_adrs93', '0900-007-001'),
+('C147', '朱58', 'cg8PE7lR6f', 'h5BgLeVmeW@gmail.com', '$2y$10$bbIGDldRvkp2VaB4csr9uuJfvWmgZe/MEGTygcuHNFMe0PiHfnlVe', 'F', '1997-02-24', 'my_dummy_adrs22', '0900-004-008'),
+('C148', '孫35', 'cH2tUMY5ib', 'zKwX7sQQOW@gmail.com', '$2y$10$VvK45G7zkHg9bMD/MkK8weTv9Ep9lUXwGfOAfwv/ZAgmWiZPZ9AAa', 'F', '1997-12-26', 'my_dummy_adrs41', '0900-008-008'),
+('C149', '郭22', 'yUHGJySuKu', 'xwbkjYFnLK@gmail.com', '$2y$10$6C7ZIwRRzih0orVdDPqqduG9dPcd1ongY1I1xYkE4FL5BTFIjDxVe', 'M', '1997-10-26', 'my_dummy_adrs36', '0900-003-005'),
+('C150', '郭74', 'HkPpYmE0oi', 'Vsh0NBgQm8@gmail.com', '$2y$10$aDJf4UhVRZ1KYWnWZ8Xf/OyRfuCnLxTXWXcOb0pdAoKs1Jca.C5CW', 'M', '1997-03-02', 'my_dummy_adrs22', '0900-006-009'),
+('C151', '趙35', 'sd1SZqzkJ0', '4HKskWPlvC@gmail.com', '$2y$10$H.YhfkfG/4WbBg9KwL3NuukqPsgpRtWPbyLXn02M1MfzPYsNodDQy', 'F', '1997-02-20', 'my_dummy_adrs30', '0900-001-001'),
+('C152', '羅81', 'eJuFagCnwn', 'hYqRefyyeC@gmail.com', '$2y$10$MPmBjMiVaIleBewyutSrlORDG4IM9cRnR/uPn2Rr3mbdqe3p9StAu', 'M', '1997-01-07', 'my_dummy_adrs69', '0900-007-001'),
+('C153', '王62', '0tWFzuVuaa', 'WeV1yGXanB@gmail.com', '$2y$10$zxnZTmkgk62xbLWoe/f45O8ahm6cYoN/bt5pPGwkevHSlEXqdbz36', 'M', '1997-02-16', 'my_dummy_adrs23', '0900-005-002'),
+('C154', '徐16', 'qBzMi6kw9a', 'XbfoNOuPIj@gmail.com', '$2y$10$f5fsc7BCvC6Etq39RML2geh1sLieWcv72X/5dS0MK0CeG1FBSbBIu', 'F', '1997-03-07', 'my_dummy_adrs38', '0900-001-009'),
+('C155', '謝44', 'wxnh4p5r9y', 'HAUS4yRmka@gmail.com', '$2y$10$5A.RQzRpvA2QfMf8GlpMDOylKFe0oD5QirFEmwIurZiYqn6NttMRm', 'M', '1997-11-27', 'my_dummy_adrs55', '0900-008-009'),
+('C156', '王96', 'x8fA4gXvkO', 'y1FO1lotHQ@gmail.com', '$2y$10$vNb2KzYPH1gcTt8vgbNLN.ZG4OxCYNk5yKO3QUAO5ywuMSJuw8mSS', 'M', '1997-03-28', 'my_dummy_adrs36', '0900-006-002'),
+('C157', '馬91', 'nOi0mPnvBB', 'eb2o39r5fT@gmail.com', '$2y$10$KisZIBpLC0a41I6GUjvCGuodYLaL6fWsZyBatMNTe8dQrPVnAmkBm', 'F', '1997-01-29', 'my_dummy_adrs63', '0900-007-009'),
+('C158', '馬21', 'Fx0G4z2r8j', '3SPbxNPSIT@gmail.com', '$2y$10$vN9/oi.tNpDPUnUUjI3eO.KssS2USBjbddb/7mBGHBLqJaWj3N6ei', 'F', '1997-07-04', 'my_dummy_adrs58', '0900-007-004'),
+('C159', '梁36', '9XqlwnGTtV', 'GknR7jVHTa@gmail.com', '$2y$10$LqRS91YBhWJLnDHGn4DAKOzBJ9PtzrYqnFMSEnjFPkOp0MPSrM6qm', 'M', '1997-01-16', 'my_dummy_adrs13', '0900-001-002'),
+('C160', '王48', 'tMFuQn35aX', 'KSJkC4CBiP@gmail.com', '$2y$10$Oe6a0KhJGuXwbi8/ML3HZueXzv75T0eZciyLoVho8t6aYEXsm2XpS', 'F', '1997-11-24', 'my_dummy_adrs99', '0900-007-006'),
+('C161', '高28', 'WoeV2W6uPt', 'vuzuJmJu5y@gmail.com', '$2y$10$v7bu21QfUPtZWuTZubhQAOVBtG2KCgkGBM3yuDuabG9EE7yw6NvsC', 'F', '1997-12-19', 'my_dummy_adrs74', '0900-005-003'),
+('C162', '李75', '6NcDENrdqq', 'NjTMOUFo1U@gmail.com', '$2y$10$v6zaEi99nYF0LkqpL.u2zeI407wQ2W/a0C/ZUwjPihtRQSwyYHVbi', 'M', '1997-12-24', 'my_dummy_adrs83', '0900-004-004'),
+('C163', '林84', 'iCu0Gmjotp', 'XjVnH1wpQR@gmail.com', '$2y$10$0BJiYcm2UOYMdbiitMJ/MuepxCd02KcOSwQS45nax0YkuXgghtokm', 'M', '1997-05-06', 'my_dummy_adrs42', '0900-001-006'),
+('C164', '陳86', 'uc1Ar9V9Cr', 'JAo2452QsL@gmail.com', '$2y$10$KJtY9qO9.S4l0SQEkzERyeIeHYOzF131Ys8bY2xH2woGRwrdGxNTa', 'M', '1997-06-23', 'my_dummy_adrs66', '0900-005-009'),
+('C165', '孫29', 'bJ2u0qJPpP', 'B48PvlpQkd@gmail.com', '$2y$10$cSMB38wEFaEQgSyWgVp3O.NOCP4i2xjdjjXHnf9yyKyM2tX7X4/fO', 'M', '1997-04-07', 'my_dummy_adrs39', '0900-009-009'),
+('C166', '劉61', 'fyChlJZvRz', 'J67RjDYtxa@gmail.com', '$2y$10$qGessG5kvJu6mY7wZ8w17etNtYsKhGnSeiaBembxwDyPFcmqgeDjm', 'M', '1997-11-12', 'my_dummy_adrs73', '0900-003-002'),
+('C167', '謝83', 'GBF018Pbs6', 'nrFyeC0t9g@gmail.com', '$2y$10$00gk6j9Z8ym3rfXIXsRL5.TVq5I3lcA1B1SvdILYAJaoFiGYu8fGi', 'M', '1997-06-07', 'my_dummy_adrs59', '0900-005-005'),
+('C168', '徐78', 'ogogevQn5U', 'B284Uinmvp@gmail.com', '$2y$10$8hYccqDTzQNAwdKYpUjYKe.IZMlVFeJEyIpgHBsNsYbFOBwz3c1Mu', 'F', '1997-11-01', 'my_dummy_adrs26', '0900-004-001'),
+('C169', '周36', 'SfYlHm9Sct', 'CrTakzRxN7@gmail.com', '$2y$10$W4dvFvMk/3ic.5ZbWcEOsO6p.nzdi.0NzZyVgMveoOjGXPwN0Efg2', 'M', '1997-03-28', 'my_dummy_adrs8', '0900-003-001'),
+('C170', '周59', 'XLO2lZjRr0', 'ZGFfCUY0Va@gmail.com', '$2y$10$YP9CtR47sZQenffc080GNOcYUppV.qylbu4ay3l6vBqXvyjQiOuH.', 'M', '1997-08-04', 'my_dummy_adrs45', '0900-006-006'),
+('C171', '梁58', 'rqf5NxuGCh', 'HaUWoIvPDz@gmail.com', '$2y$10$ULhatBxWSx5kl0914JP4jOfY3nqeko.qaLo0xBgFP.pgyJ5.jv7ty', 'M', '1997-10-27', 'my_dummy_adrs81', '0900-009-008'),
+('C172', '陳19', 'vPxdsTVJEF', 'FvRNs3y26D@gmail.com', '$2y$10$ovhOBAAjlawQtqCeVQyUme6mNExt1bPT2Uaf..4PdEIBEvljut3K.', 'F', '1997-10-13', 'my_dummy_adrs89', '0900-004-009'),
+('C173', '張11', 'j8A2z2BTSe', 'PXZpKYfuXY@gmail.com', '$2y$10$uoRVRWHLT7nIu15vgh.RNOhD9wBjRw9W2/4j.ycJT1R5xybhryzSK', 'F', '1997-12-11', 'my_dummy_adrs20', '0900-008-004'),
+('C174', '周98', 'wFk8aFmwxI', '1O1WTli2D9@gmail.com', '$2y$10$5FRejSv9sk8MCPDFRkkUxuIlDQ4AVSOpCd9q0qbT4xjiernJJkjdy', 'F', '1997-04-19', 'my_dummy_adrs82', '0900-007-009'),
+('C175', '張25', 'Eidz4KzCoR', 'nLpim4nUky@gmail.com', '$2y$10$pKuMSL4k/dMgOru7M7GLLeGJlGajngIxohjMkmbYLd8BbnI/f3Jie', 'M', '1997-06-29', 'my_dummy_adrs80', '0900-005-002'),
+('C176', '朱81', '2cmkGOoTGx', 'NWII8Kut3x@gmail.com', '$2y$10$fewS38uLsx5R31c9UKUNI.HvqDg4ScZk4RmU5xMfwj0c3FXlx3sCK', 'F', '1997-04-18', 'my_dummy_adrs37', '0900-006-003'),
+('C177', '梁53', 'JS3OdHei68', 'aN986Eik35@gmail.com', '$2y$10$Vg3jkFPxGNroR/dJhIqRUeaAMbojy9kY7GkeBnrGCjir/oaou3R2G', 'M', '1997-10-22', 'my_dummy_adrs72', '0900-002-008'),
+('C178', '徐38', 'nUEZGr9rKS', 'LeWevHO5eI@gmail.com', '$2y$10$7BP7v3vAA48LY4dc82/J1.y5ewLFObxU9EB2tSto1U4mpDgs2jmBS', 'F', '1997-03-24', 'my_dummy_adrs42', '0900-005-005'),
+('C179', '馬81', 'ZCO4Y0kByP', 'TqIjyCmUa2@gmail.com', '$2y$10$4lq2A82z3.3AoCHiwKkiC.3JAM0MINp87GU9bs.Owyo5YG7vKJ5pC', 'M', '1997-05-19', 'my_dummy_adrs39', '0900-003-007'),
+('C180', '林96', '8V6HOPv0gk', 'oqdV5Ejz9B@gmail.com', '$2y$10$9aXSlPUvVlu7QPrwl3d5P.0khUobJ9y.ARylXstpQpu/qKixzgn72', 'M', '1997-05-22', 'my_dummy_adrs89', '0900-004-003'),
+('C181', '羅72', 'JjhstdpE34', 'jbNplJSNFw@gmail.com', '$2y$10$i8QpzUoMjoRVTQZqYlEgP.23Np7qXCaQMYfPh/.QOhyZKhBFCr/zq', 'M', '1997-03-13', 'my_dummy_adrs4', '0900-002-009'),
+('C182', '高59', 'FOCUYGZum3', 'lLwhXELH6J@gmail.com', '$2y$10$fNeOPO2p8BDSW52tP5Xgf.7wbwK735eA3J0ZLA2VBHt4zsgFfjURa', 'M', '1997-09-17', 'my_dummy_adrs92', '0900-006-001'),
+('C183', '何63', '5JYLIQsh14', 'vBBJeerQJE@gmail.com', '$2y$10$lbSkHrFcYHQDSsVkax3OkeoT6qWD4HiydgqnJDQcpxwBJIHsXgmM.', 'M', '1997-12-25', 'my_dummy_adrs85', '0900-009-001'),
+('C184', '高66', 'q7cB2kdB0z', 'C3Zgy4MHeq@gmail.com', '$2y$10$c9aBmGoo7qgt.z7MM7zkHeZjJogrsimMFv46XSjbnPcry40PTDygu', 'M', '1997-06-23', 'my_dummy_adrs20', '0900-005-008'),
+('C185', '徐38', '67s8r2puBy', '8LrIl97cZ6@gmail.com', '$2y$10$0X1tif6vhGIw/pzWT9TMf.0y5/Nuh.g1DOBGoVVmarDgOmTDkKQx2', 'M', '1997-09-11', 'my_dummy_adrs77', '0900-002-007'),
+('C186', '劉37', 'vCaQXcduKL', 'a0JqWKyCxZ@gmail.com', '$2y$10$u8VprKN.Z.GruBdgvdq9UOhMifV17ZFX/rSP2HIF069YzMwqVG0D6', 'M', '1997-09-09', 'my_dummy_adrs25', '0900-009-005'),
+('C187', '馬37', '1R4oFwrdkD', '8UL1UWTHQo@gmail.com', '$2y$10$IYYDyJI0IGBdDtWRAoYHhuyMpvepRx/JNhWw77UVGU2Rc4sN9ri8O', 'M', '1997-07-09', 'my_dummy_adrs79', '0900-007-009'),
+('C188', '鄭91', 'sdjkgKr8zg', 'S5XgGtLzff@gmail.com', '$2y$10$6TZTY3JoK3WEucAr7kzW7ujLn.gFUaGNqCwmwpQeS1sS9JGt/.vKK', 'M', '1997-04-10', 'my_dummy_adrs33', '0900-001-005'),
+('C189', '胡83', '62hLn2z4Tr', 'cNOWYGyR4P@gmail.com', '$2y$10$2Np6.tZoXsJcb.esic5mPOsKPc5UkNkzEH84bivCe1aUxQqUyGDx2', 'F', '1997-10-14', 'my_dummy_adrs84', '0900-002-004'),
+('C190', '馬87', '3yrm2i6gsD', 'YhIDK8ob08@gmail.com', '$2y$10$H72SwLnCWVsMZdFc4h6n2O4Kb7B9Lpjl1CIhfH/yO41B1f4NvtJXu', 'M', '1997-02-04', 'my_dummy_adrs84', '0900-003-002'),
+('C191', '吳32', 'MBVyxnWNXd', '16oJy2I4C0@gmail.com', '$2y$10$tVVi7Z1DbQJ6oYYgTdzg6.ENX.H.Yn3OUHAP.8UVk/IdbBBY8ydSq', 'M', '1997-03-25', 'my_dummy_adrs21', '0900-007-006'),
+('C192', '羅15', '311Gci7zPP', 'xP4h9DfFwM@gmail.com', '$2y$10$KJfoh3Sq14PB8eBpmPEf3uruj02Y98gB3.QwFrkBp71vtSyMjwG26', 'M', '1997-05-30', 'my_dummy_adrs84', '0900-006-005'),
+('C193', '吳32', 'dz3q2mbqGP', 'FhU1PHbTDz@gmail.com', '$2y$10$du//kef.ldLg8tf5ofYNgeKghJ/icPHz9jr8DTcpr5WryKUMGirVq', 'F', '1997-12-16', 'my_dummy_adrs36', '0900-008-007'),
+('C194', '高82', 'Wa1tspeEDq', 'sNKAsjFoI8@gmail.com', '$2y$10$8P5QkotP3uY3HXN/FiMo4OW4k2ny8Yv81HGoM9AYjvGBsSdFfXcMO', 'F', '1997-01-04', 'my_dummy_adrs15', '0900-007-007'),
+('C195', '謝84', '7dCGX2C1f8', 'ujVYe2CFAt@gmail.com', '$2y$10$4dEnPfYtHCw0WdiwEiiCqOgfiZk0JT9p0ZgMPtFfaDWG.qsDkI922', 'M', '1997-01-27', 'my_dummy_adrs11', '0900-003-008'),
+('C196', '楊25', 'zn4OpbNc5B', '3sVZs1qKWc@gmail.com', '$2y$10$z30C0kux4gRKbNMd8DX7OO3dvtrFQEP0nkdUPvbw2iJ/Bz1YlQTRO', 'F', '1997-03-30', 'my_dummy_adrs43', '0900-001-009'),
+('C197', '胡45', 'xnFr3vLTyf', 'xP49PsgwV6@gmail.com', '$2y$10$oEZR0jyQD503sbTjrD3.CeMXWxvFDT2tYuhuR3ycDCLwF.Oyv7k0m', 'F', '1997-04-05', 'my_dummy_adrs33', '0900-008-006'),
+('C198', '馬97', 'epxEXIbWqW', 'aYAyS2lQJi@gmail.com', '$2y$10$8UH46nkEfDMgGrSNDyEsl.NzmOtNkywDZG3R9Xo4H0Aaic/9kgWFm', 'M', '1997-04-08', 'my_dummy_adrs40', '0900-006-008'),
+('C199', '鄭56', 'xImLJyWOdI', 'asC8ncpvuE@gmail.com', '$2y$10$.LaeHsKZlcVhSuODG8XLJesVfcjZs8pYNtxPsEM5ws.BovsU1xJne', 'F', '1997-11-14', 'my_dummy_adrs21', '0900-009-007'),
+('C200', '郭14', 'a70aIsWEgw', '747QWUiEpa@gmail.com', '$2y$10$568NImG1hfTn1cTMEP34CO713PG2GnTowtulplDaTstD1COJKIUmO', 'M', '1997-09-27', 'my_dummy_adrs70', '0900-006-005');
+-- add dummy datas:
 
 -- table顧客: crams
 -- 刪除已存在之重複table
@@ -461,7 +463,7 @@ CREATE TABLE `admins` (
   `adminID` varchar(5) NOT NULL default '',-- Primary key:流水號
   `aName` varchar(20) collate utf8_unicode_ci default NULL, -- 管理員姓名 
   `aAccount` varchar(20) NOT NULL unique, -- 管理員帳號
-  `aPassword` varchar(60) NOT NULL unique, -- 管理員密碼: 加密後可能加長故取60
+  `aPassword` varchar(100) NOT NULL unique, -- 管理員密碼: 加密後可能加長故取60
   `aDepartment` varchar(30) default NULL, -- 管理員部門
   `aTitle` varchar(30) default NULL, -- 管理員職稱
   PRIMARY KEY  (`adminID`)
@@ -470,9 +472,9 @@ CREATE TABLE `admins` (
 
 -- add dummy datas:
 INSERT INTO `admins` VALUES
- ('A001','大名01','adm01','pwd01','部門01','部長')
-,('A002','大名02','adm02','pwd02','部門02','部長')
-,('A003','大名03','adm03','pwd03','部門03','部長');
+ ('A001','大名01','adm01','$2y$10$uKV2BCDw.Vpg9SvkO8IgA.0owhUVHSxHXasoeVUFlrs7AWE2y3xjG','部門01','部長')
+,('A002','大名02','adm02','$2y$10$7BYWnH3yp5WOEGc/hAoOt.t2pJtJrJxoUgRswUe7FztgTq711HoS.','部門02','部長')
+,('A003','大名03','adm03','$2y$10$anNz3OJPg68IQVibkSyvZuzmoLMv.cQjtqWpRcjzxStCLYngQzvOe','部門03','部長');
 
 -- table賣方: sellers
 -- 刪除已存在之重複table
@@ -481,7 +483,7 @@ CREATE TABLE `sellers` (
   `sellerID` varchar(5) NOT NULL default '',-- Primary key:流水號
   `sName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 賣方稱謂
   `sAccount` varchar(20) NOT NULL, -- 賣方帳號
-  `sPassword` varchar(60) NOT NULL, -- 賣方密碼: 加密後可能加長故取60
+  `sPassword` varchar(100) NOT NULL, -- 賣方密碼: 加密後可能加長故取60
   `sAddress` varchar(60) default NULL, -- 賣方地址
   `sPhone` varchar(24) default NULL, -- 賣方電話
   `sMail` varchar(60) default NULL, -- 賣方信箱
@@ -492,12 +494,12 @@ CREATE TABLE `sellers` (
 
 -- add dummy datas:
 INSERT INTO `sellers` VALUES
- ('S001','星巴克','sel01ler','pwd01','my_dummy_adrs01','(99)0000-0001','s001@gmail.com','美國')
-,('S002','露易莎咖啡','sel02ler','pwd02','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
-,('S003','伯朗咖啡','sel03ler','pwd03','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
-,('S004','上島咖啡','sel04ler','pwd04','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','日本')
-,('S005','小樽咖啡','sel05ler','pwd05','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','日本')
-,('S006','資策會咖啡','1234','1234','my_dummy_adrs06','(99)0000-0006','s006@gmail.com','台灣');
+ ('S001','星巴克','sel01ler','$2y$10$veXmDFN1rExJQdGUbTkPiOEc0lUq5H0N0xIuMNDCQa5vap1U3sPHa','my_dummy_adrs01','(99)0000-0001','s001@gmail.com','美國')
+,('S002','露易莎咖啡','sel02ler','$2y$10$oBCfgBb.BzmRrMAruZQIP.kZWH/jn9D.Rbmr8m3WIIwkE7dJ9i4du','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
+,('S003','伯朗咖啡','sel03ler','$2y$10$NNrlO66BPXrK/q942nKR7.9SpKEgYp2W3GaRs75I3v.JDlPnDNAQS','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
+,('S004','上島咖啡','sel04ler','$2y$10$HhsDVl94qKOFtK1l5aAj7OAhapz6ovvedlBXehTgsKc5zvWY3ftg6','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','日本')
+,('S005','小樽咖啡','sel05ler','$2y$10$J0r1yBjU6z1cWVzuftoPzePPsU17ibJBawdgB.R4hUQ0ggP2xBQhm','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','日本')
+,('S006','資策會咖啡','sel06ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs06','(99)0000-0006','s006@gmail.com','台灣');
 
 DROP TABLE IF EXISTS `infomations`;
 CREATE TABLE `infomations` (
@@ -513,26 +515,65 @@ CREATE TABLE `infomations` (
 -- add dummy datas:
 INSERT INTO `infomations` VALUES
  ('I001','咖啡節','星巴克公司為慶祝咖啡節來臨，全館曼特寧買2送1','S001')
-,('I002','新品上市','露易莎咖啡特調瑪奇朵將於3月6日準時開賣','S002')
-,('I003','休館通知','為防治武漢肺炎擴散，伯朗咖啡敦南店將於4月7日至4月9日進行消毒作業暫停營業','S003')
-,('I004','新品上市','上島咖啡深焙咖啡豆將於3月6日準時開賣','S004')
-,('I005','講座通知','小樽咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S005')
-,('I006','夥伴招募','星巴克公司將於6月14日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S001')
+ ,('I002','新品上市','露易莎咖啡特調瑪奇朵將於3月6日準時開賣','S002')
+ ,('I003','休館通知','為防治武漢肺炎擴散，資策會咖啡敦南店將於4月7日至4月9日進行消毒作業暫停營業','S006')
+ ,('I004','新品上市','上島咖啡深焙咖啡豆將於3月7日準時開賣','S004')
+ ,('I005','講座通知','小樽咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S005')
+ ,('I006','夥伴招募','星巴克公司將於6月14日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S001')
 ,('I007','夥伴招募','露易莎咖啡將於7月24日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S002')
 ,('I008','夥伴招募','伯朗咖啡將於7月28日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S003')
-,('I009','試喝會','上島咖啡深焙咖啡豆將於6月5日舉行試喝會','S004')
-,('I010','講座舉辦','小樽咖啡將於8月8日於國家圖書館舉行咖啡產地講座','S005')
+,('I009','試喝會','上島咖啡深焙咖啡將於6月5日舉行試喝會','S004')
+,('I010','講座通知','小樽咖啡將於8月8日於國家圖書館舉行咖啡產地講座','S005')
 ,('I011','試喝會','為獎勵學員辛勞學習，資策會咖啡將5月5日舉行試喝會','S006')
-,('I012','新品上市','星巴克公司冰滴咖啡將於3月6日準時開賣','S001')
-,('I013','休館通知','為防治武漢肺炎擴散，露易莎敦北店將於3月1日至3月3日進行消毒作業暫停營業','S003')
-,('I014','新品上市','伯朗咖啡深焙咖啡豆將於3月6日準時開賣','S003')
+,('I012','新品上市','星巴克公司冰滴咖啡將於4月4日準時開賣','S001')
+,('I013','新品上市','伯朗冰滴咖啡將於4月4日準時開賣','S003')
+,('I014','新品上市','露易莎冰滴咖啡將於4月4日準時開賣','S002')
 ,('I015','講座通知','星巴克公司將於6月7日於國家圖書館舉行咖啡產地講座','S001')
-,('I016','儲備幹部招募','星巴克公司將於6月14日舉行幹部招募，歡迎管理人才加入本公司','S001')
-,('I017','儲備幹部招募','露易莎咖啡將於6月24日舉行幹部招募，歡迎管理人才加入本公司','S002')
-,('I018','儲備幹部招募','上島咖啡將於7月24日舉行幹部招募，歡迎管理人才加入本公司','S004')
-,('I019','試喝會','伯朗咖啡深焙咖啡豆將於6月5日舉行試喝會','S003')
-,('I020','講座舉辦','上島咖啡將於9月8日於國家圖書館舉行咖啡產地講座','S004')
-,('I021','講座舉辦','資策會咖啡將於6月8日於國家圖書館舉行咖啡產地講座','S006');
+,('I016','儲備幹部招募','星巴克公司將於6月14日舉行幹部招募，歡迎優秀人才加入本公司','S001')
+,('I017','儲備幹部招募','露易莎咖啡將於6月24日舉行幹部招募，歡迎優秀人才加入本公司','S002')
+,('I018','儲備幹部招募','上島咖啡將於7月24日舉行幹部招募，歡迎優秀人才加入本公司','S004')
+,('I019','試喝會','伯朗咖啡深焙咖啡將於6月5日舉行試喝會','S003')
+,('I020','講座通知','上島咖啡將於9月8日於國家圖書館舉行咖啡產地講座','S004')
+,('I021','講座通知','資策會咖啡將於6月8日於國家圖書館舉行咖啡產地講座','S006')
+,('I022','咖啡節','露易莎咖啡為慶祝咖啡節來臨，全館曼特寧買2送1','S002')
+,('I023','咖啡節','伯朗咖啡為慶祝咖啡節來臨，全館曼特寧買2送1','S003')
+,('I024','咖啡節','資策會咖啡為慶祝咖啡節來臨，全館曼特寧買2送1','S006')
+,('I025','咖啡節','小樽咖啡為慶祝咖啡節來臨，全館曼特寧買2送1','S005')
+,('I026','咖啡節','上島咖啡為慶祝咖啡節來臨，全館曼特寧買2送1','S004')
+,('I027','新品上市','上島咖啡特調瑪奇朵將於3月6日準時開賣','S004')
+,('I028','新品上市','小樽咖啡特調瑪奇朵將於3月6日準時開賣','S005')
+,('I029','新品上市','資策會咖啡特調瑪奇朵將於3月6日準時開賣','S006')
+,('I030','休館通知','為防治武漢肺炎擴散，小樽咖啡敦南店將於4月7日至4月9日進行消毒作業暫停營業','S005')
+,('I031','休館通知','為防治武漢肺炎擴散，上島咖啡敦南店將於4月7日至4月9日進行消毒作業暫停營業','S004')
+,('I032','休館通知','為防治武漢肺炎擴散，伯朗咖啡敦南店將於4月7日至4月9日進行消毒作業暫停營業','S003')
+,('I033','休館通知','為防治武漢肺炎擴散，露易莎咖啡敦南店將於4月7日至4月9日進行消毒作業暫停營業','S002')
+,('I034','休館通知','為防治武漢肺炎擴散，星巴克公司敦南店將於4月7日至4月9日進行消毒作業暫停營業','S001')
+,('I035','新品上市','星巴克公司深焙咖啡豆將於3月7日準時開賣','S001')
+,('I036','新品上市','露易莎咖啡深焙咖啡豆將於3月7日準時開賣','S002')
+,('I037','新品上市','伯朗咖啡深焙咖啡豆將於3月7日準時開賣','S003')
+,('I038','新品上市','小樽咖啡深焙咖啡豆將於3月7日準時開賣','S005')
+,('I039','新品上市','資策會咖啡深焙咖啡豆將於3月7日準時開賣','S006')
+,('I040','講座通知','資策會咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S006')
+,('I041','講座通知','上島咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S004')
+,('I042','講座通知','伯朗咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S003')
+,('I043','講座通知','露易莎咖啡將於4月7日於國家圖書館舉行咖啡產地講座','S002')
+,('I044','講座通知','星巴克公司將於4月7日於國家圖書館舉行咖啡產地講座','S001')
+,('I045','夥伴招募','上島咖啡將於6月14日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S004')
+,('I046','夥伴招募','小樽咖啡將於7月24日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S005')
+,('I047','夥伴招募','資策會咖啡將於7月28日舉行人才招募，歡迎有興趣的民眾加入我們的行列','S006')
+,('I048','試喝會','星巴克公司深焙咖啡將於6月5日舉行試喝會','S001')
+,('I049','試喝會','露易莎咖啡將5月5日舉行試喝會','S002')
+,('I050','試喝會','小樽咖啡深焙咖啡將於6月5日舉行試喝會','S005')
+,('I051','講座通知','露易莎咖啡將於9月8日於國家圖書館舉行咖啡產地講座','S002')
+,('I052','講座通知','伯朗咖啡將於6月8日於國家圖書館舉行咖啡產地講座','S003')
+,('I053','新品上市','上島冰滴咖啡將於4月4日準時開賣','S004')
+,('I054','新品上市','小樽冰滴咖啡將於4月4日準時開賣','S005')
+,('I055','新品上市','資策會冰滴咖啡將於4月4日準時開賣','S006')
+,('I056','儲備幹部招募','伯朗咖啡將於6月14日舉行幹部招募，歡迎優秀人才加入本公司','S003')
+,('I057','儲備幹部招募','上島咖啡將於6月24日舉行幹部招募，歡迎優秀人才加入本公司','S005')
+,('I058','儲備幹部招募','小樽咖啡將於7月24日舉行幹部招募，歡迎優秀人才加入本公司','S006')
+,('I059','新品上市','星巴克公司特調瑪奇朵將於3月6日準時開賣','S001')
+,('I060','新品上市','伯朗咖啡特調瑪奇朵將於3月6日準時開賣','S003');
 
 
 DROP TABLE IF EXISTS `discounts`;
@@ -542,6 +583,8 @@ CREATE TABLE `discounts` (
   `disDescrip` varchar(250) NOT NULL, -- 折扣描述
   `sellerID` varchar(5) NOT NULL, -- 賣方編碼
   `Discount` float NOT NULL, -- 折扣
+  `startDate` date default NULL, -- 開始日期:
+  `overDate` date default NULL, -- 結束日期:
   
   
   PRIMARY KEY  (`disID`)
@@ -550,63 +593,42 @@ CREATE TABLE `discounts` (
 
 -- add dummy datas:
 INSERT INTO `discounts` VALUES
- ('D001','曼特寧優惠','星巴克公司現時曼特寧咖啡75折','S001','0.75')
-,('D002','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75')
-,('D003','拿鐵優惠','伯朗咖啡現時拿鐵咖啡85折','S003','0.85')
-,('D004','瑪奇朵優惠','上島咖啡6月6日起瑪奇朵咖啡85折','S004','0.85')
-,('D005','瑪奇朵優惠','小樽咖啡現時瑪奇朵咖啡85折','S005','0.85')
-,('D006','瑪奇朵優惠','露易莎咖啡4月3日起瑪奇朵咖啡75折','S002','0.75')
-,('D007','瑪奇朵優惠','伯朗咖啡現時瑪奇朵咖啡85折','S003','0.85')
-,('D008','拿鐵優惠','上島咖啡6月6日起拿鐵咖啡85折','S004','0.85')
-,('D009','拿鐵優惠','星巴克公司現時拿鐵咖啡85折','S001','0.85')
-,('D010','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75')
-,('D011','曼特寧優惠','伯朗咖啡現時曼特寧咖啡85折','S003','0.85')
-,('D012','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85')
-,('D013','冰滴咖啡優惠','小樽咖啡現時冰滴咖啡85折','S005','0.85')
-,('D014','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85')
-,('D015','冰摩卡優惠','小樽咖啡現時冰摩卡咖啡85折','S005','0.85')
-,('D016','冰摩卡優惠','露易莎咖啡4月3日起冰摩卡咖啡75折','S002','0.75')
-,('D017','冰摩卡優惠','星巴克公司現時冰摩卡咖啡85折','S001','0.85')
-,('D018','利比瑞卡優惠','上島咖啡6月6日起利比瑞卡咖啡85折','S004','0.85')
-,('D019','利比瑞卡優惠','小樽咖啡現時利比瑞卡咖啡85折','S005','0.85')
-,('D020','利比瑞卡優惠','資策會咖啡現時利比瑞卡咖啡85折','S006','0.85');
-
-DROP TABLE IF EXISTS `discounts2`;
-CREATE TABLE `discounts2` (
-  `disID` varchar(10) NOT NULL default '',-- Primary key:流水號
-  `disName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 折扣名稱
-  `disDescrip` varchar(250) NOT NULL, -- 折扣描述
-  `sellerID` varchar(5) NOT NULL, -- 賣方編碼
-  `Discount` float NOT NULL, -- 折扣
-  `startDate` date default NULL, -- 開始日期:
-  `overDate` date default NULL, -- 結束日期:
-  
-  PRIMARY KEY  (`disID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
--- 預設儲存引擎: InnoDB(after php5.5)
-
--- add dummy datas:
-INSERT INTO `discounts2` VALUES
- ('D001','曼特寧優惠','星巴克公司現時曼特寧咖啡75折','S001','0.75','2019-02-18', '2019-02-20')
-,('D002','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75','2019-02-18', '2019-02-20')
-,('D003','拿鐵優惠','伯朗咖啡現時拿鐵咖啡85折','S003','0.85','2019-02-18', '2019-02-20')
-,('D004','瑪奇朵優惠','上島咖啡6月6日起瑪奇朵咖啡85折','S004','0.85','2019-02-18', '2019-02-20')
-,('D005','瑪奇朵優惠','小樽咖啡現時瑪奇朵咖啡85折','S005','0.85','2019-02-18', '2019-02-20')
-,('D006','瑪奇朵優惠','露易莎咖啡4月3日起瑪奇朵咖啡75折','S002','0.75','2019-02-18', '2019-02-20')
-,('D007','瑪奇朵優惠','伯朗咖啡現時瑪奇朵咖啡85折','S003','0.85','2019-02-18', '2019-02-20')
-,('D008','拿鐵優惠','上島咖啡6月6日起拿鐵咖啡85折','S004','0.85','2019-02-18', '2019-02-20')
-,('D009','拿鐵優惠','星巴克公司現時拿鐵咖啡85折','S001','0.85','2019-02-18', '2019-02-20')
-,('D010','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75','2019-02-18', '2019-02-20')
-,('D011','曼特寧優惠','伯朗咖啡現時曼特寧咖啡85折','S003','0.85','2019-02-18', '2019-02-20')
-,('D012','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85','2019-02-18', '2019-02-20')
-,('D013','冰滴咖啡優惠','小樽咖啡現時冰滴咖啡85折','S005','0.85','2019-02-18', '2019-02-20')
-,('D014','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85','2019-02-18', '2019-02-20')
-,('D015','冰摩卡優惠','小樽咖啡現時冰摩卡咖啡85折','S005','0.85','2019-02-18', '2019-02-20')
-,('D016','冰摩卡優惠','露易莎咖啡4月3日起冰摩卡咖啡75折','S002','0.75','2019-02-18', '2019-02-20')
-,('D017','冰摩卡優惠','星巴克公司現時冰摩卡咖啡85折','S001','0.85','2019-02-18', '2019-02-20')
-,('D018','利比瑞卡優惠','上島咖啡6月6日起利比瑞卡咖啡85折','S004','0.85','2019-02-18', '2019-02-20')
-,('D019','利比瑞卡優惠','小樽咖啡現時利比瑞卡咖啡85折','S005','0.85','2019-02-18', '2019-02-20')
-,('D020','利比瑞卡優惠','資策會咖啡現時利比瑞卡咖啡85折','S006','0.85','2019-02-18', '2019-02-20');
+('D001','曼特寧優惠','星巴克公司3月5日起曼特寧咖啡75折','S001','0.75','2020-03-05', '2020-03-08')
+,('D002','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75','2020-04-03', '2020-04-06')
+,('D003','拿鐵優惠','伯朗咖啡3月6日起拿鐵咖啡85折','S003','0.85','2020-03-06', '2020-03-08')
+,('D004','瑪奇朵優惠','上島咖啡6月6日起瑪奇朵咖啡85折','S004','0.85','2020-06-06', '2020-06-09')
+,('D005','瑪奇朵優惠','小樽咖啡4月3日起瑪奇朵咖啡85折','S005','0.85','2020-04-03', '2020-04-06')
+,('D006','瑪奇朵優惠','露易莎咖啡4月3日起瑪奇朵咖啡75折','S002','0.75','2020-04-03', '2020-04-06')
+,('D007','瑪奇朵優惠','伯朗咖啡4月3日起瑪奇朵咖啡85折','S003','0.85','2020-04-03', '2020-04-06')
+,('D008','拿鐵優惠','上島咖啡6月6日起拿鐵咖啡85折','S004','0.85','2020-06-06', '2020-06-09')
+,('D009','拿鐵優惠','星巴克公司3月6日起拿鐵咖啡85折','S001','0.85','2020-03-06', '2020-03-08')
+,('D010','曼特寧優惠','上島咖啡4月3日起曼特寧咖啡75折','S004','0.75','2020-04-03', '2020-04-06')
+,('D011','曼特寧優惠','伯朗咖啡3月5日起曼特寧咖啡85折','S003','0.85','2020-03-05', '2020-03-08')
+,('D012','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85','2020-06-06', '2020-06-09')
+,('D013','冰滴咖啡優惠','小樽咖啡6月6日冰滴咖啡85折','S005','0.85','2020-06-06', '2020-06-08')
+,('D014','冰滴咖啡優惠','星巴克公司6月6日起冰滴咖啡85折','S001','0.85','2020-06-06', '2020-06-09')
+,('D015','冰摩卡優惠','小樽咖啡4月3日起冰摩卡咖啡85折','S005','0.85','2020-04-03', '2020-04-06')
+,('D016','冰摩卡優惠','露易莎咖啡4月3日起冰摩卡咖啡75折','S002','0.75','2020-04-03', '2020-04-06')
+,('D017','冰摩卡優惠','星巴克公司4月3日起冰摩卡咖啡85折','S001','0.85','2020-04-03', '2020-04-06')
+,('D018','利比瑞卡優惠','上島咖啡6月8日起利比瑞卡咖啡85折','S004','0.85','2020-06-08', '2020-06-12')
+,('D019','利比瑞卡優惠','小樽咖啡6月8日起利比瑞卡咖啡85折','S005','0.85','2020-06-08', '2020-06-12')
+,('D020','利比瑞卡優惠','資策會咖啡6月8日起利比瑞卡咖啡85折','S006','0.85','2020-06-08', '2020-06-12')
+,('D021','曼特寧優惠','小樽咖啡3月5日起曼特寧咖啡85折','S005','0.85','2020-03-05', '2020-03-08')
+,('D022','曼特寧優惠','資策會咖啡3月5日起曼特寧咖啡85折','S006','0.85','2020-03-05', '2020-03-08')
+,('D023','拿鐵優惠','露易莎咖啡3月6日起拿鐵咖啡85折','S002','0.85','2020-03-06', '2020-03-08')
+,('D024','拿鐵優惠','小樽咖啡6月6日起拿鐵咖啡85折','S005','0.85','2020-06-06', '2020-06-09')
+,('D025','拿鐵優惠','資策會咖啡3月6日起拿鐵咖啡85折','S006','0.85','2020-03-06', '2020-03-08')
+,('D026','瑪奇朵優惠','星巴克公司4月3日起瑪奇朵咖啡75折','S001','0.75','2020-04-03', '2020-04-06')
+,('D027','瑪奇朵優惠','資策會咖啡4月3日起瑪奇朵咖啡85折','S006','0.85','2020-04-03', '2020-04-06')
+,('D028','冰滴咖啡優惠','露易莎咖啡6月6日起冰滴咖啡85折','S002','0.85','2020-06-06', '2020-06-09')
+,('D029','冰滴咖啡優惠','伯朗咖啡6月6日冰滴咖啡85折','S003','0.85','2020-06-06', '2020-06-08')
+,('D030','冰滴咖啡優惠','資策會咖啡6月6日起冰滴咖啡85折','S006','0.85','2020-06-06', '2020-06-09')
+,('D031','冰摩卡優惠','伯朗咖啡4月3日起冰摩卡咖啡85折','S003','0.85','2020-04-03', '2020-04-06')
+,('D032','冰摩卡優惠','上島咖啡4月3日起冰摩卡咖啡75折','S004','0.75','2020-04-03', '2020-04-06')
+,('D033','冰摩卡優惠','資策會咖啡4月3日起冰摩卡咖啡85折','S006','0.85','2020-04-03', '2020-04-06')
+,('D034','利比瑞卡優惠','星巴克公司6月8日起利比瑞卡咖啡85折','S001','0.85','2020-06-08', '2020-06-12')
+,('D035','利比瑞卡優惠','露易莎咖啡6月8日起利比瑞卡咖啡85折','S002','0.85','2020-06-08', '2020-06-12')
+,('D036','利比瑞卡優惠','伯朗咖啡6月8日起利比瑞卡咖啡85折','S003','0.85','2020-06-08', '2020-06-12');
 
 -- table訂單: orders
 -- 刪除已存在之重複table
