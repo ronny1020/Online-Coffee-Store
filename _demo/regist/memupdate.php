@@ -178,7 +178,7 @@ function checkmail(sMail) {
             <hr size="1" />
             <p class="heading">帳號資料</p>
             <p>&nbsp;使用帳號：
-			<input class="form-control" value="<?php echo $row_RecMember["sAccount"];?>"></p></input><br>
+			<input class="form-control" value="<?php echo $row_RecMember["sAccount"];?>" readonly></p></input><br>
             <p>&nbsp;使用密碼：
             <input name="sPassword" type="password" class="form-control" id="sPassword"><br>
     		<input name="sPasswordo" type="hidden" id="sPasswordo" value="<?php echo $row_RecMember["sPassword"];?>"></p>
