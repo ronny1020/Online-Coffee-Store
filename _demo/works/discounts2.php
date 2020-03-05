@@ -1,5 +1,6 @@
 <?php
 session_start();
+// error_reporting(0);
 
 //Prevents direct connection.
 if ($_SESSION['username'] == '' || $_SESSION['AorS'] != 1) {
@@ -24,9 +25,9 @@ if (isset($_GET["page"])) {
 }
 
 //orderby
-if (isset($_POST["infoID_ASC"])||isset($_POST["infoName_ASC"])||isset($_POST["infoDescrip_ASC"])) {
+if (isset($_POST["disID_ASC"])||isset($_POST["disName_ASC"])||isset($_POST["disDescrip_ASC"])||isset($_POST["Discount_ASC"])||isset($_POST["startDate_ASC"])||isset($_POST["overDate_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])) {
+} else if (isset($_POST["disID_DESC"])||isset($_POST["disName_DESC"])||isset($_POST["disDescrip_DESC"])||isset($_POST["Discount_DESC"])||isset($_POST["startDate_DESC"])||isset($_POST["overDate_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if(isset($_SESSION["ASCorDESC"])) {
 } else {
@@ -35,15 +36,21 @@ if (isset($_POST["infoID_ASC"])||isset($_POST["infoName_ASC"])||isset($_POST["in
 $ASCorDESC = $_SESSION["ASCorDESC"] ;
 
 
-if (isset($_POST["infoID_ASC"])||isset($_POST["infoID_DESC"])){
-    $_SESSION["orderby"]="infoID";
-} else if (isset($_POST["infoName_ASC"])||isset($_POST["infoName_DESC"])){
-    $_SESSION["orderby"]="infoName";
-} else if (isset($_POST["infoDescrip_ASC"])||isset($_POST["infoDescrip_DESC"])){
-    $_SESSION["orderby"]="infoDescrip";
+if (isset($_POST["disID_ASC"])||isset($_POST["disID_DESC"])){
+    $_SESSION["orderby"]="disID";
+} else if (isset($_POST["disName_ASC"])||isset($_POST["disName_DESC"])){
+    $_SESSION["orderby"]="disName";
+} else if (isset($_POST["disDescrip_ASC"])||isset($_POST["disDescrip_DESC"])){
+    $_SESSION["orderby"]="disDescrip";
+} else if (isset($_POST["Discount_ASC"])||isset($_POST["Discount_DESC"])){
+  $_SESSION["orderby"]="Discount";
+}  else if (isset($_POST["startDate_ASC"])||isset($_POST["startDate_DESC"])){
+    $_SESSION["orderby"]="startDate";
+} else if (isset($_POST["overDate_ASC"])||isset($_POST["overDate_DESC"])){
+    $_SESSION["orderby"]="overDate";
 } else if(isset($_SESSION["orderby"])) {
 } else {
-    $_SESSION["orderby"]="infoID";
+    $_SESSION["orderby"]="disID";
 }
 $orderby = $_SESSION["orderby"];
 
@@ -76,7 +83,7 @@ $userID="";
 while ($ID = mysqli_fetch_assoc($findID)){
     $userID = $ID["sellerID"];
 }
-$total_num_rows = mysqli_num_rows(mysqli_query($link,"select infoID from coffee.infomations WHERE sellerID='$userID';"));
+$total_num_rows = mysqli_num_rows(mysqli_query($link,"select disID from coffee.discounts2 WHERE sellerID='$userID';"));
 $lastPage=floor($total_num_rows/$rowNum)+1;
 $tableOffSet = $rowNum * ($page-1);
 $showDataStartFrom=$tableOffSet+1;
@@ -92,7 +99,7 @@ foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
         $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.infomations WHERE infoID IN ('$deleteItem')
+        DELETE FROM coffee.discounts2 WHERE disID IN ('$deleteItem')
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
@@ -112,136 +119,80 @@ if (isset($_POST["deleteSelected"])) {
     }
     $selectedList = ltrim($selectedList, "!,");
     $deleteSelectedCommandText = <<<SqlQuery
-  DELETE FROM coffee.infomations WHERE infoID IN ($selectedList)
+  DELETE FROM coffee.discounts2 WHERE disID IN ($selectedList)
   SqlQuery;
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+
 if (isset($_POST['modal_submit'])) {
-    $tmp_iid = $_POST['iid'];
-    $tmp_ifn = $_POST['ifn'];
-    $tmp_ifd = $_POST['ifd'];
-   
+    $tmp_did = $_POST['did'];
+    $tmp_nam = $_POST['nam'];
+    $tmp_ddp = $_POST['ddp'];
+    $tmp_dct = $_POST['dct'];
+    $tmp_std = $_POST['std'];
+    $tmp_ovd = $_POST['ovd'];
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.infomations VALUES ('$tmp_iid','$tmp_ifn','$tmp_ifd','$userID')
+    insert into coffee.discounts2 VALUES ('$tmp_did','$tmp_nam','$tmp_ddp', '$userID' ,'$tmp_dct','$tmp_std','$tmp_ovd')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
-    
+
 }
 
 if (isset($_POST['modal_submit2'])) {
     $tmp_did2 = $_POST['did2'];
     $tmp_nam2 = $_POST['nam2'];
     $tmp_ddp2 = $_POST['ddp2'];
-   
+    $tmp_dct2 = $_POST['dct2'];
+    $tmp_std2 = $_POST['std2'];
+    $tmp_ovd2 = $_POST['ovd2'];
     
-	$sql_query = "UPDATE infomations SET infoName='$tmp_nam2', infoDescrip='$tmp_ddp2' WHERE sellerID='$userID' AND infoID='$tmp_did2'";   
+	$sql_query = "UPDATE discounts2 SET disName='$tmp_nam2', disDescrip='$tmp_ddp2', Discount='$tmp_dct2', startDate='$tmp_std2', overDate='$tmp_ovd2' WHERE sellerID='$userID' AND disID='$tmp_did2'";   
 	$stmt = $link -> prepare($sql_query);
     $stmt -> execute();
 	$stmt -> close();
 	// $link -> close();
 }
 
-$query_RecMember = "SELECT * FROM infomations WHERE sellerID='$userID'";
+$query_RecMember = "SELECT * FROM discounts2 WHERE sellerID='$userID'";
 $RecMember = $link->query($query_RecMember);	
 $row_RecMember = $RecMember->fetch_assoc();
+
 
 // search function
 if (isset($_POST["startSearch"])) {
     if($_POST["searchKeyword"]!=""){
-        $_SESSION["infomation_searchKeyword"] = $_POST["searchKeyword"];
+        $_SESSION["discount_searchKeyword"] = $_POST["searchKeyword"];
     }
-    $_SESSION["infomation_searchBy"] = $_POST["searchBy"];
-    header('location:infomations.php');
+    $_SESSION["discount_searchBy"] = $_POST["searchBy"];
+    header('location:discounts2.php');
 }
 
 // clear search
 if (isset($_POST["clearSearch"])) {
-    unset($_SESSION["infomation_searchKeyword"]);
-    unset($_SESSION["infomation_searchBy"]);
-    header('location:infomations.php');
+    unset($_SESSION["discount_searchKeyword"]);
+    unset($_SESSION["discount_searchBy"]);
+    header('location:discounts2.php');
 }
 $searchComment="";
 
-if(isset($_SESSION["infomation_searchKeyword"])) {
-    $searchKeyword=$_SESSION["infomation_searchKeyword"];
-    if($_SESSION["infomation_searchBy"]=="infoName"){
-        $searchComment="and infoName like '%$searchKeyword%'";
-    }else if($_SESSION["infomation_searchBy"]=="infoDescrip"){
-        $searchComment="and infoDescrip like '%$searchKeyword%'";
+if(isset($_SESSION["discount_searchKeyword"])) {
+    $searchKeyword=$_SESSION["discount_searchKeyword"];
+    if($_SESSION["discount_searchBy"]=="disName"){
+        $searchComment="and disName like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="Discount"){
+        $searchComment="and Discount like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="disDescrip"){
+        $searchComment="and disDescrip like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="startDate"){
+        $searchComment="and startDate like '%$searchKeyword%'";
+    }else if($_SESSION["discount_searchBy"]=="overDate"){
+        $searchComment="and overDate like '%$searchKeyword%'";
     }
     
 }
-
-// export selected data
-if (isset($_POST["exportSelected"])) {
-
-    $selectedList="('";
-    foreach ($_POST as $i => $j) {
-        if (substr($i, 0, 8) == "selected") {
-            $selectedItem = ltrim($i, "selected");
-            $selectedList.=$selectedItem."','";
-        }
-    }
-    $selectedList=rtrim($selectedList,",");
-    $selectedList.="')";
-    echo $selectedList;
-
-    if($selectedList = "('')"){
-        // header('location:' . $_SERVER['REQUEST_URI'] . '');
-    }
-    
-
-    $exportComment="select infoID, infoName, infoDescrip, sellerID from coffee.infomations 
-    where sellerID='$userID' and infoID in $selectedList ORDER BY infoID;";
-   
-    $exportResult = mysqli_query($link, $exportComment);
-    $columns_total = mysqli_num_fields($exportResult);
-    $exportResult_exist = mysqli_num_rows($exportResult)>0;
-    
-
-    if($exportResult_exist){
-        // Get The Field Name
-        $output ="";
-        for($i = 0; $i < $columns_total; $i++){
-            $heading = mysqli_fetch_field_direct($exportResult, $i);
-            $output .= '"' . $heading->name . '",';
-        }
-        $output .="\n";
-        
-        // Get Records from the table
-
-        while($row = mysqli_fetch_assoc($exportResult)){
-    
-        $output .='"' . $row["infoID"] . '",';
-        $output .='"' . $row["infoName"] . '",';
-        $output .='"' . $row["infoDescrip"] . '",';
-        $output .='"' . $row["sellerID"] . '",';
-        $output .="\n";
-        }
-        
-
-        
-        $filename = "InfomationList". date('Y-m-d H:i:s').".csv";
-        header('Content-Encoding: UTF-8');
-        header("Content-Type: text/csv; charset=UTF-8");
-        header('Content-Disposition: attachment; filename=' . $filename);
-        echo "\xEF\xBB\xBF";
-        echo $output;
-  
-    }
-    // Download the file
-
-
-
- 
-    exit;
-
-  // header('location:' . $_SERVER['REQUEST_URI'] . '');
-}
-
 
 ?>
 
@@ -276,7 +227,7 @@ if (isset($_POST["exportSelected"])) {
     <?php include '../parts/head.php';?>
 
     <!-- Start your code here -->
-    <div class="main p-5">
+<div class="main p-5">
 
     <form class="card p-3 mb-5" method="POST">
             <div class="w-50 mx-auto">
@@ -286,13 +237,22 @@ if (isset($_POST["exportSelected"])) {
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
                     <select name="searchBy">
-                        <option value="infoName">
-                        資訊名稱
+                        <option value="disName">
+                            優惠名稱
                         </option>
-                       
-                        <option value="infoDescrip">
-                        資訊內容
+                        <option value="disDescrip">
+                            優惠內容
                         </option>
+                        <option value="Discount">
+                            折數    
+                        </option>
+                        <option value="startDate">
+                            開始日期    
+                        </option>
+                        <option value="overDate">
+                            結束日期    
+                        </option>
+                        
                         
                     </select>
                 </div>
@@ -300,8 +260,8 @@ if (isset($_POST["exportSelected"])) {
                 <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
                 <p class="mt-3">
                     <?php 
-                    if(isset($_SESSION["infomation_searchKeyword"])){
-                        echo "您正在搜尋：".$_SESSION["infomation_searchKeyword"];
+                    if(isset($_SESSION["discount_searchKeyword"])){
+                        echo "您正在搜尋：".$_SESSION["discount_searchKeyword"];
                     }                    
                      ?>
                 </p>
@@ -311,12 +271,10 @@ if (isset($_POST["exportSelected"])) {
 
 
 
-
         <form method='post' class="card p-3">
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
-                    <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
                     <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
 
@@ -347,33 +305,63 @@ if (isset($_POST["exportSelected"])) {
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0 ">    
-                                <p class="m-1">資訊編號</p>
+                                <p class="m-1">優惠編號</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="infoID_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="infoID_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="disID_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="disID_ASC">
                                 </div>
                             </div>
                         </th>
                   
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">資訊名稱</p>
+                                <p class="m-1">優惠名稱</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="" name="infoName_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="" name="infoName_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC"  value=""  name="disName_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
                                 </div>
                             </div>
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">資訊內容</p>
+                                <p class="m-1">優惠內容</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="" name="infoDescript_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="" name="infoDescript_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC"  value=""  name="disDescrip_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC"  value=""  name="disDescrip_ASC">
                                 </div>
                             </div>
                         </th>
                         
+                        <th>
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">折數</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="Discount_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="Discount_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">開始日期</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="startDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="startDate_ASC">
+                                </div>
+                            </div>
+                        </th>
+
+                        <th>
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">結束日期</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="overDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="overDate_ASC">
+                                </div>
+                            </div>
+                        </th>
+
                         </th>
                         <th>                        
                 </thead>
@@ -384,8 +372,10 @@ if (isset($_POST["exportSelected"])) {
 // write table
 
 $commandText = <<<SqlQuery
-                    select infoID, infoName, infoDescrip, sellerID from coffee.infomations where sellerID='$userID' $searchComment ORDER BY infoID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select disID, disName, disDescrip, Discount, startDate, overDate, sellerID from coffee.discounts2 where sellerID='$userID' $searchComment ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
+
+
 $result = mysqli_query($link, $commandText);
 
 while ($row = mysqli_fetch_assoc($result)):
@@ -394,19 +384,29 @@ while ($row = mysqli_fetch_assoc($result)):
 
                     <tr>
                         <td>
-                            <input type="checkbox" name="<?php echo "selected" . $row["infoID"] ?>"
+                            <input type="checkbox" name="<?php echo "selected" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
-                        <td id="<?php echo $row["infoID"]."infoID" ?>"><?php echo $row["infoID"] ?></td>
-                        <td id="<?php echo $row["infoID"]."infoName" ?>"><?php echo $row["infoName"] ?></td>
-                        <td id="<?php echo $row["infoID"]."infoDescrip" ?>"><?php echo $row["infoDescrip"] ?></td>
+                        <td id="<?php echo $row["disID"]."disID" ?>"><?php echo $row["disID"] ?></td>
+                        <td id="<?php echo $row["disID"]."disName" ?>"><?php echo $row["disName"] ?></td>
+                        <td id="<?php echo $row["disID"]."disDescrip" ?>"><?php echo $row["disDescrip"] ?></td>
+                        <td id="<?php echo $row["disID"]."Discount" ?>"><?php echo $row["Discount"] ?></td>
+                        <td id="<?php echo $row["disID"]."startDate" ?>"><?php echo $row["startDate"] ?></td>
+                        <td id="<?php echo $row["disID"]."overDate" ?>"><?php echo $row["overDate"] ?></td>
+                        
+
+
+
+
+
+                        
                         
                         <td class="p-0">
                         <div class="right_btn" align="center">
-                            <input type="submit" value="刪除" name="<?php echo "delete" . $row["infoID"] ?>"
+                            <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                                <input type='button' value="編輯" name="<?php echo "edit" . $row["infoID"] ?>"
-                        class="btn btn-primary mb-3" onclick="throwinmodal_INFO(<?php echo "'".$row['infoID']."'"?>)">
+                                <input type='button' value="編輯" name="<?php echo "edit" . $row["disID"] ?>"
+                        class="btn btn-primary mb-3" onclick="throwinmodal_DIS(<?php echo "'".$row['disID']."'"?>)">
                         </div>
                         </td>
                     </tr>
@@ -420,41 +420,42 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="d-flex justify-content-center align-items-center flex-column  m-5">
         <!-- page select -->
         <div class="m-3">
-            <a class='m-2 btn btn-info' href='infomations.php?page=1'>第一頁</a>
-            <a class='m-2 btn btn-info' href='infomations.php?page=<?php echo ($page<=1)? "1" : $previousPage; ?>'>上一頁</a>
-            <a class='m-2 btn btn-info' href='infomations.php?page=<?php echo ($page>=$lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
-            <a class='m-2 btn btn-info' href='infomations.php?page=<?php echo $lastPage;     ?>'>最尾頁</a>
+            <a class='m-2 btn btn-info' href='discounts.php?page=1'>第一頁</a>
+            <a class='m-2 btn btn-info' href='discounts.php?page=<?php echo ($page<=1)? "1" : $previousPage; ?>'>上一頁</a>
+            <a class='m-2 btn btn-info' href='discounts.php?page=<?php echo ($page>=$lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
+            <a class='m-2 btn btn-info' href='discounts.php?page=<?php echo $lastPage;     ?>'>最尾頁</a>
         </div>
             <div>
             <?php
             for($i=1 ; $i<=3 && $i<=$lastPage ; $i++ ){
-                echo " <a class='m-2' href='infomations.php?page=$i'>$i</a>";
+                echo " <a class='m-2' href='discounts.php?page=$i'>$i</a>";
             }
             if($page<=6){
                 for($i=4 ; $i<=($page+2)&& $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='infomations.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='discounts.php?page=$i'>$i</a>";
                 }               
             }else{
                 echo "<span>......</span>";
                 for($i=($page-2)  ; $i<=($page+2)&& $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='infomations.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='discounts.php?page=$i'>$i</a>";
                 }
             }
             if($lastPage-$page<=5){
                 for($i=($page+3) ;  $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='infomations.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='discounts.php?page=$i'>$i</a>";
                 }               
             }else{
                 echo "<span>......</span>";
                 for($i=($lastPage-2)  ; $i<=$lastPage ; $i++ ){
-                    echo " <a class='m-2' href='infomations.php?page=$i'>$i</a>";
+                    echo " <a class='m-2' href='discounts.php?page=$i'>$i</a>";
                 }
             }
         
             ?>
             </div>
 
-            <iframe name="thisframe"></iframe>
+
+<iframe name="thisframe"></iframe>
 <!-- Modal -->
 <div class="modal fade" id="myModal">
 <div class="modal-dialog">
@@ -470,15 +471,23 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>資訊編號:<input type="text" name='iid'>
+                    <th>優惠編號:<input type="text" name='did'>
                     </th>
                     <hr>
-                    <th>資訊名稱: <input type="text" name='ifn'></th>
+                    <th>優惠名稱: <input type="text" name='nam'></th>
                     <hr>
-                    <th>資訊內容: <input type="text" name='ifd'>
+                    <th>優惠內容: <input type="text" name='ddp'>
                     </th>
                     <hr>
-                    
+                    <th>折數:<input type="text" name='dct'>
+                    </th>
+                    <hr>
+                    <th>開始日期:<input type="date" name='std'>
+                    </th>
+                    <hr>
+                    <th>結束日期:<input type="date" name='ovd'>
+                    </th>
+                    <hr>
                     
             </tr>
         </div>
@@ -508,15 +517,23 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>資訊編號:<input type="text" name='did2' id='did2' readonly>
+                    <th>優惠編號:<input type="text" name='did2' id='did2' readonly>
                     </th>
                     <hr>
-                    <th>資訊名稱: <input type="text" name='nam2' id='nam2' ></th>
+                    <th>優惠名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>資訊內容: <input type="text" name='ddp2' id='ddp2' >
+                    <th>優惠內容: <input type="text" name='ddp2' id='ddp2'>
                     </th>
                     <hr>
-                    
+                    <th>折數:<input type="text" name='dct2'  id='dct2'>
+                    </th>
+                    <hr>
+                    <th>開始日期:<input type="date" name='std2'  id='std2'>
+                    </th>
+                    <hr>
+                    <th>結束日期:<input type="date" name='ovd2'  id='ovd2'>
+                    </th>
+                    <hr>
                     
             </tr>
         </div>
@@ -531,9 +548,12 @@ while ($row = mysqli_fetch_assoc($result)):
 </div>
 
 
-</div>
-</div>
 
+
+        </div>
+
+    </div>
+</div>
     <!-- End your code here. -->
     <?php include '../parts/footer.php';?>
 
