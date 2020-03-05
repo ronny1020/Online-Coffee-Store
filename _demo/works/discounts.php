@@ -343,9 +343,10 @@ if (isset($_POST["exportSelected"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
-                    <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
                     <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
+                    <input type="submit" value="匯出勾選" class="btn btn-success ml-3 mb-3" name="exportSelected">
+                    <input type="button" value="匯入資料" class="btn btn-info ml-3 mb-3" onclick="importDataUpload()">
 
                 <div class='float-right'>
                     <span class="mr-5">
@@ -623,6 +624,14 @@ while ($row = mysqli_fetch_assoc($result)):
         </div>
 
     </div>
+</div>
+
+
+<div id="popUp_window" class="window_close">
+    <div id="popUp_bg" onclick="popUp_close()">
+    </div>
+
+
 </div>
     <!-- End your code here. -->
     <?php include '../parts/footer.php';?>
