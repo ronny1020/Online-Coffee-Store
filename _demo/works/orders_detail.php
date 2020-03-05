@@ -184,7 +184,11 @@ if (isset($_POST["deleteSelected"])) {
 
     <!-- I edited these stuffs.-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
+    <script src="../demoutil.js"></script>
     <script src="../orders_detail_need.js"></script>
+
+
+
 </head>
 
 <body>
@@ -253,7 +257,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["OrderID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
-                    <input type='button' value="編輯123" name="<?php echo "edit" . $row["OrderID"] ?>"
+                    <input type='button' value="編輯" name="<?php echo "edit" . $row["OrderID"] ?>"
                         class="btn btn-primary mb-3"  data-toggle="modal" data-target='#MyEdit' onclick="throwinmodal_orders_detail(<?php echo "'".$row['OrderID']."'"?>)">
                 </td>
             </tr>
