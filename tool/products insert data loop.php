@@ -50,6 +50,7 @@ if (isset($_POST["insert"])) {
 
         mysqli_query($link, $CommandText);
     }
+    
     echo "done";    
 }
 
@@ -74,9 +75,19 @@ for($i=1;$i<=$number;$i++){
     $pid= str_repeat("0",10-(strlen($pid))).$pid;
     $tid=rand(1,$maxTagID);
 
-    $CommandText = "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($pid,$tid);";
-    mysqli_query($link, $CommandText);
+    $findTagMapExistComment="SELECT tagMapID FROM coffee.products_tagMap where productID=$pid and tagID=$tid;";
+    $findTagMapExistResult=mysqli_query($link, $findTagMapExistComment);
+
+    if(mysqli_num_rows($findTagMapExistResult)>0){
+
+    }else{
+        $CommandText = "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($pid,$tid);";
+        mysqli_query($link, $CommandText);
+        echo $CommandText ;
+        echo "<br>";
+    }
 }
+
     echo "done";   
 
 
