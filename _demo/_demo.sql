@@ -463,7 +463,7 @@ CREATE TABLE `admins` (
   `adminID` varchar(5) NOT NULL default '',-- Primary key:流水號
   `aName` varchar(20) collate utf8_unicode_ci default NULL, -- 管理員姓名 
   `aAccount` varchar(20) NOT NULL unique, -- 管理員帳號
-  `aPassword` varchar(60) NOT NULL unique, -- 管理員密碼: 加密後可能加長故取60
+  `aPassword` varchar(100) NOT NULL unique, -- 管理員密碼: 加密後可能加長故取60
   `aDepartment` varchar(30) default NULL, -- 管理員部門
   `aTitle` varchar(30) default NULL, -- 管理員職稱
   PRIMARY KEY  (`adminID`)
@@ -472,9 +472,9 @@ CREATE TABLE `admins` (
 
 -- add dummy datas:
 INSERT INTO `admins` VALUES
- ('A001','大名01','adm01','pwd01','部門01','部長')
-,('A002','大名02','adm02','pwd02','部門02','部長')
-,('A003','大名03','adm03','pwd03','部門03','部長');
+ ('A001','大名01','adm01','$2y$10$uKV2BCDw.Vpg9SvkO8IgA.0owhUVHSxHXasoeVUFlrs7AWE2y3xjG','部門01','部長')
+,('A002','大名02','adm02','$2y$10$7BYWnH3yp5WOEGc/hAoOt.t2pJtJrJxoUgRswUe7FztgTq711HoS.','部門02','部長')
+,('A003','大名03','adm03','$2y$10$anNz3OJPg68IQVibkSyvZuzmoLMv.cQjtqWpRcjzxStCLYngQzvOe','部門03','部長');
 
 -- table賣方: sellers
 -- 刪除已存在之重複table
@@ -544,6 +544,42 @@ CREATE TABLE `discounts` (
   `disDescrip` varchar(250) NOT NULL, -- 折扣描述
   `sellerID` varchar(5) NOT NULL, -- 賣方編碼
   `Discount` float NOT NULL, -- 折扣
+  
+  
+  PRIMARY KEY  (`disID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 預設儲存引擎: InnoDB(after php5.5)
+
+-- add dummy datas:
+INSERT INTO `discounts` VALUES
+ ('D001','曼特寧優惠','星巴克公司現時曼特寧咖啡75折','S001','0.75')
+,('D002','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75')
+,('D003','拿鐵優惠','伯朗咖啡現時拿鐵咖啡85折','S003','0.85')
+,('D004','瑪奇朵優惠','上島咖啡6月6日起瑪奇朵咖啡85折','S004','0.85')
+,('D005','瑪奇朵優惠','小樽咖啡現時瑪奇朵咖啡85折','S005','0.85')
+,('D006','瑪奇朵優惠','露易莎咖啡4月3日起瑪奇朵咖啡75折','S002','0.75')
+,('D007','瑪奇朵優惠','伯朗咖啡現時瑪奇朵咖啡85折','S003','0.85')
+,('D008','拿鐵優惠','上島咖啡6月6日起拿鐵咖啡85折','S004','0.85')
+,('D009','拿鐵優惠','星巴克公司現時拿鐵咖啡85折','S001','0.85')
+,('D010','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75')
+,('D011','曼特寧優惠','伯朗咖啡現時曼特寧咖啡85折','S003','0.85')
+,('D012','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85')
+,('D013','冰滴咖啡優惠','小樽咖啡現時冰滴咖啡85折','S005','0.85')
+,('D014','冰滴咖啡優惠','上島咖啡6月6日起冰滴咖啡85折','S004','0.85')
+,('D015','冰摩卡優惠','小樽咖啡現時冰摩卡咖啡85折','S005','0.85')
+,('D016','冰摩卡優惠','露易莎咖啡4月3日起冰摩卡咖啡75折','S002','0.75')
+,('D017','冰摩卡優惠','星巴克公司現時冰摩卡咖啡85折','S001','0.85')
+,('D018','利比瑞卡優惠','上島咖啡6月6日起利比瑞卡咖啡85折','S004','0.85')
+,('D019','利比瑞卡優惠','小樽咖啡現時利比瑞卡咖啡85折','S005','0.85')
+,('D020','利比瑞卡優惠','資策會咖啡現時利比瑞卡咖啡85折','S006','0.85');
+
+DROP TABLE IF EXISTS `discounts2`;
+CREATE TABLE `discounts2` (
+  `disID` varchar(10) NOT NULL default '',-- Primary key:流水號
+  `disName` varchar(20) collate utf8_unicode_ci NOT NULL, -- 折扣名稱
+  `disDescrip` varchar(250) NOT NULL, -- 折扣描述
+  `sellerID` varchar(5) NOT NULL, -- 賣方編碼
+  `Discount` float NOT NULL, -- 折扣
   `startDate` date default NULL, -- 開始日期:
   `overDate` date default NULL, -- 結束日期:
   
@@ -552,7 +588,7 @@ CREATE TABLE `discounts` (
 -- 預設儲存引擎: InnoDB(after php5.5)
 
 -- add dummy datas:
-INSERT INTO `discounts` VALUES
+INSERT INTO `discounts2` VALUES
  ('D001','曼特寧優惠','星巴克公司現時曼特寧咖啡75折','S001','0.75','2019-02-18', '2019-02-20')
 ,('D002','曼特寧優惠','露易莎咖啡4月3日起曼特寧咖啡75折','S002','0.75','2019-02-18', '2019-02-20')
 ,('D003','拿鐵優惠','伯朗咖啡現時拿鐵咖啡85折','S003','0.85','2019-02-18', '2019-02-20')
