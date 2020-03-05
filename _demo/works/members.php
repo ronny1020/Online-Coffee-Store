@@ -44,7 +44,7 @@ $rowNum = $_SESSION["member_row_num"];
 //總欄數:
 $total_num_rows = mysqli_num_rows(mysqli_query($link, "select customerID from coffee.customers;"));
 //最後一頁的頁數為:
-$lastPage = floor($total_num_rows / $rowNum) + 1;
+$lastPage = ceil($total_num_rows / $rowNum);
 $tableOffSet = $rowNum * ($page - 1);
 $showDataStartFrom = $tableOffSet + 1;
 $showDataEndTo = $tableOffSet + $rowNum;
@@ -67,27 +67,7 @@ foreach ($_POST as $i => $j) {
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
-    } //Right edit button:
-    // elseif (substr($i, 0, 4) == "edit") {
-    //     //獲得customerID
-    //     $editItem = ltrim($i, "edit");
-    //     $editCommandText = <<<SqlQuery
-    //     select customerID, cName, cAccount, cSex, cBirthDate, cAddress, cMobile
-    //     from coffee.customers WHERE customerID IN ('$editItem')
-    //     SqlQuery;
-    //     $result = mysqli_query($link, $editCommandText);
-    //     while ($row = mysqli_fetch_assoc($result)) {
-    //         $_SESSION["modal_cid"] = $row["customerID"];
-    //         $_SESSION["modal_nam"] = $row["cName"];
-    //         $_SESSION["modal_acc"] = $row["cAccount"];
-    //         $_SESSION["modal_sex"] = $row["cSex"];
-    //         $_SESSION["modal_bid"] = $row["cBirthDate"];
-    //         $_SESSION["modal_adr"] = $row["cAddress"];
-    //         $_SESSION["modal_mob"] = $row["cMobile"];
-    //     }
-    //     ;
-    //     // header('location:' . $_SERVER['REQUEST_URI'] . '');
-    // }
+    }
 }
 
 //ADD NEW DATA TO FORM! :
@@ -95,13 +75,14 @@ if (isset($_POST['modal_submit'])) {
     $tmp_cid = $_POST['cid'];
     $tmp_nam = $_POST['nam'];
     $tmp_acc = $_POST['acc'];
-    $tmp_pwd = $_POST['pwd'];
+    $tmp_eml = $_POST['eml'];
     $tmp_sex = $_POST['sex'];
     $tmp_bid = $_POST['bid'];
     $tmp_adr = $_POST['adr'];
     $tmp_mob = $_POST['mob'];
+    $tmp_pwd = password_hash($_POST['pwd'], PASSWORD_BCRYPT);
     $insertCommandText = <<<SqlQuery
-    insert into coffee.customers VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_pwd','$tmp_sex','$tmp_bid','$tmp_adr','$tmp_mob')
+    insert into coffee.customers VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_eml','$tmp_pwd','$tmp_sex','$tmp_bid','$tmp_adr','$tmp_mob')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 }
@@ -112,7 +93,7 @@ if (isset($_POST['modal_submit_e'])) {
     $tmp_cid_e = $_POST['cid_e'];
     $tmp_nam_e = $_POST['nam_e'];
     $tmp_acc_e = $_POST['acc_e'];
-    $tmp_pwd_e = $_POST['pwd_e'];
+    $tmp_eml_e = $_POST['eml_e'];
     $tmp_sex_e = $_POST['sex_e'];
     $tmp_bid_e = $_POST['bid_e'];
     $tmp_adr_e = $_POST['adr_e'];
@@ -120,28 +101,18 @@ if (isset($_POST['modal_submit_e'])) {
     // echo $tmp_sex_e . $tmp_bid_e;
     //刪除舊資料
     $insertCommandText = <<<SqlQuery
-    DELETE FROM coffee.customers WHERE customerID IN ('$tmp_cid_e');
-    SqlQuery;
-    mysqli_query($link, $insertCommandText);
-
-    //插入新資料
-    $insertCommandText = <<<SqlQuery
-    insert into coffee.customers VALUES ('$tmp_cid_e','$tmp_nam_e','$tmp_acc_e','$tmp_pwd_e','$tmp_sex_e','$tmp_bid_e','$tmp_adr_e','$tmp_mob_e');
+    UPDATE `coffee`.`customers` SET 
+    `cName` = '$tmp_nam_e', 
+    `cAccount` = '$tmp_acc_e',
+    `cEmail` = '$tmp_eml_e', 
+    `cSex` = '$tmp_sex_e',
+    `cBirthDate` = '$tmp_bid_e',
+    `cAddress` = '$tmp_adr_e',
+    `cMobile` = '$tmp_mob_e'
+    WHERE customerID IN ('$tmp_cid_e');
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 }
-
-// Write table:
-$front_STR1 = "<td>";
-$back_STR1 = "</td>";
-$front_STR2 = "<td><input type='textbox' value='";
-$back_STR2 = "'></td>";
-$res_fSTR = $front_STR1;
-$res_bSTR = $back_STR1;
-
-// $editbtn = "<input type='submit' value='編輯' class='btn btn-primary mb-3' name='to_edit'>";
-// $updtbtn = "<input type='submit' value='送出' class='btn btn-primary mb-3' name='to_updt'>";
-// $resultBtn = $editbtn;
 
 // delete selected items:
 if (isset($_POST["deleteSelected"])) {
@@ -161,13 +132,80 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+// Export selected items.
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList = "('";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList .= $selectedItem . "','";
+        }
+    }
+    $selectedList = rtrim($selectedList, ",");
+    $selectedList .= "')";
+
+    //防呆 一個都沒勾的話:
+    if ($selectedList == "('')") {
+        // echo "<script>alert('Please select at least 1 column.');</script>";
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    }
+    //多一空欄位 '' 但不影響功能
+    // echo $selectedList;
+    $exportComment = <<<SqlQuery
+    select customerID, cName, cAccount, cEmail, cSex, cBirthDate, cAddress, cMobile from coffee.customers
+    WHERE customerID IN $selectedList ORDER BY customerID
+    SqlQuery;
+
+    $exportResult = mysqli_query($link, $exportComment);
+    // if($exportResult === FALSE){
+    //     // echo $exportResult;
+    //     // exit;
+    // }
+    // else{
+    $columns_total = mysqli_num_fields($exportResult);
+    $exportResult_exist = mysqli_num_rows($exportResult) > 0;
+    if ($exportResult_exist) {
+        // Get The Field Name
+        $output = "";
+        for ($i = 0; $i < $columns_total; $i++) {
+            $heading = mysqli_fetch_field_direct($exportResult, $i);
+            $output .= '"' . $heading->name . '",';
+        }
+        $output .= "\n";
+
+        // Get Records from the table
+        while ($row = mysqli_fetch_assoc($exportResult)) {
+            $output .= '"' . $row["customerID"] . '",';
+            $output .= '"' . $row["cName"] . '",';
+            $output .= '"' . $row["cAccount"] . '",';
+            $output .= '"' . $row["cEmail"] . '",';
+            $output .= '"' . $row["cSex"] . '",';
+            $output .= '"' . $row["cBirthDate"] . '",';
+            $output .= '"' . $row["cAddress"] . '",';
+            $output .= '"' . $row["cMobile"] . '",';
+            $output .= "\n";
+        }
+
+        $filename = "MemberList" . date('Y-m-d H:i:s') . ".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
+        echo $output;
+
+    }
+    exit;
+}
+// }
+
 //========== 欄位排序調整: ==========//
 //Adjusted by 2 SESSION:
 // 1. ASCorDESC: 決定升序抑或降序
 // if ASC triggered:
 
-    if (isset($_POST["customerID_ASC"]) ||
-    isset($_POST["cAccount_ASC"]) ||
+if (isset($_POST["customerID_ASC"]) ||
+    isset($_POST["cName_ASC"]) ||
     isset($_POST["cSex_ASC"]) ||
     isset($_POST["cBirthDate_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
@@ -175,30 +213,30 @@ if (isset($_POST["deleteSelected"])) {
 //elseif DESC triggered:
 } else if (
     isset($_POST["customerID_DESC"]) ||
-    isset($_POST["cAccount_DESC"]) ||
+    isset($_POST["cName_DESC"]) ||
     isset($_POST["cSex_DESC"]) ||
     isset($_POST["cBirthDate_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if (isset($_SESSION["ASCorDESC"])) {
-} else {// Default of ASCorDESC: ASC(升序)
+} else { // Default of ASCorDESC: ASC(升序)
     $_SESSION["ASCorDESC"] = "ASC";
 }
 $ASCorDESC = $_SESSION["ASCorDESC"];
 
 // 2. ORDERBY: 決定以何物排序
 if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
-    $_SESSION["orderby"] = "customerID";
-} else if (isset($_POST["cAccount_ASC"]) || isset($_POST["cAccount_DESC"])) {
-    $_SESSION["orderby"] = "cAccount";
+    $_SESSION["cu_orderby"] = "customerID";
+} else if (isset($_POST["cName_ASC"]) || isset($_POST["cName_DESC"])) {
+    $_SESSION["cu_orderby"] = "cName";
 } else if (isset($_POST["cSex"]) || isset($_POST["cSex_DESC"])) {
-    $_SESSION["orderby"] = "cSex";
+    $_SESSION["cu_orderby"] = "cSex";
 } else if (isset($_POST["cBirthDate_ASC"]) || isset($_POST["cBirthDate_DESC"])) {
-    $_SESSION["orderby"] = "cBirthDate";
-} else if (isset($_SESSION["orderby"])) {
-} else {// Default of orderby: cramID
-    $_SESSION["orderby"] = "customerID";
+    $_SESSION["cu_orderby"] = "cBirthDate";
+} else if (isset($_SESSION["cu_orderby"])) {
+} else { // Default of orderby: cramID
+    $_SESSION["cu_orderby"] = "customerID";
 }
-$orderby = $_SESSION["orderby"];
+$orderby = $_SESSION["cu_orderby"];
 
 //======= 排序調整: END HERE. =======//
 
@@ -235,8 +273,8 @@ $orderby = $_SESSION["orderby"];
 
 <form method='post' class="card p-3">
     <div>
-        <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
-            class="btn btn-danger mb-3">
+        <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"class="btn btn-danger mb-3">
+        <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
         <!--Modal toggled here.-->
         <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
@@ -278,23 +316,23 @@ $orderby = $_SESSION["orderby"];
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cName</p>
+                                <div class="DESC-ASC ml-2">
+                                <input type="submit" class="d-block btn btn-DESC" value="▲" name="cName_DESC">
+                                <input type="submit" class="d-block btn btn-ASC" value="▼" name="cName_ASC">
+                                </div>
                             </div>
                         </th>
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">cAccount</p>
-                                <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="cAccount_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="cAccount_ASC">
-                                </div>
                             </div>
 
                         </th>
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cPassword</p>
+                                <p class="m-1">cEmail</p>
                             </div>
                         </th>
 
@@ -340,7 +378,7 @@ $orderby = $_SESSION["orderby"];
 // $commandText: $str
 // 受所允許之總欄數調控
 $commandText = <<<SqlQuery
-select customerID, cName, cAccount, cPassword, cSex, cBirthDate, cAddress, cMobile
+select customerID, cName, cAccount, cEmail, cSex, cBirthDate, cAddress, cMobile
 from coffee.customers ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
@@ -353,21 +391,21 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         style='position: relative;'>
                         </td>
                         <!-- ID added here. -->
-                        <td id="<?php echo $row["customerID"]."customerID" ?>"><?php echo $row["customerID"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cName" ?>" ><?php echo $row["cName"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cAccount" ?>" ><?php echo $row["cAccount"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cPassword" ?>" ><?php echo $row["cPassword"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cSex" ?>" ><?php echo $row["cSex"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cBirthDate" ?>" ><?php echo $row["cBirthDate"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cAddress" ?>" ><?php echo $row["cAddress"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cMobile" ?>" ><?php echo $row["cMobile"] ?></td>
-                        
-                        <td>  
+                        <td id="<?php echo $row["customerID"] . "customerID" ?>"><?php echo $row["customerID"] ?></td>
+                        <td id="<?php echo $row["customerID"] . "cName" ?>" ><?php echo $row["cName"] ?></td>
+                        <td id="<?php echo $row["customerID"] . "cAccount" ?>" ><?php echo $row["cAccount"] ?></td>
+                        <td id="<?php echo $row["customerID"] . "cEmail" ?>" ><?php echo $row["cEmail"] ?></td>
+                        <td id="<?php echo $row["customerID"] . "cSex" ?>" ><?php echo $row["cSex"] ?></td>
+                        <td id="<?php echo $row["customerID"] . "cBirthDate" ?>" ><?php echo $row["cBirthDate"] ?></td>
+                        <td id="<?php echo $row["customerID"] . "cAddress" ?>" ><?php echo $row["cAddress"] ?></td>
+                        <td id="<?php echo $row["customerID"] . "cMobile" ?>" ><?php echo $row["cMobile"] ?></td>
+
+                        <td>
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["customerID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["customerID"] ?>"
-                        class="btn btn-primary mb-3" onclick="throwinmodal_MEMBERS(<?php echo "'".$row['customerID']."'"?>)">
+                        class="btn btn-primary mb-3" onclick="throwinmodal_MEMBERS(<?php echo "'" . $row['customerID'] . "'" ?>)">
                         </td>
 </tr>
             <?php endwhile?>
@@ -436,7 +474,7 @@ if ($lastPage - $page <= 5) {
                     <th>cAccount: <input type="text" name='acc'>
                     </th>
                     <hr>
-                    <th>cPassword: <input type="text" name='pwd'>
+                    <th>cEmail: <input type="text" name='eml'>
                     </th>
                     <hr>
                     <th>cBirthDate:<input type="date" name='bid'>
@@ -447,15 +485,27 @@ if ($lastPage - $page <= 5) {
                     <hr>
                     <th>cMobile: <input type="text" name='mob'></th>
                     <hr>
-                    <th>cSex: <select name='sex'>
-                        <option value='F'>男</option>
-                        <option value='M'>女</option>
-                    </select></th>
+                    <th>cSex:
+                    <select name='sex'>
+                        <option value='M'>男</option>
+                        <option value='F'>女</option>
+                    </select>
+                    </th>
+                    <hr>
+                    <th>
+                    <span style="color:red;">cPassword:</span>
+                    <input type="password" name='pwd' id='pwd' onkeyup='MODAL_PWcheck();'></th>
+                    <hr>
+                    <th>
+                    <span style="color:red;">confirm Password:</span>
+                    <input type="password" name='pwd_check' id='pwd_check' onkeyup='MODAL_PWcheck();'></th>
+                    <hr>
+                    <th><span id='error_msg' style="font-weight:bolder;"></span></th>
             </tr>
         </div>
         <!-- Modal footer -->
         <div class="modal-footer">
-            <input type="submit" name="modal_submit" value='submit' class="btn btn-primary"></input>
+            <input type="submit" name="modal_submit" id="modal_submit" value='submit' class="btn btn-primary"></input>
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         </form>
@@ -486,7 +536,7 @@ if ($lastPage - $page <= 5) {
                     <th>cAccount: <input type="text" name='acc_e' id='acc_e'>
                     </th>
                     <hr>
-                    <th>cPassword: <input type="text" name='pwd_e' id='pwd_e'>
+                    <th>cEmail: <input type="text" name='eml_e' id='eml_e'>
                     </th>
                     <hr>
                     <th>cBirthDate:<input type="date" name='bid_e' id='bid_e'>
@@ -519,3 +569,7 @@ if ($lastPage - $page <= 5) {
 <!-- End your code here. -->
 <?php include '../parts/footer.php';?>
 </body>
+
+<script>
+    
+</script>

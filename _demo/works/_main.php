@@ -43,10 +43,16 @@ if (isset($_POST["logout"])) {
     <script src="../demoutil.js"></script>
 </head>
 
-<body>
+<body class="login_bg">
+<div  class='login card p-5'>
+    <p class='welcome'>登入成功!</p>
+    <p class='welcome'>請點選左上角按鈕以開始工作。</p>
+    <a style="font-size:20%; text-align:right;">做爽的，可能會再改</a>  
+</div>
 <?php include '../parts/sidebar.php';?>
 <?php include '../parts/head.php';?>
 <!-- Start your code here. -->
+
 
 <!-- End your code here. -->
 <?php include '../parts/footer.php';?>

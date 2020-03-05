@@ -148,7 +148,6 @@ $query_RecMember = "SELECT * FROM infomations WHERE sellerID='$userID'";
 $RecMember = $link->query($query_RecMember);	
 $row_RecMember = $RecMember->fetch_assoc();
 
-
 // search function
 if (isset($_POST["startSearch"])) {
     if($_POST["searchKeyword"]!=""){
@@ -176,6 +175,69 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
     
 }
 
+// Export selected items.
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList="('";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList .= $selectedItem . "','";
+        }
+    }
+    $selectedList = rtrim($selectedList , ",");
+    $selectedList .= "')";
+
+    //防呆 一個都沒勾的話:
+    if($selectedList == "('')"){
+        // echo "<script>alert('Please select at least 1 column.');</script>";
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    }
+    //多一空欄位 '' 但不影響功能
+    // echo $selectedList;
+    $exportComment = <<<SqlQuery
+    select infoID, infoName, infoDescrip, sellerID from coffee.infomations   
+    where sellerID='$userID' and infoID IN $selectedList ORDER BY infoID
+    SqlQuery;
+   
+    $exportResult = mysqli_query($link, $exportComment);
+    // if($exportResult === FALSE){
+    //     // echo $exportResult;
+    //     // exit;
+    // }
+    // else{
+        $columns_total = mysqli_num_fields($exportResult);
+        $exportResult_exist = mysqli_num_rows($exportResult)>0;
+        if($exportResult_exist){
+            // Get The Field Name
+            $output ="";
+            for($i = 0; $i < $columns_total; $i++){
+                $heading = mysqli_fetch_field_direct($exportResult, $i);
+                $output .= '"' . $heading->name . '",';
+            }
+        $output .="\n";
+ 
+        // Get Records from the table
+        while($row = mysqli_fetch_assoc($exportResult)){    
+        $output .='"' . $row["infoID"] . '",';
+        $output .='"' . $row["infoName"] . '",';
+        $output .='"' . $row["infoDescrip"] . '",';
+        $output .='"' . $row["sellerID"] . '",';
+        $output .="\n";
+        }
+
+        $filename = "infomationList". date('Y-m-d H:i:s').".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
+        echo $output;
+  
+    }
+    exit;
+    }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -201,6 +263,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
     <link rel="stylesheet" type="text/css" href="../style2.css">
     <script src="../demoutil.js"></script>
+    <script src="../demoutil2.js"></script>
 </head>
 
 <body>
@@ -219,11 +282,11 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                     <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
                     <select name="searchBy">
                         <option value="infoName">
-                            訊息名稱
+                        資訊名稱
                         </option>
                        
-                        <option value="infoNameDescrip">
-                            訊息內容
+                        <option value="infoDescrip">
+                        資訊內容
                         </option>
                         
                     </select>
@@ -248,6 +311,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
                     class="btn btn-danger mb-3">
+                    <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
                     <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
 
@@ -268,7 +332,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                 </span>
             </div>
 
-            <table class="table table-striped ">
+            <table class="table table-striped table-bordered data_main_table">
                 <thead class="thead-light">
                     <tr>
                         <th>
@@ -297,7 +361,7 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
                         </th>
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
-                                <p class="m-1">資訊描述</p>
+                                <p class="m-1">資訊內容</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="" name="infoDescript_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="" name="infoDescript_ASC">
@@ -328,15 +392,17 @@ while ($row = mysqli_fetch_assoc($result)):
                             <input type="checkbox" name="<?php echo "selected" . $row["infoID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
-                        <td><?php echo $row["infoID"] ?></td>
-                        <td><?php echo $row["infoName"] ?></td>
-                        <td><?php echo $row["infoDescrip"] ?></td>
+                        <td id="<?php echo $row["infoID"]."infoID" ?>"><?php echo $row["infoID"] ?></td>
+                        <td id="<?php echo $row["infoID"]."infoName" ?>"><?php echo $row["infoName"] ?></td>
+                        <td id="<?php echo $row["infoID"]."infoDescrip" ?>"><?php echo $row["infoDescrip"] ?></td>
                         
                         <td class="p-0">
+                        <div class="right_btn" align="center">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["infoID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                                <input type="button" value="編輯" name="edit" class="btn btn-primary ml-3 mb-3"
-                                data-toggle="modal" data-target="#myModal2">
+                                <input type='button' value="編輯" name="<?php echo "edit" . $row["infoID"] ?>"
+                        class="btn btn-primary mb-3" onclick="throwinmodal_INFO(<?php echo "'".$row['infoID']."'"?>)">
+                        </div>
                         </td>
                     </tr>
                     <?php endwhile?>
@@ -391,7 +457,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
         <!-- Modal Header -->
         <div class="modal-header">
-            <h4 class="modal-title">資料變更:</h4>
+            <h4 class="modal-title">新增資料:</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <form method="post" action=''>
@@ -399,12 +465,12 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>infoID:<input type="text" name='iid'>
+                    <th>資訊編號:<input type="text" name='iid'>
                     </th>
                     <hr>
-                    <th>infoName: <input type="text" name='ifn'></th>
+                    <th>資訊名稱: <input type="text" name='ifn'></th>
                     <hr>
-                    <th>infoDescrip: <input type="text" name='ifd'>
+                    <th>資訊內容: <input type="text" name='ifd'>
                     </th>
                     <hr>
                     
@@ -423,7 +489,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
 <iframe name="thisframe2"></iframe>
 <!-- Modal -->
-<div class="modal fade" id="myModal2">
+<div class="modal fade" id="Modal_edit">
 <div class="modal-dialog">
     <div class="modal-content">
 
@@ -437,12 +503,12 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>infoID:<input type="text" name='did2' value="<?php echo $row_RecMember["infoID"];?>">
+                    <th>資訊編號:<input type="text" name='did2' id='did2' readonly>
                     </th>
                     <hr>
-                    <th>infoName: <input type="text" name='nam2' value="<?php echo $row_RecMember["infoName"];?>"></th>
+                    <th>資訊名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>infoDescrip: <input type="text" name='ddp2' value="<?php echo $row_RecMember["infoDescrip"];?>">
+                    <th>資訊內容: <input type="text" name='ddp2' id='ddp2' >
                     </th>
                     <hr>
                     

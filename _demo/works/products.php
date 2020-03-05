@@ -1,4 +1,18 @@
 <?php
+                     
+//          　　∩＿＿＿∩　　   
+//             | ˊ ︵ ︵ˋ
+//            ∕   (⊙)(⊙)        It's not a bug, it's a feature.
+//           |  　( _●_) ≡      /
+//       ＿＿≡　    |∪| ミ        
+//     ˋ＿＿＿        ﹨ˊ  ＼   
+//          /　     ／  ( (    
+//         /       ╱     ﹀    
+//        /     ╴／         
+//     （＿     ˋ           
+//       | / ╲ }           
+//       ∪    ))           
+// 
 session_start();
 
 //Prevents direct connection.
@@ -206,6 +220,109 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+// export selected data
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList="(";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList.=$selectedItem.",";
+        }
+    }
+
+    $selectedList=rtrim($selectedList,",");
+    $selectedList.=")";
+    
+    if($selectedList != "()"){
+        $exportComment="select productID, ProductName, categoryName, UnitPrice, UnitsInStock, specification, products.description from coffee.products 
+        JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
+        where sellerID='$userID' and productID in $selectedList ORDER BY productID;";
+
+    
+        $exportResult = mysqli_query($link, $exportComment);
+        $columns_total = mysqli_num_fields($exportResult);
+        $exportResult_exist = mysqli_num_rows($exportResult)>0;
+    
+        // Get The Field Name
+        $output ="";
+        for($i = 0; $i < $columns_total; $i++){
+            $heading = mysqli_fetch_field_direct($exportResult, $i);
+            $output .= '"' . $heading->name . '",';
+        }
+        $output .="\n";
+ 
+        // Get Records from the table
+
+        while($row = mysqli_fetch_assoc($exportResult)){
+    
+        $output .='"' . $row["productID"] . '",';
+        $output .='"' . $row["ProductName"] . '",';
+        $output .='"' . $row["categoryName"] . '",';
+        $output .='"' . $row["UnitPrice"] . '",';
+        $output .='"' . $row["UnitsInStock"] . '",';
+        $output .='"' . $row["specification"] . '",';
+        $output .='"' . $row["description"] . '",';
+        $output .="\n";
+        }
+
+
+            // Download the file
+        $filename = "ProductList". date('Y-m-d H:i:s').".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
+        echo $output;
+
+        exit;
+  
+    }
+
+   
+
+  header('location:' . $_SERVER['REQUEST_URI'] . '');
+}
+
+
+
+
+
+// uploadImage
+function uploadImage($productIDForImage){
+    $ImageUpload_dir = "../image/products/";
+    $ImageUpload_file = $ImageUpload_dir . $productIDForImage.".jpg";
+
+    $uploadOk = 1;
+    $ImageUploadType = strtolower(pathinfo($ImageUpload_file,PATHINFO_EXTENSION));
+    // Check if image file is a actual image or fake image
+    if(isset($_FILES["ProductImage_upload"])) {
+        $check = getimagesize($_FILES["ProductImage_upload"]["tmp_name"]);
+        if($check == false) {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+    }
+
+    if($ImageUploadType != "jpg" ) {
+    echo "Sorry, only JPG are allowed.";
+    $uploadOk = 0;
+    }
+
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+    // if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES["ProductImage_upload"]["tmp_name"], $ImageUpload_file)) {
+          
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
+
+
+
+}
 
 // create data from button
 if (isset($_POST["create_data"])) {
@@ -225,6 +342,8 @@ if (isset($_POST["create_data"])) {
     $productID_input= str_repeat("0",10-(strlen($productID_input))).$productID_input;
     mysqli_error($link);
 
+    uploadImage($productID_input);
+
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 6) == "newTag" && $j !="" ) {
             $newTag=$j;
@@ -241,7 +360,7 @@ if (isset($_POST["create_data"])) {
     }
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
-
+// update
 if (isset($_POST["edit_data"])) {
     $productID_input = $_POST["ProductID_input"];
     $ProductName_input = $_POST["ProductName_input"];
@@ -250,7 +369,6 @@ if (isset($_POST["edit_data"])) {
     $UnitsInStock_input = $_POST["UnitsInStock_input"];
     $specification_input = $_POST["specification_input"];
     $description_input = $_POST["description_input"];
-
 
     $input_comment = "UPDATE `coffee`.`products` SET 
     `ProductName` = '$ProductName_input', 
@@ -265,6 +383,7 @@ if (isset($_POST["edit_data"])) {
 
     mysqli_error($link);
 
+    uploadImage($productID_input);
     // tags delete or create
     foreach ($_POST as $i => $j) {
     // delete tags
@@ -295,7 +414,7 @@ if (isset($_POST["edit_data"])) {
         mysqli_query($link, "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($productID_input,$newTagID);");
         }
     }
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+    // header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
 
@@ -373,6 +492,8 @@ if (isset($_POST["edit_data"])) {
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')" class="btn btn-danger mb-3">
                 <input type="button" value="新增資料" class="btn btn-primary ml-3 mb-3" onclick="create_edit()">
+                <input type="submit" value="匯出勾選" class="btn btn-success ml-3 mb-3" name="exportSelected">
+                <input type="button" value="匯入資料" class="btn btn-info ml-3 mb-3" onclick="importDataUpload()">
 
                 <div class='float-right'>
                     <span class="mr-5">
@@ -438,7 +559,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                                 </div>
                             </div>
                         </th>
-                        <!-- here -->
+                        
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
                                 <p class="m-1">庫存量</p>
@@ -468,8 +589,8 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                     <?php
                     // write table
 
-                    $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description
-                    from coffee.products JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID
+                    $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description from coffee.products 
+                    JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
                     where sellerID='$userID' $searchComment ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
 
                     $result = mysqli_query($link, $commandText);
@@ -527,7 +648,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                             <div class="right_btn">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
                                 class="btn btn-danger my-0 btn-md" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="button" value="編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'" . $row["productID"] . "'" ?>)">
+                            <input type="button" value="檢視/編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'" . $row["productID"] . "'" ?>)">
                             </div>
 
                         </td>
@@ -582,8 +703,8 @@ mysqli_close($link);
 
     </div>
 </div>
-<div id="create_edit_window" class="window_close">
-    <div id="create_edit_bg">
+<div id="popUp_window" class="window_close">
+    <div id="popUp_bg" onclick="popUp_close()">
     </div>
 
 

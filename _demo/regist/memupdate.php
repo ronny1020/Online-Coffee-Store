@@ -167,7 +167,7 @@ function checkmail(sMail) {
 
 <table width="780" border="0" align="center" cellpadding="4" cellspacing="0">
   <tr>
-    <td class="tdbline"><img src="images/mlogo.png" alt="會員系統" width="164" height="67"></td>
+    <td class="tdbline"><img src="images/mlogo5.png" alt="會員系統" width="164" height="67"></td>
   </tr>
   <tr>
     <td class="tdbline"><table width="100%" border="0" cellspacing="0" cellpadding="10">
@@ -178,7 +178,7 @@ function checkmail(sMail) {
             <hr size="1" />
             <p class="heading">帳號資料</p>
             <p>&nbsp;使用帳號：
-			<input class="form-control" value="<?php echo $row_RecMember["sAccount"];?>"></p></input><br>
+			<input class="form-control" value="<?php echo $row_RecMember["sAccount"];?>" readonly></p></input><br>
             <p>&nbsp;使用密碼：
             <input name="sPassword" type="password" class="form-control" id="sPassword"><br>
     		<input name="sPasswordo" type="hidden" id="sPasswordo" value="<?php echo $row_RecMember["sPassword"];?>"></p>
@@ -186,7 +186,7 @@ function checkmail(sMail) {
             <input name="sPasswordrecheck" type="password" class="form-control" id="sPasswordrecheck">
             <span class="smalltext">若不修改密碼，請不要填寫。若要修改，請輸入密碼</span><span class="smalltext">二次。<br>若修改密碼，系統會自動登出，請用新密碼登入。</span></p>
             <hr size="1" />
-            <p class="heading">公司資料</p>
+            <p class="heading">基本資料</p>
             <p><font color="#FF0000">*</font>公司名稱：
             <input name="sName" type="text" class="form-control" id="sName" value="<?php echo $row_RecMember["sName"];?>">
             <br>
@@ -197,11 +197,11 @@ function checkmail(sMail) {
             <p>&nbsp;國　　家：
             <input name="sCountry" type="text" class="form-control" id="sCountry" value="<?php echo $row_RecMember["sCountry"];?>">
             <br><span class="smalltext"></span></p>
-            <p>&nbsp;電　　話：
+            <p><font color="#FF0000">*</font>電　　話：
             <input name="sPhone" type="text" class="form-control" id="sPhone" value="<?php echo $row_RecMember["sPhone"];?>"></p>
-            <br><p>&nbsp;住　　址：
+            <br><p><font color="#FF0000">*</font>地　　址：
             <input name="sAddress" type="text" class="form-control" id="sAddress" value="<?php echo $row_RecMember["sAddress"];?>" size="40"> </p>
-            <p><font color="#FF0000">*</font> 表示為必填的欄位</p>
+            <br><p><font color="#FF0000">*</font> 表示為必填的欄位</p>
           </div>
           <hr size="1" />
           <p align="center">
@@ -214,22 +214,22 @@ function checkmail(sMail) {
         </form></td>
         <td width="200">
         <div class="boxtl"></div><div class="boxtr"></div>
-        <div class="regbox">
+        <div class="regbox" align="center">
           <p class="heading"><strong>會員系統</strong></p>
           
             <p><strong><?php echo $row_RecMember["sName"];?></strong> 您好。</p>
             
             <p>本次登入的時間為：</p>
             <?php echo date("Y年m月d日") ;?></br>
-            <p align="center"><a href="../works/_main.php">會員中心</a> | <a href="?logout=true">登出系統</a></p>
+            <p ><a href="../works/_main.php">會員中心</a> | <a href="?logout=true">登出系統</a></p>
         </div>
         <div class="boxbl"></div><div class="boxbr"></div></td>
       </tr>
     </table></td>
   </tr>
-  <tr>
+  <!-- <tr>
     <td align="center" background="images/album_r2_c1.jpg" class="trademark">© 2020 ILoveCoffee Company All Rights Reserved.</td>
-  </tr>
+  </tr> -->
 </table>
 </body>
 </html>

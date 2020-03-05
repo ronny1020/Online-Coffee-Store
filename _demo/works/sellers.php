@@ -94,8 +94,10 @@ if (isset($_POST["modal-submit"])){
     $pwd = $_POST['pwd'];
     $adr = $_POST['adr'];
     $phone = $_POST['phone'];
+    $mail = $_POST['mail'];
+    $country = $_POST['country'];
     $insertCommandText = <<<SqlQuery
-    INSERT INTO coffee.sellers VALUES ('$sid','$nam','$acc','$pwd','$adr','$phone','123','sss')
+    INSERT INTO coffee.sellers VALUES ('$sid','$nam','$acc','$pwd','$adr','$phone','$mail','$country')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 }
@@ -108,9 +110,11 @@ if (isset($_POST['edModal-submit'])){
     $pwd = $_POST['pwd'];
     $adr = $_POST['adr'];
     $phone = $_POST['phone'];
+    $mail = $_POST['mail'];
+    $country = $_POST['country'];
     $editCommandText = <<<SqlQuery
-    UPDATE coffee.sellers SET sellerID='$sid', sName='$nam', sAccount='$acc',
-    sPassword='$pwd', sAddress='$adr', sPhone='$phone' 
+    UPDATE coffee.sellers SET sellerID='$sid', sName='$nam', sAccount='$acc',sPassword='$pwd', 
+    sAddress='$adr', sPhone='$phone', sMail='$mail', sCountry='$country' 
     where sellerID = '$sid'
     SqlQuery;
     mysqli_query($link, $editCommandText);
@@ -146,6 +150,8 @@ if (isset($_POST['edModal-submit'])){
             pwd.value = params[3]; //password
             adr.value = params[4]; //address
             phone.value = params[5]; //phone
+            mail.value = params[6];
+            country.value = params[7];
         }
     </script>
 </head>
@@ -179,47 +185,44 @@ if (isset($_POST['edModal-submit'])){
         <table class="table table-striped ">
             <thead class="thead-light">
                 <tr>
-                    <th>check</th>
+                    <th>勾選</th>
                     <th>sellerID</th>
-                    <th>sName</th>
-                    <th>sAccount</th>
-                    <th>sPassword</th>
-                    <th>sAddress</th>
-                    <th>sPhone</th>
-                    <th></th>
+                    <th>廠商名稱</th>
+                    <th>帳號</th>
+                    <th>密碼</th>
+                    <th>地址</th>
+                    <th>電話</th>
+                    <th>email</th>
+                    <th>國家/地區</th>
+                    <th>編輯</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
     // write table
     $commandText = <<<SqlQuery
-        select sellerID, sName, sAccount, sPassword, sAddress, sPhone
-        from coffee.sellers
+        select sellerID, sName, sAccount, sPassword, sAddress, sPhone, sMail, sCountry
+        from coffee.sellers LIMIT $rowNum OFFSET $tableOffSet
         SqlQuery;
-    
     $result = mysqli_query($link, $commandText);
-    while ($row = mysqli_fetch_assoc($result)): ?>
-                <tr>
-                    <!-- <label class="form-check-label"> -->
-                        <td>
-                            <input type="checkbox" name="<?php echo "selected" . $row["sellerID"] ?>"
-                                class="btn btn-danger mb-3">
-                        </td>
-                        <td><?php echo $row["sellerID"] ?></td>
-                        <td><?php echo $row["sName"] ?></td>
-                        <td><?php echo $row["sAccount"] ?></td>
-                        <td><?php echo $row["sPassword"] ?></td>
-                        <td><?php echo $row["sAddress"] ?></td>
-                        <td><?php echo $row["sPhone"] ?></td>
-                        <?php $temp = '"'.$row['sellerID'].'","'.$row['sName'].'","'.$row['sAccount'].'","'.$row['sPassword'].'","'.$row['sAddress'].'","'.$row['sPhone'].'"' ?>
-                        <td>
-                            <input type="submit" value="刪除" name="<?php echo "delete".$row["sellerID"] ?>"
+    while ($row = mysqli_fetch_assoc($result)): $temp = "'"; ?>
+                <tr><!-- <label class="form-check-label"> -->
+                        <td><input  class="btn btn-danger mb-3" type="checkbox" 
+                            name="<?php echo "selected".$row["sellerID"]; ?>"></td>
+                        <td><?php echo $row["sellerID"]; $temp = $temp.$row["sellerID"]."','"; ?></td>
+                        <td><?php echo $row["sName"]; $temp = $temp.$row["sName"]."','"; ?></td>
+                        <td><?php echo $row["sAccount"]; $temp = $temp.$row["sAccount"]."','"; ?></td>
+                        <td><?php echo $row['sPassword']; $temp; $temp = $temp.$row['sPassword']."','"; ?></td>
+                        <td><?php echo $row["sAddress"]; $temp = $temp.$row["sAddress"]."','"; ?></td>
+                        <td><?php echo $row["sPhone"];; $temp = $temp.$row["sPhone"]."','"; ?></td>
+                        <td><?php echo $row["sMail"]; $temp = $temp.$row["sMail"]."','"; ?></td>
+                        <td><?php echo $row["sCountry"]; $temp = $temp.$row["sCountry"]."'"; ?></td>
+                        <td><input type="submit" value="刪除" name="<?php echo "delete".$row["sellerID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                             <input type="button" value="編輯" name="<?php echo "edit".$row["sellerID"] ?>" 
                                 data-toggle="modal" data-target="#editModal"
-                                class="btn btn-primary mb-3"
-                                <?php echo "onclick='displayModal($temp)'"?>>
-                </tr>
+                                class="btn btn-primary mb-3" onclick="displayModal(<?php echo $temp;?>)">
+                </tr> 
                 <?php endwhile?>
             </tbody>
         </table>
@@ -277,21 +280,21 @@ if ($lastPage - $page <= 5) {
       </div>
       <div class="modal-body">
         <tr>
-            <th>sellerID:<input type="text" name='sid'>
-            </th>
+            <th>sellerID:<input type="text" name='sid'></th>
             <hr>
             <th>sName: <input type="text" name='nam'></th>
             <hr>
-            <th>sAccount: <input type="text" name='acc'>
-            </th>
+            <th>sAccount: <input type="text" name='acc'></th>
             <hr>
-            <th>sPassword: <input type="text" name='pwd'>
-            </th>
+            <th>sPassword: <input type="text" name='pwd'></th>
             <hr>
-            <th>sAddress: <input type="text" name='adr'>
-            </th>
+            <th>sAddress: <input type="text" name='adr'></th>
             <hr>
             <th>sPhone: <input type="text" name='phone'></th>
+            <hr>
+            <th>sMail: <input type="text" name="mail"></th>
+            <hr>
+            <th>sCountry: <input type="text" name="country"></th>
         </tr>
       </div>
       <div class="modal-footer">
@@ -316,21 +319,21 @@ if ($lastPage - $page <= 5) {
       </div>
       <div class="modal-body">
         <tr>
-            <th>sellerID:<input type="text" name='sid' id="sid" readonly>
-            </th>
+            <th>sellerID:<input type="text" name='sid' id="sid" readonly></th>
             <hr>
             <th>sName: <input type="text" name='nam' id="nam"></th>
             <hr>
-            <th>sAccount: <input type="text" name='acc' id="acc">
-            </th>
+            <th>sAccount: <input type="text" name='acc' id="acc"></th>
             <hr>
-            <th>sPassword: <input type="text" name='pwd' id="pwd">
-            </th>
+            <th>sPassword: <input type="text" name='pwd' id="pwd"></th>
             <hr>
-            <th>sAddress: <input type="text" name='adr' id="adr">
-            </th>
+            <th>sAddress: <input type="text" name='adr' id="adr"></th>
             <hr>
             <th>sPhone: <input type="text" name='phone' id="phone"></th>
+            <hr>
+            <th>sMail: <input type="text" name='mail' id='mail'></th>
+            <hr>
+            <th>sCountry: <input type="text" name='country' id='country'></th>
         </tr>
       </div>
       <div class="modal-footer">

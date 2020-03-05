@@ -96,14 +96,14 @@ if (isset($_GET["page"])) {
 }
 //number of rows
 if (isset($_POST["row_num_submit"])) {
-    $_SESSION["member_row_num"] = $_POST["row_num"];
+    $_SESSION["cram_row_num"] = $_POST["row_num"];
     header('Location: cram.php');
-} else if (isset($_SESSION["member_row_num"])) {
+} else if (isset($_SESSION["cram_row_num"])) {
 } else {
 //初始欄數=50
-    $_SESSION["member_row_num"] = 50;
+    $_SESSION["cram_row_num"] = 50;
 }
-$rowNum = $_SESSION["member_row_num"];
+$rowNum = $_SESSION["cram_row_num"];
 
 //總欄數:
 $total_num_rows = mysqli_num_rows(mysqli_query($link, "select cramID from coffee.crams;"));
@@ -147,18 +147,18 @@ $ASCorDESC = $_SESSION["ASCorDESC"];
 
 // 2. ORDERBY: 決定以何物排序
 if (isset($_POST["cramID_ASC"]) || isset($_POST["cramID_DESC"])) {
-    $_SESSION["orderby"] = "cramID";
+    $_SESSION["cr_orderby"] = "cramID";
 } else if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
-    $_SESSION["orderby"] = "customerID";
+    $_SESSION["cr_orderby"] = "customerID";
 } else if (isset($_POST["cDate_ASC"]) || isset($_POST["cDate_DESC"])) {
-    $_SESSION["orderby"] = "cDate";
+    $_SESSION["cr_orderby"] = "cDate";
 } else if (isset($_POST["cChecked_ASC"]) || isset($_POST["cChecked_DESC"])) {
-    $_SESSION["orderby"] = "cChecked";
-} else if (isset($_SESSION["orderby"])) {
+    $_SESSION["cr_orderby"] = "cChecked";
+} else if (isset($_SESSION["cr_orderby"])) {
 } else {// Default of orderby: cramID
-    $_SESSION["orderby"] = "cramID";
+    $_SESSION["cr_orderby"] = "cramID";
 }
-$orderby = $_SESSION["orderby"];
+$orderby = $_SESSION["cr_orderby"];
 
 //======= 排序調整: END HERE. =======//
 
@@ -324,34 +324,34 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 <div class="d-flex justify-content-center align-items-center flex-column  m-5">
         <!-- page select -->
         <div class="m-3">
-            <a class='m-2 btn btn-info' href='members.php?page=1'>第一頁</a>
-            <a class='m-2 btn btn-info' href='members.php?page=<?php echo ($page <= 1) ? "1" : $previousPage; ?>'>上一頁</a>
-            <a class='m-2 btn btn-info' href='members.php?page=<?php echo ($page >= $lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
-            <a class='m-2 btn btn-info' href='members.php?page=<?php echo $lastPage; ?>'>最尾頁</a>
+            <a class='m-2 btn btn-info' href='cram.php?page=1'>第一頁</a>
+            <a class='m-2 btn btn-info' href='cram.php?page=<?php echo ($page <= 1) ? "1" : $previousPage; ?>'>上一頁</a>
+            <a class='m-2 btn btn-info' href='cram.php?page=<?php echo ($page >= $lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
+            <a class='m-2 btn btn-info' href='cram.php?page=<?php echo $lastPage; ?>'>最尾頁</a>
         </div>
             <div>
 <?php
 for ($i = 1; $i <= 3 && $i <= $lastPage; $i++) {
-    echo " <a class='m-2' href='members.php?page=$i'>$i</a>";
+    echo " <a class='m-2' href='cram.php?page=$i'>$i</a>";
 }
 if ($page <= 6) {
     for ($i = 4; $i <= ($page + 2) && $i <= $lastPage; $i++) {
-        echo " <a class='m-2' href='members.php?page=$i'>$i</a>";
+        echo " <a class='m-2' href='cram.php?page=$i'>$i</a>";
     }
 } else {
     echo "<span>......</span>";
     for ($i = ($page - 2); $i <= ($page + 2) && $i <= $lastPage; $i++) {
-        echo " <a class='m-2' href='members.php?page=$i'>$i</a>";
+        echo " <a class='m-2' href='cram.php?page=$i'>$i</a>";
     }
 }
 if ($lastPage - $page <= 5) {
     for ($i = ($page + 3); $i <= $lastPage; $i++) {
-        echo " <a class='m-2' href='members.php?page=$i'>$i</a>";
+        echo " <a class='m-2' href='cram.php?page=$i'>$i</a>";
     }
 } else {
     echo "<span>......</span>";
     for ($i = ($lastPage - 2); $i <= $lastPage; $i++) {
-        echo " <a class='m-2' href='members.php?page=$i'>$i</a>";
+        echo " <a class='m-2' href='cram.php?page=$i'>$i</a>";
     }
 }
 
