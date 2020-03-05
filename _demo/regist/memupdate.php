@@ -197,7 +197,7 @@ function checkmail(sMail) {
             <p>&nbsp;國　　家：
             <input name="sCountry" type="text" class="form-control" id="sCountry" value="<?php echo $row_RecMember["sCountry"];?>">
             <br><span class="smalltext"></span></p>
-            <p>&nbsp;電　　話：
+            <p><font color="#FF0000">*</font>電　　話：
             <input name="sPhone" type="text" class="form-control" id="sPhone" value="<?php echo $row_RecMember["sPhone"];?>"></p>
             <br><p><font color="#FF0000">*</font>地　　址：
             <input name="sAddress" type="text" class="form-control" id="sAddress" value="<?php echo $row_RecMember["sAddress"];?>" size="40"> </p>

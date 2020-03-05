@@ -169,7 +169,7 @@ window.location.href='../index.php';
             <p><font color="#FF0000">*</font>電　　話：
             <input name="sPhone" type="text" class="form-control" placeholder="請輸入電話" id="sPhone">
             <br>
-            <p>&nbsp;&nbsp;信　　箱：
+            <p><font color="#FF0000">*</font>信　　箱：
             <input name="sMail" type="text" class="form-control" placeholder="請輸入信箱" id="sMail" size="40"></p>
             <br>
             <p><font color="#FF0000">*</font>地　　址：
