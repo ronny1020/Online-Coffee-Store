@@ -75,7 +75,6 @@ for($i=1;$i<=$number;$i++){
     $tid=rand(1,$maxTagID);
 
     $CommandText = "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($pid,$tid);";
-    echo $CommandText;  
     mysqli_query($link, $CommandText);
 }
     echo "done";   
