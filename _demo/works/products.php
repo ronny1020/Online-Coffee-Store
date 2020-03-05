@@ -230,17 +230,20 @@ if (isset($_POST["exportSelected"])) {
             $selectedList.=$selectedItem.",";
         }
     }
+
     $selectedList=rtrim($selectedList,",");
     $selectedList.=")";
-    $exportComment="select productID, ProductName, categoryName, UnitPrice, UnitsInStock, specification, products.description from coffee.products 
-    JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
-    where sellerID='$userID' and productID in $selectedList ORDER BY productID;";
+    
+    if($selectedList != "()"){
+        $exportComment="select productID, ProductName, categoryName, UnitPrice, UnitsInStock, specification, products.description from coffee.products 
+        JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
+        where sellerID='$userID' and productID in $selectedList ORDER BY productID;";
 
-   
-    $exportResult = mysqli_query($link, $exportComment);
-    $columns_total = mysqli_num_fields($exportResult);
-    $exportResult_exist = mysqli_num_rows($exportResult)>0;
-    if($exportResult_exist){
+    
+        $exportResult = mysqli_query($link, $exportComment);
+        $columns_total = mysqli_num_fields($exportResult);
+        $exportResult_exist = mysqli_num_rows($exportResult)>0;
+    
         // Get The Field Name
         $output ="";
         for($i = 0; $i < $columns_total; $i++){
@@ -264,23 +267,21 @@ if (isset($_POST["exportSelected"])) {
         }
 
 
-        
+            // Download the file
         $filename = "ProductList". date('Y-m-d H:i:s').".csv";
         header('Content-Encoding: UTF-8');
         header("Content-Type: text/csv; charset=UTF-8");
         header('Content-Disposition: attachment; filename=' . $filename);
         echo "\xEF\xBB\xBF";
         echo $output;
+
+        exit;
   
     }
-    // Download the file
 
+   
 
-
- 
-    exit;
-
-  // header('location:' . $_SERVER['REQUEST_URI'] . '');
+  header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
 
@@ -490,8 +491,9 @@ if (isset($_POST["edit_data"])) {
         <form method='post' class="card p-3">
             <div>
                 <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')" class="btn btn-danger mb-3">
-                <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
                 <input type="button" value="新增資料" class="btn btn-primary ml-3 mb-3" onclick="create_edit()">
+                <input type="submit" value="匯出勾選" class="btn btn-success ml-3 mb-3" name="exportSelected">
+                <input type="button" value="匯入資料" class="btn btn-info ml-3 mb-3" onclick="importDataUpload()">
 
                 <div class='float-right'>
                     <span class="mr-5">
@@ -701,8 +703,8 @@ mysqli_close($link);
 
     </div>
 </div>
-<div id="create_edit_window" class="window_close">
-    <div id="create_edit_bg">
+<div id="popUp_window" class="window_close">
+    <div id="popUp_bg" onclick="popUp_close()">
     </div>
 
 

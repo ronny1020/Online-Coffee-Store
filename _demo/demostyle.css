@@ -364,7 +364,7 @@
     }
     /* for creating form for create or edit in products */
     
-    #create_edit_window {
+    #popUp_window {
         position: fixed;
         width: 100%;
         height: 100vh;
@@ -380,7 +380,7 @@
         display: none;
     }
     
-    #create_edit_bg {
+    #popUp_bg {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -388,10 +388,10 @@
         opacity: 0.8;
     }
     
-    #create_edit_context {
+    #popUp_context {
         position: absolute;
         width: 61.8%;
-        height: 80%;
+        max-height: 80%;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
@@ -399,7 +399,7 @@
         z-index: 88;
     }
     
-    #create_edit_context .closebtn {
+    #popUp_context .closebtn {
         color: #373737 !important;
     }
     
@@ -417,7 +417,6 @@
         height: 200px;
         object-fit: cover;
     }
-
     /* Login page background. (Lee 0304) */
     
     td {
@@ -437,8 +436,8 @@
     .login_bg>.card {
         background-color: rgba(255, 255, 255, 0.5);
     }
-
-    .card > .welcome{
+    
+    .card>.welcome {
         text-align: center;
         font-size: 150%;
         font-weight: bolder;
