@@ -64,18 +64,18 @@ function selectAllCheckbox() {
 }
 
 //Modal content verification:
-var PWDcheck = function () {
-        if (document.getElementById('pwd').value ==
-            document.getElementById('pwd_check').value) {
-            document.getElementById('error_msg').style.color = 'green';
-            document.getElementById('error_msg').innerHTML = 'matching';
-            document.getElementById('modal_submit').removeAttribute('disabled');
-        } else {
-            document.getElementById('error_msg').style.color = 'red';
-            document.getElementById('error_msg').innerHTML = 'not matching';
-            document.getElementById('modal_submit').setAttribute('disabled','');
-        }
+var PWDcheck = function() {
+    if (document.getElementById('pwd').value ==
+        document.getElementById('pwd_check').value) {
+        document.getElementById('error_msg').style.color = 'green';
+        document.getElementById('error_msg').innerHTML = 'matching';
+        document.getElementById('modal_submit').removeAttribute('disabled');
+    } else {
+        document.getElementById('error_msg').style.color = 'red';
+        document.getElementById('error_msg').innerHTML = 'not matching';
+        document.getElementById('modal_submit').setAttribute('disabled', '');
     }
+}
 
 
 
@@ -166,7 +166,7 @@ function throwinmodal_MEMBERS(myid) {
 //for Creating & Appending element & give attribute in the same time
 
 
-HTMLElement.prototype.CreateAppend = function (element, context, ...attr) {
+HTMLElement.prototype.CreateAppend = function(element, context, ...attr) {
     e = document.createElement(element)
     if (context != undefined) {
         e.innerHTML = context;
@@ -334,8 +334,8 @@ function create_edit(ID) {
     }
     tags_ce.CreateAppend("div", "", "id", "createTagArea");
     newTagNumber = 0;
-    tags_ce.CreateAppend("input", "", "type", "button", "value", "新增TAG欄位", "class", "btn bg-color-gold m-3", "onclick", "createNewTag()");
-    tags_ce.CreateAppend("input", "", "type", "button", "value", "刪除TAG欄位", "class", "btn bg-color-gold m-3", "onclick", "deleteNewTag()");
+    tags_ce.CreateAppend("input", "", "type", "button", "value", "新增TAG欄位", "class", "btn btn-warning border-0 bg-color-gold m-3", "onclick", "createNewTag()");
+    tags_ce.CreateAppend("input", "", "type", "button", "value", "刪除TAG欄位", "class", "btn btn-warning border-0 bg-color-gold m-3", "onclick", "deleteNewTag()");
     // footer submit
     popUp_context.CreateAppend("div", "", "class", "card-footer bg-color-Paper", "id", "create_edit_footer");
     create_edit_footer.CreateAppend("input", "", "type", "submit", "class", "btn btn-primary", "value", submit_value, "name", submit_name, "onclick", `return confirm('你確定要${submit_value}資料嗎？')`);

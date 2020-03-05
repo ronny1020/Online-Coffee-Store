@@ -735,10 +735,10 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
         <div class="d-flex justify-content-center align-items-center flex-column  m-5">
         <!-- page select -->
         <div class="m-3">
-            <a class='m-2 btn bg-color-gold' href='products.php?page=1'>第一頁</a>
-            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page <= 1) ? "1" : $previousPage; ?>'>上一頁</a>
-            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo ($page >= $lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
-            <a class='m-2 btn bg-color-gold' href='products.php?page=<?php echo $lastPage; ?>'>最尾頁</a>
+            <a class='m-2 btn btn-warning border-0 bg-color-gold' href='products.php?page=1'>第一頁</a>
+            <a class='m-2 btn btn-warning border-0 bg-color-gold' href='products.php?page=<?php echo ($page <= 1) ? "1" : $previousPage; ?>'>上一頁</a>
+            <a class='m-2 btn btn-warning border-0 bg-color-gold' href='products.php?page=<?php echo ($page >= $lastPage) ? $lastPage : $nextPage; ?>'>下一頁</a>
+            <a class='m-2 btn btn-warning border-0 bg-color-gold' href='products.php?page=<?php echo $lastPage; ?>'>最尾頁</a>
         </div>
             <div>
             <?php
