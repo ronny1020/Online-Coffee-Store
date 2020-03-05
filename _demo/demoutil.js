@@ -65,17 +65,18 @@ function selectAllCheckbox() {
 
 //Modal content verification:
 var PWDcheck = function () {
-    if (document.getElementById('pwd').value != '') {
         if (document.getElementById('pwd').value ==
-            document.getElementById('pwd_checked').value) {
+            document.getElementById('pwd_check').value) {
             document.getElementById('error_msg').style.color = 'green';
             document.getElementById('error_msg').innerHTML = 'matching';
+            document.getElementById('modal_submit').removeAttribute('disabled');
         } else {
             document.getElementById('error_msg').style.color = 'red';
             document.getElementById('error_msg').innerHTML = 'not matching';
+            document.getElementById('modal_submit').setAttribute('disabled','');
         }
     }
-}
+
 
 
 

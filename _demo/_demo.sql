@@ -586,7 +586,6 @@ CREATE TABLE `discounts` (
   `startDate` date default NULL, -- 開始日期:
   `overDate` date default NULL, -- 結束日期:
   
-  
   PRIMARY KEY  (`disID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 預設儲存引擎: InnoDB(after php5.5)
@@ -629,6 +628,24 @@ INSERT INTO `discounts` VALUES
 ,('D034','利比瑞卡優惠','星巴克公司6月8日起利比瑞卡咖啡85折','S001','0.85','2020-06-08', '2020-06-12')
 ,('D035','利比瑞卡優惠','露易莎咖啡6月8日起利比瑞卡咖啡85折','S002','0.85','2020-06-08', '2020-06-12')
 ,('D036','利比瑞卡優惠','伯朗咖啡6月8日起利比瑞卡咖啡85折','S003','0.85','2020-06-08', '2020-06-12');
+
+
+CREATE TABLE discount_detail (
+  disID varchar(10) NOT NULL,-- Primary key:流水號
+  productID int(10) ZEROFILL NOT NULL, -- Primary key:流水號(商品)
+  disPrice int(10) NOT NULL -- 單價
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 預設儲存引擎: InnoDB(after php5.5)
+  
+  INSERT INTO discount_detail VALUES
+  ('D001',0000164416,'100'),
+  ('D002',0000164414,'100'),
+  ('D002',0000164415,'100'),
+  ('D003',0000164416,'100');
+  
+
+
+
 
 -- table訂單: orders
 -- 刪除已存在之重複table

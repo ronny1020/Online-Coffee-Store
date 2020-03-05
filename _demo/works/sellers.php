@@ -91,7 +91,7 @@ if (isset($_POST["modal-submit"])){
     $sid = $_POST['sid'];
     $nam = $_POST['nam'];
     $acc = $_POST['acc'];
-    $pwd = $_POST['pwd'];
+    $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
     $adr = $_POST['adr'];
     $phone = $_POST['phone'];
     $mail = $_POST['mail'];
@@ -147,11 +147,11 @@ if (isset($_POST['edModal-submit'])){
             sid.value = params[0]; //id
             nam.value = params[1]; //name
             acc.value = params[2]; //account
-            pwd.value = params[3]; //password
-            adr.value = params[4]; //address
-            phone.value = params[5]; //phone
-            mail.value = params[6];
-            country.value = params[7];
+            //pwd.value = params[3]; //password
+            adr.value = params[3]; //address
+            phone.value = params[4]; //phone
+            mail.value = params[5];
+            country.value = params[6];
         }
     </script>
 </head>
@@ -189,7 +189,7 @@ if (isset($_POST['edModal-submit'])){
                     <th>sellerID</th>
                     <th>廠商名稱</th>
                     <th>帳號</th>
-                    <th>密碼</th>
+                    <!-- <th>密碼</th> -->
                     <th>地址</th>
                     <th>電話</th>
                     <th>email</th>
@@ -212,7 +212,7 @@ if (isset($_POST['edModal-submit'])){
                         <td><?php echo $row["sellerID"]; $temp = $temp.$row["sellerID"]."','"; ?></td>
                         <td><?php echo $row["sName"]; $temp = $temp.$row["sName"]."','"; ?></td>
                         <td><?php echo $row["sAccount"]; $temp = $temp.$row["sAccount"]."','"; ?></td>
-                        <td><?php echo $row['sPassword']; $temp; $temp = $temp.$row['sPassword']."','"; ?></td>
+                        <!-- <td><?php //echo $row['sPassword']; $temp; $temp = $temp.$row['sPassword']."','"; ?></td> -->
                         <td><?php echo $row["sAddress"]; $temp = $temp.$row["sAddress"]."','"; ?></td>
                         <td><?php echo $row["sPhone"];; $temp = $temp.$row["sPhone"]."','"; ?></td>
                         <td><?php echo $row["sMail"]; $temp = $temp.$row["sMail"]."','"; ?></td>
@@ -282,19 +282,19 @@ if ($lastPage - $page <= 5) {
         <tr>
             <th>sellerID:<input type="text" name='sid'></th>
             <hr>
-            <th>sName: <input type="text" name='nam'></th>
+            <th>廠商名稱: <input type="text" name='nam'></th>
             <hr>
-            <th>sAccount: <input type="text" name='acc'></th>
+            <th>帳號: <input type="text" name='acc'></th>
             <hr>
-            <th>sPassword: <input type="text" name='pwd'></th>
+            <th>密碼: <input type="text" name='pwd'></th>
             <hr>
-            <th>sAddress: <input type="text" name='adr'></th>
+            <th>地址: <input type="text" name='adr'></th>
             <hr>
-            <th>sPhone: <input type="text" name='phone'></th>
+            <th>電話: <input type="text" name='phone'></th>
             <hr>
-            <th>sMail: <input type="text" name="mail"></th>
+            <th>email: <input type="text" name="mail"></th>
             <hr>
-            <th>sCountry: <input type="text" name="country"></th>
+            <th>國家/地區: <input type="text" name="country"></th>
         </tr>
       </div>
       <div class="modal-footer">
@@ -321,19 +321,19 @@ if ($lastPage - $page <= 5) {
         <tr>
             <th>sellerID:<input type="text" name='sid' id="sid" readonly></th>
             <hr>
-            <th>sName: <input type="text" name='nam' id="nam"></th>
+            <th>廠商名稱: <input type="text" name='nam' id="nam"></th>
             <hr>
-            <th>sAccount: <input type="text" name='acc' id="acc"></th>
+            <th>帳號: <input type="text" name='acc' id="acc"></th>
             <hr>
-            <th>sPassword: <input type="text" name='pwd' id="pwd"></th>
+            <!-- <th>sPassword: <input type="text" name='pwd' id="pwd"></th>
+            <hr> -->
+            <th>地址: <input type="text" name='adr' id="adr"></th>
             <hr>
-            <th>sAddress: <input type="text" name='adr' id="adr"></th>
+            <th>電話: <input type="text" name='phone' id="phone"></th>
             <hr>
-            <th>sPhone: <input type="text" name='phone' id="phone"></th>
+            <th>email: <input type="text" name='mail' id='mail'></th>
             <hr>
-            <th>sMail: <input type="text" name='mail' id='mail'></th>
-            <hr>
-            <th>sCountry: <input type="text" name='country' id='country'></th>
+            <th>國家/地區: <input type="text" name='country' id='country'></th>
         </tr>
       </div>
       <div class="modal-footer">
