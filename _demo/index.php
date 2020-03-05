@@ -34,7 +34,7 @@ function loginCheck($acc, $pwd)
     $commandText = "select * from sellers";
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['sAccount'] == $acc && password_verify($row['sPassword'], $pwd)) {
+        if ($row['sAccount'] == $acc && password_verify($pwd, $row['sPassword'])) {
             mysqli_close($link);
             $_SESSION["AorS"] = 1;
             return 1;
@@ -47,7 +47,7 @@ function loginCheck($acc, $pwd)
     $commandText = "select * from admins";
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)) {
-        if ($row['aAccount'] == $acc && password_verify($row['aPassword'], $pwd)) {
+        if ($row['aAccount'] == $acc && password_verify($pwd, $row['aPassword'])) {
             mysqli_close($link);
             $_SESSION["AorS"] = 0;
             return 0;
@@ -70,11 +70,11 @@ if (isset($_POST["btnOK"])) {
     $sUserName = $_POST["txtacc"];
     $sPassword = $_POST["txtpwd"];
     //密碼加密: 雜湊(hash)
-    $encrypt_pwd = password_hash($sPassword, PASSWORD_BCRYPT);
+    // $encrypt_pwd = password_hash($sPassword, PASSWORD_BCRYPT);
     //Empty contents shall not pass.
     if ($sPassword !== "" && $sUserName !== "") {
         //檢查登入:
-        if (loginCheck($sUserName, $encrypt_pwd) >= 0) {
+        if (loginCheck($sUserName, $sPassword) >= 0) {
             //If 記得我 ticked:
             if ($_POST['remember'] == true) {
                 // $_SESSION['password'] = $sPassword;
