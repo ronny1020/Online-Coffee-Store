@@ -44,7 +44,7 @@ $rowNum = $_SESSION["member_row_num"];
 //總欄數:
 $total_num_rows = mysqli_num_rows(mysqli_query($link, "select customerID from coffee.customers;"));
 //最後一頁的頁數為:
-$lastPage = floor($total_num_rows / $rowNum) + 1;
+$lastPage = ceil($total_num_rows / $rowNum);
 $tableOffSet = $rowNum * ($page - 1);
 $showDataStartFrom = $tableOffSet + 1;
 $showDataEndTo = $tableOffSet + $rowNum;
@@ -141,6 +141,73 @@ if (isset($_POST["deleteSelected"])) {
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
+// Export selected items.
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList="('";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList .= $selectedItem . "','";
+        }
+    }
+    $selectedList = rtrim($selectedList , ",");
+    $selectedList .= "')";
+
+    //防呆 一個都沒勾的話:
+    if($selectedList == "('')"){
+        // echo "<script>alert('Please select at least 1 column.');</script>";
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    }
+    //多一空欄位 '' 但不影響功能
+    // echo $selectedList;
+    $exportComment = <<<SqlQuery
+    select customerID, cName, cAccount, cEmail, cSex, cBirthDate, cAddress, cMobile from coffee.customers   
+    WHERE customerID IN $selectedList ORDER BY customerID
+    SqlQuery;
+   
+    $exportResult = mysqli_query($link, $exportComment);
+    // if($exportResult === FALSE){
+    //     // echo $exportResult;
+    //     // exit;
+    // }
+    // else{
+        $columns_total = mysqli_num_fields($exportResult);
+        $exportResult_exist = mysqli_num_rows($exportResult)>0;
+        if($exportResult_exist){
+            // Get The Field Name
+            $output ="";
+            for($i = 0; $i < $columns_total; $i++){
+                $heading = mysqli_fetch_field_direct($exportResult, $i);
+                $output .= '"' . $heading->name . '",';
+            }
+        $output .="\n";
+ 
+        // Get Records from the table
+        while($row = mysqli_fetch_assoc($exportResult)){    
+        $output .='"' . $row["customerID"] . '",';
+        $output .='"' . $row["cName"] . '",';
+        $output .='"' . $row["cAccount"] . '",';
+        $output .='"' . $row["cEmail"] . '",';
+        $output .='"' . $row["cSex"] . '",';
+        $output .='"' . $row["cBirthDate"] . '",';
+        $output .='"' . $row["cAddress"] . '",';
+        $output .='"' . $row["cMobile"] . '",';
+        $output .="\n";
+        }
+
+        $filename = "MemberList". date('Y-m-d H:i:s').".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
+        echo $output;
+  
+    }
+    exit;
+    }
+// }
+
 //========== 欄位排序調整: ==========//
 //Adjusted by 2 SESSION:
 // 1. ASCorDESC: 決定升序抑或降序
@@ -215,8 +282,8 @@ $orderby = $_SESSION["cu_orderby"];
 
 <form method='post' class="card p-3">
     <div>
-        <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
-            class="btn btn-danger mb-3">
+        <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"class="btn btn-danger mb-3">
+        <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
         <!--Modal toggled here.-->
         <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
@@ -274,7 +341,7 @@ $orderby = $_SESSION["cu_orderby"];
 
                         <th>
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cPassword</p>
+                                <p class="m-1">cEmail</p>
                             </div>
                         </th>
 
@@ -320,7 +387,7 @@ $orderby = $_SESSION["cu_orderby"];
 // $commandText: $str
 // 受所允許之總欄數調控
 $commandText = <<<SqlQuery
-select customerID, cName, cAccount, cPassword, cSex, cBirthDate, cAddress, cMobile
+select customerID, cName, cAccount, cEmail, cSex, cBirthDate, cAddress, cMobile
 from coffee.customers ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
@@ -336,7 +403,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         <td id="<?php echo $row["customerID"]."customerID" ?>"><?php echo $row["customerID"] ?></td>
                         <td id="<?php echo $row["customerID"]."cName" ?>" ><?php echo $row["cName"] ?></td>
                         <td id="<?php echo $row["customerID"]."cAccount" ?>" ><?php echo $row["cAccount"] ?></td>
-                        <td id="<?php echo $row["customerID"]."cPassword" ?>" ><?php echo $row["cPassword"] ?></td>
+                        <td id="<?php echo $row["customerID"]."cEmail" ?>" ><?php echo $row["cEmail"] ?></td>
                         <td id="<?php echo $row["customerID"]."cSex" ?>" ><?php echo $row["cSex"] ?></td>
                         <td id="<?php echo $row["customerID"]."cBirthDate" ?>" ><?php echo $row["cBirthDate"] ?></td>
                         <td id="<?php echo $row["customerID"]."cAddress" ?>" ><?php echo $row["cAddress"] ?></td>
@@ -416,7 +483,7 @@ if ($lastPage - $page <= 5) {
                     <th>cAccount: <input type="text" name='acc'>
                     </th>
                     <hr>
-                    <th>cPassword: <input type="text" name='pwd'>
+                    <th>cEmail: <input type="text" name='pwd'>
                     </th>
                     <hr>
                     <th>cBirthDate:<input type="date" name='bid'>
@@ -466,7 +533,7 @@ if ($lastPage - $page <= 5) {
                     <th>cAccount: <input type="text" name='acc_e' id='acc_e'>
                     </th>
                     <hr>
-                    <th>cPassword: <input type="text" name='pwd_e' id='pwd_e'>
+                    <th>cEmail: <input type="text" name='pwd_e' id='pwd_e'>
                     </th>
                     <hr>
                     <th>cBirthDate:<input type="date" name='bid_e' id='bid_e'>
