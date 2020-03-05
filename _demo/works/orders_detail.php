@@ -93,10 +93,10 @@ foreach ($_POST as $i => $j) {
 
 //ADD NEW DATA TO FORM! :
 if (isset($_POST['modal_submit'])) {
-   $tmp_oid = $_POST['oid'];
-   $tmp_pid = $_POST['pid'];
-   $tmp_Quan = $_POST['Quan'];
-   $tmp_Dis = $_POST['Dis'];
+   $tmp_oid = @$_POST['oid'];
+   $tmp_pid = @$_POST['pid'];
+   $tmp_Quan = @$_POST['Quan'];
+   $tmp_Dis= @$_POST['Dis'];
 
    $insertCommandText = <<<SqlQuery
    insert into coffee.orders_detail VALUES ('$tmp_oid','$tmp_pid','$tmp_Quan','$tmp_Dis')
@@ -106,6 +106,31 @@ if (isset($_POST['modal_submit'])) {
    
    mysqli_query($link, $insertCommandText);
 }
+
+//EDIT INNER DATA FROM FROM!
+//整行砍掉再重丟
+if (isset($_POST['modal_submit_e'])) {
+    $tmp_oid_e = $_POST['oid_e'];
+    $tmp_pid_e = $_POST['pid_e'];
+    $tmp_Quan_e = $_POST['Quan_e'];
+    $tmp_Dis_e= $_POST['Dis_e'];
+
+    //刪除舊資料
+    $insertCommandText = <<<SqlQuery
+    DELETE FROM coffee.orders_detail WHERE OrderID IN ('$tmp_oid_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+
+    //插入新資料
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.orders_detail VALUES ('$tmp_oid_e','$tmp_pid_e','$tmp_Quan_e','$tmp_Dis_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
+
+
+
+
 
 // Write table:
 $front_STR1 = "<td>";
@@ -159,7 +184,7 @@ if (isset($_POST["deleteSelected"])) {
 
     <!-- I edited these stuffs.-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
-    <script src="../demoutil.js"></script>
+    <script src="../orders_detail_need.js"></script>
 </head>
 
 <body>
@@ -228,8 +253,8 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["OrderID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
-                    <input type='button' value="編輯" name="<?php echo "edit" . $row["OrderID"] ?>"
-                        class="btn btn-primary mb-3"  data-toggle="modal" data-target='#MyEdit'>
+                    <input type='button' value="編輯123" name="<?php echo "edit" . $row["OrderID"] ?>"
+                        class="btn btn-primary mb-3"  data-toggle="modal" data-target='#MyEdit' onclick="throwinmodal_orders_detail(<?php echo "'".$row['OrderID']."'"?>)">
                 </td>
             </tr>
             <?php endwhile?>
@@ -309,15 +334,15 @@ while ($row = mysqli_fetch_assoc($result)): ?>
        <div class="modal-body">
             <tr>
 
-                    <th>OrderID:<input type="text" name='oid'>
+                    <th>OrderID:<input type="text" name='oid_e' id='oid_e' readonly>
                     </th>
                     <hr>
-                    <th>ProductID: <input type="text" name='pid'></th>
+                    <th>ProductID: <input type="text" name='pid_e' id='pid_e' ></th>
                     <hr>
-                    <th>Quantity: <input type="int" name='Quan'>
+                    <th>Quantity: <input type="int" name='Quan_e' id='Quan_e'>
                     </th>
                     <hr>
-                    <th>Discount: <input type="float" name='Dis'>
+                    <th>Discount: <input type="float" name='Dis_e' id='Dis_e' >
                     </th>
                     <hr>
 
@@ -330,7 +355,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
         <!-- Modal footer -->
         <div class="modal-footer">
-            <input type="submit" name="modal_submit" value='submit' class="btn btn-primary"></input>
+            <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input>
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         </form>

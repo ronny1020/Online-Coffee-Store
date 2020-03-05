@@ -30,7 +30,57 @@ mysqli_select_db($link, "coffee");
 // } else {
 //     $page = 1;
 // }
-// //number of rows
+
+
+
+
+
+//orderby
+// OrderID, CustomerID, OrderDate, ShippedDate, ShipAddress, ShipRegion, ShipPostCode, ShipCity, ShipCountry
+// if (isset($_POST["OrderID_ASC"]) || isset($_POST["CustomerID_ASC"]) || isset($_POST["OrderDate_ASC"]) || isset($_POST["ShippedDate_ASC"]) || isset($_POST["ShipAddress_ASC"]) || isset($_POST["ShipRegion_ASC"]|| isset($_POST["ShipPostCode_ASC"]|| isset($_POST["ShipCity_ASC"]|| isset($_POST["ShipCountry_ASC"])) {
+//     $_SESSION["OrderID_ASCorDESC"] = "ASC";
+// } else if (isset($_POST["OrderID_DESC"]) || isset($_POST["CustomerID_DESC"]) || isset($_POST["OrderDate_DESC"]) || isset($_POST["ShippedDate_DESC"]) || isset($_POST["ShipAddress_DESC"]) || isset($_POST["ShipRegion_DESC"] || isset($_POST["ShipPostCode_DESC"] || isset($_POST["ShipCity_DESC"] || isset($_POST["ShipCountry_DESC"])) {
+//     $_SESSION["OrderID_ASCorDESC"] = "DESC";
+// } else if (isset($_SESSION["OrderID_ASCorDESC"])) {
+// } else {
+//     $_SESSION["OrderID_ASCorDESC"] = "ASC";
+// }
+// $ASCorDESC = $_SESSION["OrderID_ASCorDESC"];
+
+// if (isset($_POST["OrderID_ASC"]) || isset($_POST["OrderID_DESC"])) {
+//     $_SESSION["OrderID_orderby"] = "OrderID";
+// } else if (isset($_POST["CustomerID_ASC"]) || isset($_POST["CustomerID_DESC"])) {
+//     $_SESSION["OrderID_orderby"] = "CustomerID";
+// } else if (isset($_POST["OrderDate_ASC"]) || isset($_POST["OrderDate_DESC"])) {
+//     $_SESSION["product_orderby"] = "OrderDate";
+// } else if (isset($_POST["ShippedDate_ASC"]) || isset($_POST["ShippedDate_DESC"])) {
+//     $_SESSION["product_orderby"] = "ShippedDate";
+// } else if (isset($_POST["ShipAddress_ASC"]) || isset($_POST["ShipAddress_DESC"])) {
+//     $_SESSION["product_orderby"] = "ShipAddress";
+// } else if (isset($_POST["ShipRegion_ASC"]) || isset($_POST["ShipRegion_DESC"])) {
+//     $_SESSION["product_orderby"] = "ShipRegion"
+// } else if (isset($_POST["ShipPostCode_ASC"]) || isset($_POST["ShipPostCode_DESC"])) {
+//     $_SESSION["product_orderby"] = "ShipPostCode"
+// } else if (isset($_POST["ShipCity_ASC"]) || isset($_POST["ShipCity_DESC"])) {
+//     $_SESSION["product_orderby"] = "ShipCity"
+// } else if (isset($_POST["ShipCountry_ASC"]) || isset($_POST["ShipCountry_DESC"])) {
+//     $_SESSION["product_orderby"] = "ShipCountry"    
+ 
+    
+    
+    
+//     ;
+// } else if (isset($_SESSION["product_orderby"])) {
+// } else {
+//     $_SESSION["product_orderby"] = "OrderID";
+// }
+// $orderby = $_SESSION["OrderID_orderby"];
+
+
+
+
+
+//number of rows
 // if (isset($_POST["row_num_submit"])) {
 //     $_SESSION["member_row_num"] = $_POST["row_num"];
 //     header('Location: members.php');
@@ -63,53 +113,57 @@ foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
         $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.ordrs_detail WHERE OrderID IN ('$deleteItem')
+        DELETE FROM coffee.orders WHERE OrderID IN ('$deleteItem')
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
-    } //Right edit button:
-    elseif (substr($i, 0, 4) == "edit") {
-        //獲得customerID
-        // $editItem = ltrim($i, "edit");
-        // $editCommandText = <<<SqlQuery
-        // select OrderID, CustomerID, EmployeeID, RequiredDate, ShippedDate, ShipVia, Freight, ShipName, 
-        // ShipAddress, ShipRegion, ShipPostCode, ShipCountry, ShipCity   
-        // from coffee.orders WHERE CustomerID IN ('$editItem')
-        // SqlQuery;
-        // $result = mysqli_query($link, $editCommandText);
-        // while ($row = mysqli_fetch_assoc($result)) {
-        //     $_SESSION["modal_cid"] = $row["customerID"];
-        //     $_SESSION["modal_nam"] = $row["cName"];
-        //     $_SESSION["modal_acc"] = $row["cAccount"];
-        //     $_SESSION["modal_sex"] = $row["cSex"];
-        //     $_SESSION["modal_bid"] = $row["cBirthDate"];
-        //     $_SESSION["modal_adr"] = $row["cAddress"];
-        //     $_SESSION["modal_mob"] = $row["cMobile"];
-        // }
-        // ;
-        // header('location:' . $_SERVER['REQUEST_URI'] . '');
-    }
+    } 
 }
 
 //ADD NEW DATA TO FORM! :
 if (isset($_POST['modal_submit'])) {
-   $tmp_oid = $_POST['oid'];
-   $tmp_cid = $_POST['cid'];
-   $tmp_OrderD = $_POST['OrderD'];
-   $tmp_ShippedD = $_POST['ShippedD'];
-   $tmp_ShippedA = $_POST['ShippedA'];
-   $tmp_ShipR = $_POST['ShipR'];
-   $tmp_ShipPost = $_POST['ShipPost'];
-   $tmp_ShipCity = $_POST['ShipCity'];
-   $tmp_ShipCountry = $_POST['ShipCountry'];
+   $tmp_oid = @$_POST['oid'];
+   $tmp_cid = @$_POST['cid'];
+   $tmp_OrderD = @$_POST['OrderD'];
+   $tmp_ShippedD = @$_POST['ShippedD'];
+   $tmp_ShippedA = @$_POST['ShippedA'];
+   $tmp_ShipR = @$_POST['ShipR'];
+   $tmp_ShipPost = @$_POST['ShipPost'];
+   $tmp_ShipCity = @$_POST['ShipCity'];
+   $tmp_ShipCountry = @$_POST['ShipCountry'];
    $insertCommandText = <<<SqlQuery
    insert into coffee.orders VALUES ('$tmp_oid','$tmp_cid','$tmp_OrderD','$tmp_ShippedD','$tmp_ShippedA','$tmp_ShipR','$tmp_ShipPost','$tmp_ShipCity','$tmp_ShipCountry')
-   SqlQuery;
-   
-
-   
+   SqlQuery;      
    mysqli_query($link, $insertCommandText);
 }
+
+//EDIT INNER DATA FROM FROM!
+//整行砍掉再重丟
+if (isset($_POST['modal_submit_e'])) {
+    $tmp_oid_e = $_POST['oid_e'];
+    $tmp_cid_e = $_POST['cid_e'];
+    $tmp_OrderD_e = $_POST['OrderD_e'];
+    $tmp_ShippedD_e = $_POST['ShippedD_e'];
+    $tmp_ShippedA_e = $_POST['ShippedA_e'];
+    $tmp_ShipR_e = $_POST['ShipR_e'];
+    $tmp_ShipPost_e = $_POST['ShipPost_e'];
+    $tmp_ShipCity_e = $_POST['ShipCity_e'];
+    $tmp_ShipCountry_e = $_POST['ShipCountry_e'];
+
+
+    //刪除舊資料
+    $insertCommandText = <<<SqlQuery
+    DELETE FROM coffee.orders WHERE OrderID IN ('$tmp_oid_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+
+    //插入新資料
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.orders VALUES ('$tmp_oid_e','$tmp_cid_e','$tmp_OrderD_e','$tmp_ShippedD_e','$tmp_ShippedA_e','$tmp_ShipR_e','$tmp_ShipPost_e','$tmp_ShipCity_e', '$tmp_ShipCountry_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
+
 
 // Write table:
 $front_STR1 = "<td>";
@@ -135,7 +189,7 @@ if (isset($_POST["deleteSelected"])) {
     }
     $selectedList = ltrim($selectedList, "!,");
     $deleteSelectedCommandText = <<<SqlQuery
-    DELETE FROM coffee.ordrs_detail WHERE OrderID IN ($selectedList)
+    DELETE FROM coffee.orders WHERE OrderID IN ($selectedList)
     SqlQuery;
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
@@ -161,9 +215,9 @@ if (isset($_POST["deleteSelected"])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Noto+Serif+TC&display=swap" rel="stylesheet">
 
-    <!-- I edited these stuffs.-->
+    <!-- I edited these stuffs.      Used in the "Edit modal on the right button..."-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
-    <script src="../demoutil.js"></script>
+    <script src="../orders_need.js"></script>
 </head>
 
 <body>
@@ -171,6 +225,54 @@ if (isset($_POST["deleteSelected"])) {
 <?php include '../parts/head.php';?>
 <!-- Start your code here. -->
 <div class="main p-5">
+<form class="card p-3 mb-5" method="POST">
+            <div class="w-50 mx-auto">
+                <label for="searchKeyword">
+                    請輸入關鍵字並選擇搜尋欄位：
+                </label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
+                    <select name="searchBy">
+                        <option value="OrderID">
+                            流水號
+                        </option>
+                        <option value="CustomerID">
+                            流水號(買家)    
+                        </option>
+                        <option value="OrderDate">
+                            下單日期
+                        </option>
+                        <option value="ShippedDate">
+                            運送日期
+                        </option>
+                        <option value="ShipAddress">
+                            運送地址  
+                        </option>
+                        <option value="ShipRegion">
+                            運送區域  
+                        </option>
+                        <option value="ShipPostCode">
+                            運送郵遞區號
+                        </option>
+                        <option value="ShipCity">
+                            運送城市
+                        </option>
+                        <option value="ShipCountry">
+                            運送國家
+                        </option>
+                    </select>
+                </div>
+                <button class="btn btn-success mt-3" type="submit" name="startSearch">開始搜尋</button> 
+                <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
+                <p class="mt-3">
+                    <?php 
+                    if(isset($_SESSION["_searchKeyword"])){
+                        echo "您正在搜尋：".$_SESSION["OrderID_searchKeyword"];
+                    }                    
+                     ?>
+                </p>
+            </div>
+        </form>
 
 <form method='post' class="card p-3">
     <div>
@@ -242,7 +344,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["OrderID"] ?>"
-                        class="btn btn-primary mb-3"  data-toggle="modal" data-target='#MyEdit'>
+                        class="btn btn-primary mb-3" onclick="throwinmodal_orders(<?php echo "'".$row['OrderID']."'"?>)">
                 </td>
             </tr>
             <?php endwhile?>
@@ -329,29 +431,29 @@ while ($row = mysqli_fetch_assoc($result)): ?>
        <div class="modal-body">
             <tr>
 
-                    <th>OrderID:<input type="text" name='oid'>
+                    <th>OrderID:<input type="text" name='oid_e' id='oid_e' readonly>
                     </th>
                     <hr>
-                    <th>CustomerID: <input type="text" name='cid'></th>
+                    <th>CustomerID: <input type="text" name='cid_e'  id='cid_e'></th>
                     <hr>
-                    <th>OrderDate: <input type="date" name='OrderD'>
+                    <th>OrderDate: <input type="date" name='OrderD_e'  id='OrderD_e'>
                     </th>
                     <hr>
-                    <th>ShippedDate: <input type="date" name='ShippedD'>
+                    <th>ShippedDate: <input type="date" name='ShippedD_e' id='ShippedD_e'>
                     </th>
                     <hr>
-                    <th>ShipAddress: <input type="text" name='ShippedA'></th>
+                    <th>ShipAddress: <input type="text" name='ShippedA_e' id='ShippedA_e'></th>
                     <hr>
-                    <th>ShipRegion:<input type="text" name='ShipR'>
+                    <th>ShipRegion:<input type="text" name='ShipR_e' id='ShipR_e'>
                     </th>
                     <hr>
                     
                     
-                    <th>ShipPostCode: <input type="text" name='ShipPost'></th>
+                    <th>ShipPostCode: <input type="text" name='ShipPost_e'  id='ShipPost_e'></th>
                     <hr>
-                    <th>ShipCity: <input type="text" name='ShipCity'></th>
+                    <th>ShipCity: <input type="text" name='ShipCity_e'  id='ShipCity_e'></th>
                     <hr>
-                    <th>ShipCountry: <input type="text" name='ShipCountry'></th>
+                    <th>ShipCountry: <input type="text" name='ShipCountry_e' id='ShipCountry_e'></th>
 
 
             </tr>
@@ -361,7 +463,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
         <!-- Modal footer -->
         <div class="modal-footer">
-            <input type="submit" name="modal_submit" value='submit' class="btn btn-primary"></input>
+            <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input>
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         </form>
@@ -371,6 +473,25 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 <!-- End your code here. -->
 
 
+
+<!--
+
+<script>
+ 內嵌一段  javascript程式 抓每個欄位中的資料 接著再進行修改  
+
+
+</script>
+
+原本想把右邊的 編輯按鈕的功能做在這的 但想了想還是另外放在 orders_need.js好惹...
+
+主要是更改以下這段後面的內容XD
+// Lightweight version by LEE.(0303)
+// 1. 更改table使各欄位附加上id
+// 2. onclick button觸發函數讀值進入modal
+// 3. submit之後送出update MySql
+
+
+-->
 
 
 
