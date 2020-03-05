@@ -367,10 +367,12 @@ while ($row = mysqli_fetch_assoc($result)):
                         
                         
                         <td class="p-0">
+                        <div class="right_btn" align="center">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                                 <input type='button' value="編輯" name="<?php echo "edit" . $row["disID"] ?>"
                         class="btn btn-primary mb-3" onclick="throwinmodal_DIS(<?php echo "'".$row['disID']."'"?>)">
+                        </div>
                         </td>
                     </tr>
                     <?php endwhile?>
