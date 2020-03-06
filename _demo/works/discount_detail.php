@@ -152,7 +152,7 @@ if (isset($_POST['modal_submit2'])) {
     $tmp_ddp2 = $_POST['ddp2'];
     
     $sql_query = "UPDATE discount_detail SET disPrice='$tmp_ddp2' WHERE disID='$tmp_did2' AND productID='$tmp_nam2'";   
-    echo $sql_query;
+    
 	$stmt = $link -> prepare($sql_query);
    
     $stmt -> execute();
@@ -412,7 +412,7 @@ $commandText = <<<SqlQuery
 
 
 $result = mysqli_query($link, $commandText);
-echo $commandText;
+
 while ($row = mysqli_fetch_assoc($result)):
 
 ?>
