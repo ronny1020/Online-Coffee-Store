@@ -133,10 +133,13 @@ if (isset($_POST['modal_submit'])) {
     $tmp_did = $_POST['did'];
     $tmp_nam = $_POST['nam'];
     $tmp_ddp = $_POST['ddp'];
-   
+    
+    $tmp_did3 = trim($tmp_did);
+    $tmp_nam3 = trim($tmp_nam);
+    $tmp_ddp3 = trim($tmp_ddp);
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.discount_detail VALUES ('$tmp_did','$tmp_nam','$tmp_ddp') 
+    insert into coffee.discount_detail VALUES ('$tmp_did3','$tmp_nam3','$tmp_ddp3') 
     SqlQuery;
     mysqli_query($link, $insertCommandText);
     
@@ -386,8 +389,8 @@ if (isset($_POST["exportSelected"])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折扣價格</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC"  value=""  name="disPrice_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC"  value=""  name="disPrice_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC"  value="▲"  name="disPrice_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC"  value="▼"  name="disPrice_ASC">
                                 </div>
                             </div>
                         </th>
