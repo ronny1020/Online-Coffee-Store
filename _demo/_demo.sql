@@ -915,7 +915,7 @@ INSERT INTO `orders` VALUES
 -- 刪除已存在之重複table
 DROP TABLE IF EXISTS `orders_detail`;
 CREATE TABLE `orders_detail` (
-  `orderID` varchar(5) NOT NULL default '',-- Primary key:流水號(訂單)
+  `OrderID` varchar(5) NOT NULL default '',-- Primary key:流水號(訂單)
   `productID` int(10) ZEROFILL,
   `Quantity` smallint(6) NOT NULL default '0',-- 數量
   `Discount` float NOT NULL default '0'-- 折扣
