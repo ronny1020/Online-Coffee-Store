@@ -155,7 +155,7 @@ if(isset($_SESSION["product_searchKeyword"])) {
             $productIDList=$productIDList.$productID."','";
         }
         $productIDList=$productIDList."')";
-        $searchComment="and productID in $productIDList";
+        $searchComment="and products.productID in $productIDList";
     }
 }
 
