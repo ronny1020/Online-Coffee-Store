@@ -31,7 +31,7 @@ $error = "";
             <a class='triangle_title' type="button" data-toggle="collapse" data-target="#regist">
                資料管理<div class="triangle_rotate">▶</div></a>
             <div id="regist" class="collapse">
-            <a href="../regist/memupdate.php">註冊管理</a>
+            <a href="../regist/memupdate.php">修改資料</a>
             <a href="../works/infomations.php">訊息管理</a>
             <a href="../works/discounts.php">優惠活動管理</a>
             <a href="../works/discount_detail.php">優惠細節管理</a>

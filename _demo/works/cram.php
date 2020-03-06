@@ -271,7 +271,7 @@ $orderby = $_SESSION["cr_orderby"];
                 <!--======= 欄數調整列⬆: =======-->
 <!--======= Main table標題⬇: =======-->
     <table class="table table-striped ">
-    <thead class="bg-color-silk">
+    <thead class="bg-color-gold">
                     <tr>
                         <th>
                             <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
@@ -347,7 +347,7 @@ $result = mysqli_query($link, $commandText);
 $result = mysqli_query($link, $commandText);
 while ($row = mysqli_fetch_assoc($result)): ?>
 
-            <tr>
+            <tr class="dataSQL">
                         <td>
                         <input type="checkbox" name="<?php echo "selected" . $row["cramID"] ?>"class='checkmark'
                         style='position: relative;'>
