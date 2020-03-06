@@ -5,9 +5,9 @@ $error = "";
 ?>
 
 <div id="mySidebar" class="sidebar">
-    <div class="sidebar_bg"></div>
+    <!-- <div class="sidebar_bg"></div> -->
 
-    <div class="sidebar_context">
+    <div class="sidebar_content">
         <img src="../image/sidebar-head.jpg" alt="sidebar-head" class="sidebar-head" width="250px">
 
         <p href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</p>
@@ -27,7 +27,7 @@ $error = "";
             </div>
             <a class='triangle_title' href="sellers.php">廠商管理<div class="triangle_rotate">▶</div></a>
         <?php } elseif ($_SESSION['AorS'] === 1) {?>
-            
+
             <a class='triangle_title' type="button" data-toggle="collapse" data-target="#regist">
                資料管理<div class="triangle_rotate">▶</div></a>
             <div id="regist" class="collapse">
@@ -41,13 +41,13 @@ $error = "";
                訂單管理<div class="triangle_rotate">▶</div></a>
             <div id="order" class="collapse">
             <a href="../works/orders.php">訂單內容</a>
-            <a href="../works/orders_detail.php">訂單細節</a>    
+            <a href="../works/orders_detail.php">訂單細節</a>
             </div>
-            
+
             <a href="../works/products.php">商品管理</a>
-            
-            
-            
+
+
+
 <?php }?>
     </div>
 
