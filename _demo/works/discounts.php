@@ -290,7 +290,7 @@ if (isset($_POST["exportSelected"])) {
     <script src="../demoutil2.js"></script>
 </head>
 
-<body>
+<body class="bg-color-Paper">
     <?php include '../parts/sidebar.php';?>
     <?php include '../parts/head.php';?>
 
