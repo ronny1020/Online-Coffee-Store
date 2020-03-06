@@ -240,7 +240,7 @@ $orderby = $_SESSION["cr_orderby"];
     <script src="../demoutil.js"></script>
 </head>
 
-<body>
+<body class="bg-color-Paper">
 <?php include '../parts/sidebar.php';?>
 <?php include '../parts/head.php';?>
 <!-- Start your code here. -->

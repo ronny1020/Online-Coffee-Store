@@ -550,6 +550,7 @@ if (isset($_POST["edit_data"])) {
 
     <!-- Start your code here -->
     <div class="main p-5">
+    <div class="container mb-3" style="text-align:center; font-size: 40px; font-weight: 700;">商品管理</div>
         <form class="card p-3 mb-5" method="POST">
             <div class="w-50 mx-auto">
                 <label for="searchKeyword">
