@@ -31,7 +31,7 @@ foreach ($_POST as $i => $j) {
         SqlQuery;
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
-    } 
+    }
 }
 
 //========== 上方刪除按鈕: 一括刪除 ==========//
@@ -74,10 +74,10 @@ if (isset($_POST['modal_submit_e'])) {
     $tmp_ckd_e = $_POST['ckd_e'];
 
     $insertCommandText = <<<SqlQuery
-    UPDATE `coffee`.`crams` SET 
-    `cramID` = '$tmp_cri_e', 
+    UPDATE `coffee`.`crams` SET
+    `cramID` = '$tmp_cri_e',
     `customerID` = '$tmp_cid_e',
-    `cDate` = '$tmp_dat_e', 
+    `cDate` = '$tmp_dat_e',
     `cramContent` = '$tmp_ccn_e',
     `cChecked` = '$tmp_ckd_e'
     WHERE cramID IN ('$tmp_cri_e');
@@ -195,7 +195,7 @@ if (isset($_POST["cramID_ASC"]) ||
     isset($_POST["cChecked_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if (isset($_SESSION["ASCorDESC"])) {
-} else {// Default of ASCorDESC: ASC(升序)
+} else { // Default of ASCorDESC: ASC(升序)
     $_SESSION["ASCorDESC"] = "ASC";
 }
 $ASCorDESC = $_SESSION["ASCorDESC"];
@@ -210,7 +210,7 @@ if (isset($_POST["cramID_ASC"]) || isset($_POST["cramID_DESC"])) {
 } else if (isset($_POST["cChecked_ASC"]) || isset($_POST["cChecked_DESC"])) {
     $_SESSION["cr_orderby"] = "cChecked";
 } else if (isset($_SESSION["cr_orderby"])) {
-} else {// Default of orderby: cramID
+} else { // Default of orderby: cramID
     $_SESSION["cr_orderby"] = "cramID";
 }
 $orderby = $_SESSION["cr_orderby"];
@@ -270,17 +270,19 @@ $orderby = $_SESSION["cr_orderby"];
                 </div>
                 <!--======= 欄數調整列⬆: =======-->
 <!--======= Main table標題⬇: =======-->
-    <table class="table table-striped ">
+    <table class="table table-striped table-bordered data_main_table">
     <thead class="bg-color-gold">
                     <tr>
                         <th>
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 100px;'>
                             <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
                             <label for="selectAll">全選</label>
+                        </div>
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
-                                <p class="m-1">cramID</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 100px;'>
+                                <p class="m-1">流水號</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="cramID_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="cramID_ASC">
@@ -289,8 +291,8 @@ $orderby = $_SESSION["cr_orderby"];
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">customerID</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>
+                                <p class="m-1">會員ID</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="customerID_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="customerID_ASC">
@@ -299,25 +301,24 @@ $orderby = $_SESSION["cr_orderby"];
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cDate</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>
+                                <p class="m-1">客訴日期</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="cDate_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="cDate_ASC">
                                 </div>
                             </div>
-
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cramContent</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>
+                                <p class="m-1">客訴內容</p>
                             </div>
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cChecked</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>
+                                <p class="m-1">已處理</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="cChecked_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="cChecked_ASC">
@@ -353,18 +354,18 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         style='position: relative;'>
                         </td>
                         <!-- ID added here. -->
-                        <td id="<?php echo $row["cramID"]."cramID" ?>"><?php echo $row["cramID"] ?></td>
-                        <td id="<?php echo $row["cramID"]."customerID" ?>" ><?php echo $row["customerID"] ?></td>
-                        <td id="<?php echo $row["cramID"]."cDate" ?>" ><?php echo $row["cDate"] ?></td>
-                        <td id="<?php echo $row["cramID"]."cramContent" ?>"><?php echo $row["cramContent"] ?></td>
-                        <td id="<?php echo $row["cramID"]."cChecked" ?>"><?php echo $row["cChecked"] ?></td>
+                        <td id="<?php echo $row["cramID"] . "cramID" ?>"><?php echo $row["cramID"] ?></td>
+                        <td id="<?php echo $row["cramID"] . "customerID" ?>" ><?php echo $row["customerID"] ?></td>
+                        <td id="<?php echo $row["cramID"] . "cDate" ?>" ><?php echo $row["cDate"] ?></td>
+                        <td id="<?php echo $row["cramID"] . "cramContent" ?>"><?php echo $row["cramContent"] ?></td>
+                        <td id="<?php echo $row["cramID"] . "cChecked" ?>"><?php echo $row["cChecked"] ?></td>
                         <td>
-                        
+
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["cramID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                     <!--編輯資料: #Modal_edit toggled here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["cramID"] ?>"
-                        class="btn btn-primary mb-3" onclick="throwinmodal_CRAM(<?php echo "'".$row['cramID']."'"?>)">
+                        class="btn btn-primary mb-3" onclick="throwinmodal_CRAM(<?php echo "'" . $row['cramID'] . "'" ?>)">
                         </td>
             </tr>
             <?php endwhile?>
