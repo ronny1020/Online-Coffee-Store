@@ -96,6 +96,41 @@ for($i=1;$i<=$number;$i++){
 
 
 
+// visited
+
+if (isset($_POST["insertVisited"])) {
+    $number = $_POST["number"];
+    $time = time();
+
+    $findMaxMin = mysqli_query( $link, "SELECT MAX( productID ) as MAX ,min( productID ) as MIN FROM products;" );
+    $row = mysqli_fetch_assoc($findMaxMin);
+    $maxProductID = $row["MAX"];
+    $minProductID = $row["MIN"];
+
+        for($i=1;$i<=$number;$i++){
+        
+        $timeRand =rand(0,3*365*24*60*60);
+        $dateTime = $time-$timeRand;
+        $dateTime =date("Y-m-d H:i:s", $dateTime);
+        $pid=rand($minProductID,$maxProductID);
+
+        $CustomerId=rand(1,5);
+        $CustomerId= "C".str_repeat("0",3-(strlen($CustomerId))).$CustomerId;
+
+
+        $CommandText = "INSERT INTO coffee.product_visited  (productID, customerID,time_stamp) VALUES ($pid,'$CustomerId','$dateTime');";
+        mysqli_query($link, $CommandText);
+        echo $CommandText ;
+        echo "<br>";
+
+    }
+
+    echo "done";   
+
+
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -137,6 +172,13 @@ number of data:<input type='number' name='number' >
 <br>
 <input type='submit' value='insert' name='insertTag'>
 <Tag/form>
-Tag
+
+<hr>
+visited:
+<form method='post'>
+number of data:<input type='number' name='number' >
+<br>
+<input type='submit' value='insert' name='insertVisited'>
+<Tag/form>
 
 </body>
