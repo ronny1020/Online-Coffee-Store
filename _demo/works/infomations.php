@@ -384,8 +384,8 @@ if (isset($_POST["exportSelected"])) {
                             <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">張貼日期</p>
                                 <div class="DESC-ASC ml-2">
-                                    <input type="submit" class="d-block btn btn-DESC" value="" name="openDate_DESC">
-                                    <input type="submit" class="d-block btn btn-ASC" value="" name="openDate_ASC">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="openDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="openDate_ASC">
                                 </div>
                             </div>
                         </th>

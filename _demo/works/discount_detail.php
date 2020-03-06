@@ -186,7 +186,7 @@ $searchComment="";
 if(isset($_SESSION["discount_searchKeyword"])) {
     $searchKeyword=$_SESSION["discount_searchKeyword"];
     if($_SESSION["discount_searchBy"]=="disID"){
-        $searchComment="and disID like '%$searchKeyword%'";
+        $searchComment="and discount_detail.disID like '%$searchKeyword%'";
     }else if($_SESSION["discount_searchBy"]=="productID"){
         $searchComment="and productID like '%$searchKeyword%'";
     }else if($_SESSION["discount_searchBy"]=="disPrice"){
@@ -407,12 +407,12 @@ if (isset($_POST["exportSelected"])) {
 // write table
 
 $commandText = <<<SqlQuery
-                    select discount_detail.disID, discount_detail.productID, discount_detail.disPrice from coffee.discount_detail join discounts on (discounts.disID=discount_detail.disID) WHERE sellerID='$userID' $searchComment ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select discount_detail.disID, discount_detail.productID, discount_detail.disPrice from coffee.discount_detail join discounts on (discounts.disID=discount_detail.disID) WHERE sellerID='$userID' $searchComment ORDER BY discount_detail.disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 
 
 $result = mysqli_query($link, $commandText);
-
+echo $commandText;
 while ($row = mysqli_fetch_assoc($result)):
 
 ?>
