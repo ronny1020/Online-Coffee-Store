@@ -218,7 +218,8 @@ if (isset($_POST["deleteSelected"])) {
     <!-- I edited these stuffs.      Used in the "Edit modal on the right button..."-->
     <link rel="stylesheet" type="text/css" href="../demostyle.css">
     <script src="../demoutil.js"></script>
-    <script src="../orders_need.js"></script>
+    <script src="../orders_need.js"></script>   
+    <script src="../throwinmodal_orders_show.js"></script>
 
 </head>
 
@@ -226,11 +227,11 @@ if (isset($_POST["deleteSelected"])) {
 <?php include '../parts/sidebar.php';?>
 <?php include '../parts/head.php';?>
 <!-- Start your code here. -->
-<div class="main p-5">
+<!-- <div class="main p-5">
 <form class="card p-3 mb-5" method="POST">
             <div class="w-50 mx-auto">
                 <label for="searchKeyword">
-                    請輸入關鍵字並選擇搜尋欄位：
+                    請輸入關鍵字並選擇搜尋欄位1111111：
                 </label>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search" id="searchKeyword" name="searchKeyword">
@@ -267,14 +268,10 @@ if (isset($_POST["deleteSelected"])) {
                 <button class="btn btn-success mt-3" type="submit" name="startSearch">開始搜尋</button> 
                 <button class="btn btn-info mt-3 ml-3" type="submit" name="clearSearch">清除搜尋</button> 
                 <p class="mt-3">
-                    <?php 
-                    if(isset($_SESSION["_searchKeyword"])){
-                        echo "您正在搜尋：".$_SESSION["OrderID_searchKeyword"];
-                    }                    
-                     ?>
+
                 </p>
             </div>
-        </form>
+        </form> -->
 
 <form method='post' class="card p-3">
     <div>
@@ -304,11 +301,10 @@ if (isset($_POST["deleteSelected"])) {
                 <th>ShipCity</th>
                 <th>ShipCountry</th>
                 <th></th>
-
-
-
-
-
+                <th style="visibility:hidden">ProductID</th>
+                <th style="visibility:hidden">Quantity</th>
+                <th style="visibility:hidden">Discount</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -316,10 +312,10 @@ if (isset($_POST["deleteSelected"])) {
 <?php
 // write table
 // $commandText: $str
-// 受所允許之總欄數調控
+// 受所允許之總欄數調控        這邊還要再 join orders_detail 兩個表的內容...
 $commandText = <<<SqlQuery
-select OrderID, CustomerID,  OrderDate, ShippedDate, 
-ShipAddress, ShipRegion, ShipPostCode, ShipCity, ShipCountry from coffee.orders 
+SELECT orders.*, orders_detail.* FROM orders 
+INNER JOIN orders_detail ON orders.OrderID = orders_detail.orderID 
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
@@ -339,6 +335,10 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                 <td id="<?php echo $row["OrderID"]."ShipPostCode" ?>"><?php echo $row["ShipPostCode"] ?></td>
                 <td id="<?php echo $row["OrderID"]."ShipCity" ?>"><?php echo $row["ShipCity"] ?></td>
                 <td id="<?php echo $row["OrderID"]."ShipCountry" ?>"><?php echo $row["ShipCountry"] ?></td>
+
+                
+                
+                
                
                 <td>
 
@@ -347,7 +347,17 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                     <!--Modal aslo toggled at here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["OrderID"] ?>"
                         class="btn btn-primary mb-3" onclick="throwinmodal_orders(<?php echo "'".$row['OrderID']."'"?>)">
+            
+                    <input type='button' value="訂單細節" name="<?php echo "edit" . $row["OrderID"] ?>"
+                        class="btn btn-primary mb-3" onclick="throwinmodal_orders_show(<?php echo "'".$row['OrderID']."'"?>)">
+            
                 </td>
+
+                <td style="display:none;" id="<?php echo $row["OrderID"]."ProductID" ?>"><?php echo $row["productID"] ?></td>
+                <td style="display:none;" id="<?php echo $row["OrderID"]."Quantity" ?>"><?php echo $row["Quantity"] ?></td>
+                <td style="display:none;" id="<?php echo $row["OrderID"]."Discount" ?>"><?php echo $row["Discount"] ?></td>
+
+
             </tr>
             <?php endwhile?>
         </tbody>
@@ -473,6 +483,64 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 </div>
 </div>
 <!-- End your code here. -->
+
+
+
+
+
+
+<!--訂單細節用 Modal -->
+<div class="modal fade" id="Orders_Detail_Show">
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">資料變更:</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form method="post" action=''>
+        <!-- Modal body -->
+       <div class="modal-body">
+            <tr>
+
+                    <th>OrderID:<input type="text" name='oid_d_e' id='oid_d_e' readonly>
+                    </th>
+                    <hr>
+                    <th>ProductID: <input type="text" name='pid_d_e'  id='pid_d_e' readonly></th>         
+                    <hr>
+                    <th>Quantity: <input type="int" name='Quan_d_e' id='Quan_d_e' readonly></th>
+                    <hr>
+                    <th>Discount:<input type="float" name='Dis_d_e' id='Dis_d_e' readonly>
+                    </th>
+                    <hr>
+                    
+                   
+
+
+            </tr>
+        </div>
+
+
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+<!-- End your code here. -->
+
+
+
+
+
+
+
+
 
 
 
