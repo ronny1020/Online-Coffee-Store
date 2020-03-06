@@ -463,7 +463,7 @@ CREATE TABLE `admins` (
   `adminID` varchar(5) NOT NULL default '',-- Primary key:流水號
   `aName` varchar(20) collate utf8_unicode_ci default NULL, -- 管理員姓名 
   `aAccount` varchar(20) NOT NULL unique, -- 管理員帳號
-  `aPassword` varchar(100) NOT NULL unique, -- 管理員密碼: 加密後可能加長故取60
+  `aPassword` varchar(100) NOT NULL, -- 管理員密碼: 加密後可能加長故取60
   `aDepartment` varchar(30) default NULL, -- 管理員部門
   `aTitle` varchar(30) default NULL, -- 管理員職稱
   PRIMARY KEY  (`adminID`)
