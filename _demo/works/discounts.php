@@ -547,9 +547,7 @@ while ($row = mysqli_fetch_assoc($result)):
                     <hr>
                     <th>優惠名稱: <input type="text" name='nam'></th>
                     <hr>
-                    <th>優惠內容: <input type="text" name='ddp'>
-                    </th>
-                    <hr>
+                    
                     <th>折數:<input type="text" name='dct'>
                     </th>
                     <hr>
@@ -557,6 +555,9 @@ while ($row = mysqli_fetch_assoc($result)):
                     </th>
                     <hr>
                     <th>結束日期:<input type="date" name='ovd'>
+                    </th>
+                    <hr>
+                    <th>優惠內容: <textarea type="text" name='ddp' rows="4" cols="50"></textarea>
                     </th>
                     <hr>
                     
@@ -593,9 +594,7 @@ while ($row = mysqli_fetch_assoc($result)):
                     <hr>
                     <th>優惠名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>優惠內容: <input type="text" name='ddp2' id='ddp2'>
-                    </th>
-                    <hr>
+                    
                     <th>折數:<input type="text" name='dct2'  id='dct2'>
                     </th>
                     <hr>
@@ -603,6 +602,9 @@ while ($row = mysqli_fetch_assoc($result)):
                     </th>
                     <hr>
                     <th>結束日期:<input type="date" name='ovd2'  id='ovd2'>
+                    </th>
+                    <hr>
+                    <th>優惠內容: <textarea type="text" name='ddp2' id='ddp2' rows="4" cols="50"></textarea>
                     </th>
                     <hr>
                     

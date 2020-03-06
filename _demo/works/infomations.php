@@ -492,10 +492,11 @@ while ($row = mysqli_fetch_assoc($result)):
                     <hr>
                     <th>資訊名稱: <input type="text" name='ifn'></th>
                     <hr>
-                    <th>資訊內容: <input type="text" name='ifd'>
+                    
+                    <th>張貼日期: <input type="date" name='opd'>
                     </th>
                     <hr>
-                    <th>張貼日期: <input type="date" name='opd'>
+                    <th>資訊內容: <textarea type="text" name='ifd'  rows="4" cols="50"></textarea>
                     </th>
                     <hr>
                     
@@ -532,10 +533,11 @@ while ($row = mysqli_fetch_assoc($result)):
                     <hr>
                     <th>資訊名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>資訊內容: <input type="text" name='ddp2' id='ddp2' >
+                    
+                    <th>張貼日期: <input type="date" name='opd2' id='opd2'>
                     </th>
                     <hr>
-                    <th>張貼日期: <input type="date" name='opd2' id='opd2'>
+                    <th>資訊內容: <textarea type="text" name='ddp2' id='ddp2' rows="4" cols="50" ></textarea>
                     </th>
                     <hr>
                     
