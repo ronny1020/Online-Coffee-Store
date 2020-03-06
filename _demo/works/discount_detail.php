@@ -495,7 +495,7 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>優惠活動:<input type="text" name='did'>
+                    <th>優惠活動:<input type="text" name='did' readonly>
                     </th>
                     <hr>
                     <th>適用產品: <input type="text" name='nam'></th>
