@@ -282,17 +282,19 @@ $orderby = $_SESSION["cu_orderby"];
                 </div>
                 <!--======= 欄數調整列⬆: =======-->
     <!--======= Main table標題⬇: =======-->
-    <table class="table table-striped ">
+    <table class="table table-striped table-bordered data_main_table">
     <thead class="bg-color-gold">
                     <tr>
                         <th>
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 90px;'>
                             <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
                             <label for="selectAll">全選</label>
+                        </div>
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">
-                                <p class="m-1">customerID</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 90px;'>
+                                <p class="m-1">會員ID</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="customerID_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="customerID_ASC">
@@ -301,8 +303,8 @@ $orderby = $_SESSION["cu_orderby"];
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cName</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 90px;'>
+                                <p class="m-1">姓名</p>
                                 <div class="DESC-ASC ml-2">
                                 <input type="submit" class="d-block btn btn-DESC" value="▲" name="cName_DESC">
                                 <input type="submit" class="d-block btn btn-ASC" value="▼" name="cName_ASC">
@@ -311,21 +313,21 @@ $orderby = $_SESSION["cu_orderby"];
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cAccount</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 80px;'>
+                                <p class="m-1">帳號</p>
                             </div>
 
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cEmail</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 80px;'>
+                                <p class="m-1">電子信箱</p>
                             </div>
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cSex</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 80px;'>
+                                <p class="m-1">性別</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="cSex_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="cSex_ASC">
@@ -334,8 +336,8 @@ $orderby = $_SESSION["cu_orderby"];
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cBirthDate</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 90px;'>
+                                <p class="m-1">生日</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="cBirthDate_DESC">
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="cBirthDate_ASC">
@@ -344,14 +346,14 @@ $orderby = $_SESSION["cu_orderby"];
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cAddress</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 80px;'>
+                                <p class="m-1">住址</p>
                             </div>
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
-                                <p class="m-1">cMobile</p>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 80px;'>
+                                <p class="m-1">行動電話</p>
                             </div>
                         </th>
 
