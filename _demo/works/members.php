@@ -1,14 +1,13 @@
 <?php
 session_start();
 
-//Prevents direct connection.
+//========== Prevents direct connection. ==========//
 if ($_SESSION['username'] == '' || $_SESSION['AorS'] != 0) {
     header('Location: ../index.php');
     //echo "<script type='text/javascript'>alert('請先登入！');</script>";
 }
 
-//Logout:
-//清空SESSION
+//========== Logout:清空SESSION ==========//
 if (isset($_POST["logout"])) {
     // session_destroy();
     $_SESSION['username'] = '';
@@ -16,13 +15,86 @@ if (isset($_POST["logout"])) {
     header('Location: ../index.php');
 }
 
-//connect to SQL
+//========== Connect to SQL ==========//
 header("content-type:text/html; charset=utf-8");
 $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
 $result = mysqli_query($link, "set names utf8");
 mysqli_select_db($link, "coffee");
 
-//========== ADD: ADJUST COLUMN. ==========//
+//========== 右側刪除按鈕 ==========//
+foreach ($_POST as $i => $j) {
+    //Right delete button:
+    if (substr($i, 0, 6) == "delete") {
+        $deleteItem = ltrim($i, "delete");
+        $deleteCommandText = <<<SqlQuery
+        DELETE FROM coffee.customers WHERE customerID IN ('$deleteItem')
+        SqlQuery;
+        mysqli_query($link, $deleteCommandText);
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    }
+}
+
+//========== 上方刪除按鈕: 一括刪除 ==========//
+if (isset($_POST["deleteSelected"])) {
+    $selectedList = "!";
+
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList = $selectedList . ",'" . $selectedItem . "'";
+        }
+    }
+    $selectedList = ltrim($selectedList, "!,");
+    $deleteSelectedCommandText = <<<SqlQuery
+    DELETE FROM coffee.customers WHERE customerID IN ($selectedList)
+    SqlQuery;
+    mysqli_query($link, $deleteSelectedCommandText);
+    header('location:' . $_SERVER['REQUEST_URI'] . '');
+}
+
+//========== 編輯資料按鈕SUBMIT: 加入新值 ==========//
+if (isset($_POST['modal_submit'])) {
+    $tmp_cid = $_POST['cid'];
+    $tmp_nam = $_POST['nam'];
+    $tmp_acc = $_POST['acc'];
+    $tmp_eml = $_POST['eml'];
+    $tmp_sex = $_POST['sex'];
+    $tmp_bid = $_POST['bid'];
+    $tmp_adr = $_POST['adr'];
+    $tmp_mob = $_POST['mob'];
+    $tmp_pwd = password_hash($_POST['pwd'], PASSWORD_BCRYPT);
+    $insertCommandText = <<<SqlQuery
+    insert into coffee.customers VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_eml','$tmp_pwd','$tmp_sex','$tmp_bid','$tmp_adr','$tmp_mob')
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
+
+//========== 右側編輯按鈕SUBMIT: 更動舊值 ==========//
+if (isset($_POST['modal_submit_e'])) {
+    $tmp_cid_e = $_POST['cid_e'];
+    $tmp_nam_e = $_POST['nam_e'];
+    $tmp_acc_e = $_POST['acc_e'];
+    $tmp_eml_e = $_POST['eml_e'];
+    $tmp_sex_e = $_POST['sex_e'];
+    $tmp_bid_e = $_POST['bid_e'];
+    $tmp_adr_e = $_POST['adr_e'];
+    $tmp_mob_e = $_POST['mob_e'];
+
+    $insertCommandText = <<<SqlQuery
+    UPDATE `coffee`.`customers` SET
+    `cName` = '$tmp_nam_e',
+    `cAccount` = '$tmp_acc_e',
+    `cEmail` = '$tmp_eml_e',
+    `cSex` = '$tmp_sex_e',
+    `cBirthDate` = '$tmp_bid_e',
+    `cAddress` = '$tmp_adr_e',
+    `cMobile` = '$tmp_mob_e'
+    WHERE customerID IN ('$tmp_cid_e');
+    SqlQuery;
+    mysqli_query($link, $insertCommandText);
+}
+
+//========== 欄數/頁數調整: ==========//
 
 // get page
 if (isset($_GET["page"])) {
@@ -55,84 +127,7 @@ if ($showDataEndTo > $total_num_rows) {
 $previousPage = $page - 1;
 $nextPage = $page + 1;
 
-//===== ENDED HERE. =====//
-
-//2 Buttons work here.
-foreach ($_POST as $i => $j) {
-    //Right delete button:
-    if (substr($i, 0, 6) == "delete") {
-        $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.customers WHERE customerID IN ('$deleteItem')
-        SqlQuery;
-        mysqli_query($link, $deleteCommandText);
-        header('location:' . $_SERVER['REQUEST_URI'] . '');
-    }
-}
-
-//ADD NEW DATA TO FORM! :
-if (isset($_POST['modal_submit'])) {
-    $tmp_cid = $_POST['cid'];
-    $tmp_nam = $_POST['nam'];
-    $tmp_acc = $_POST['acc'];
-    $tmp_eml = $_POST['eml'];
-    $tmp_sex = $_POST['sex'];
-    $tmp_bid = $_POST['bid'];
-    $tmp_adr = $_POST['adr'];
-    $tmp_mob = $_POST['mob'];
-    $tmp_pwd = password_hash($_POST['pwd'], PASSWORD_BCRYPT);
-    $insertCommandText = <<<SqlQuery
-    insert into coffee.customers VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_eml','$tmp_pwd','$tmp_sex','$tmp_bid','$tmp_adr','$tmp_mob')
-    SqlQuery;
-    mysqli_query($link, $insertCommandText);
-}
-
-//EDIT INNER DATA FROM FROM!
-//整行砍掉再重丟
-if (isset($_POST['modal_submit_e'])) {
-    $tmp_cid_e = $_POST['cid_e'];
-    $tmp_nam_e = $_POST['nam_e'];
-    $tmp_acc_e = $_POST['acc_e'];
-    $tmp_eml_e = $_POST['eml_e'];
-    $tmp_sex_e = $_POST['sex_e'];
-    $tmp_bid_e = $_POST['bid_e'];
-    $tmp_adr_e = $_POST['adr_e'];
-    $tmp_mob_e = $_POST['mob_e'];
-    // echo $tmp_sex_e . $tmp_bid_e;
-    //刪除舊資料
-    $insertCommandText = <<<SqlQuery
-    UPDATE `coffee`.`customers` SET 
-    `cName` = '$tmp_nam_e', 
-    `cAccount` = '$tmp_acc_e',
-    `cEmail` = '$tmp_eml_e', 
-    `cSex` = '$tmp_sex_e',
-    `cBirthDate` = '$tmp_bid_e',
-    `cAddress` = '$tmp_adr_e',
-    `cMobile` = '$tmp_mob_e'
-    WHERE customerID IN ('$tmp_cid_e');
-    SqlQuery;
-    mysqli_query($link, $insertCommandText);
-}
-
-// delete selected items:
-if (isset($_POST["deleteSelected"])) {
-    $selectedList = "!";
-
-    foreach ($_POST as $i => $j) {
-        if (substr($i, 0, 8) == "selected") {
-            $selectedItem = ltrim($i, "selected");
-            $selectedList = $selectedList . ",'" . $selectedItem . "'";
-        }
-    }
-    $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
-    DELETE FROM coffee.customers WHERE customerID IN ($selectedList)
-    SqlQuery;
-    mysqli_query($link, $deleteSelectedCommandText);
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
-}
-
-// Export selected items.
+//========== 資料匯出: ==========//
 if (isset($_POST["exportSelected"])) {
 
     $selectedList = "('";
@@ -158,11 +153,6 @@ if (isset($_POST["exportSelected"])) {
     SqlQuery;
 
     $exportResult = mysqli_query($link, $exportComment);
-    // if($exportResult === FALSE){
-    //     // echo $exportResult;
-    //     // exit;
-    // }
-    // else{
     $columns_total = mysqli_num_fields($exportResult);
     $exportResult_exist = mysqli_num_rows($exportResult) > 0;
     if ($exportResult_exist) {
@@ -197,7 +187,6 @@ if (isset($_POST["exportSelected"])) {
     }
     exit;
 }
-// }
 
 //========== 欄位排序調整: ==========//
 //Adjusted by 2 SESSION:
@@ -238,8 +227,6 @@ if (isset($_POST["customerID_ASC"]) || isset($_POST["customerID_DESC"])) {
 }
 $orderby = $_SESSION["cu_orderby"];
 
-//======= 排序調整: END HERE. =======//
-
 ?>
 <!DOCTYPE html>
 <title>管理後台</title>
@@ -275,12 +262,12 @@ $orderby = $_SESSION["cu_orderby"];
     <div>
         <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"class="btn btn-danger mb-3">
         <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
-        <!--Modal toggled here.-->
+        <!--新增資料: #Modal_add toggled here.-->
         <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#myModal">
+               <!--======= 欄數調整列⬇: =======-->
                 <div class='float-right'>
                     <span class="mr-5">
-                    <!-- show where you are -->
                     <?php echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 筆(共 $total_num_rows 筆資料)" ?>
                     </span>
                     <label for="row_num_select">請選擇顯示行數:</label>
@@ -293,10 +280,10 @@ $orderby = $_SESSION["cu_orderby"];
                     <input type="submit" value="確定" name="row_num_submit" class="btn btn-primary ml-3 mb-3">
                     </span>
                 </div>
-
+                <!--======= 欄數調整列⬆: =======-->
     <!--======= Main table標題⬇: =======-->
     <table class="table table-striped ">
-    <thead class="bg-color-silk">
+    <thead class="bg-color-gold">
                     <tr>
                         <th>
                             <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
@@ -373,19 +360,22 @@ $orderby = $_SESSION["cu_orderby"];
                 </thead>
         <tbody>
 <!--======= Main table標題⬆: =======-->
+<!--======= Main table內容⬇: =======-->
 <?php
-// write table
-// $commandText: $str
-// 受所允許之總欄數調控
+// write main table
+// $commandText: string
+// 受所允許之總欄數調控!
+// 受升序降序調控!
 $commandText = <<<SqlQuery
 select customerID, cName, cAccount, cEmail, cSex, cBirthDate, cAddress, cMobile
 from coffee.customers ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
 SqlQuery;
 
+// Give each row specific ID.
 $result = mysqli_query($link, $commandText);
 while ($row = mysqli_fetch_assoc($result)): ?>
 
-<tr>
+<tr class='dataSQL'>
                         <td>
                         <input type="checkbox" name="<?php echo "selected" . $row["customerID"] ?>"class='checkmark'
                         style='position: relative;'>
@@ -403,7 +393,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         <td>
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["customerID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                    <!--Modal aslo toggled at here.-->
+                    <!--編輯資料: #Modal_edit toggled here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["customerID"] ?>"
                         class="btn btn-primary mb-3" onclick="throwinmodal_MEMBERS(<?php echo "'" . $row['customerID'] . "'" ?>)">
                         </td>
@@ -411,8 +401,9 @@ while ($row = mysqli_fetch_assoc($result)): ?>
             <?php endwhile?>
         </tbody>
     </table>
+<!--======= Main table內容⬆: =======-->
 </form>
-<!--頁尾頁碼&按鈕顯示:-->
+<!--======= 頁尾頁碼&按鈕顯示⬇: =======-->
 <div class="d-flex justify-content-center align-items-center flex-column  m-5">
         <!-- page select -->
         <div class="m-3">
@@ -448,10 +439,10 @@ if ($lastPage - $page <= 5) {
 }
 
 ?>
-<!--頁尾頁碼&按鈕結束-->
+<!--======= 頁尾頁碼&按鈕顯示⬆: =======-->
 </div>
 
-<!-- Modal: add new -->
+<!--======= 新增資料Modal⬇: =======-->
 <div class="modal fade" id="myModal">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -473,8 +464,9 @@ if ($lastPage - $page <= 5) {
                     <hr>
                     <th>cAccount: <input type="text" name='acc' id='acc' required="required">
                     </th>
-                    <hr>
-                    <th>cEmail: <input type="text" name='eml' id='eml' required="required">
+                    <hr><!--email: type='email'不夠嚴謹 -->
+                    <th>cEmail: <input type="text" name='eml' id='eml' required="required"
+                                       pattern="([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})">
                     </th>
                     <hr>
                     <th>cBirthDate:<input type="date" name='bid' id='bid' required="required">
@@ -482,8 +474,9 @@ if ($lastPage - $page <= 5) {
                     <hr>
                     <th>cAddress: <input type="text" name='adr' id='adr' required="required">
                     </th>
-                    <hr>
-                    <th>cMobile: <input type="text" name='mob' id='mob' required="required"></th>
+                    <hr><!-- 台灣手機號碼:'-'可選擇不加 -->
+                    <th>cMobile: <input type="text" name='mob' id='mob' required="required"
+                                        pattern="09\d{2}-?\d{3}-?\d{3}"></th>
                     <hr>
                     <th>cSex:
                     <select name='sex' id='sex' required="required">
@@ -493,12 +486,14 @@ if ($lastPage - $page <= 5) {
                     </th>
                     <hr>
                     <th>
-                    <span>cPassword:</span>
-                    <input type="password" name='pwd' id='pwd' required="required" onkeyup='PWDcheck();'></th>
+                    <span>cPassword:(8位英數字)</span><!-- 密碼:8位英數字 -->
+                    <input type="password" name='pwd' id='pwd' required="required"
+                           pattern="[a-zA-Z0-9]{8,}" onkeyup='PWDcheck();'></th>
                     <hr>
                     <th>
                     <span>confirm Password:</span>
-                    <input type="password" name='pwd_check' id='pwd_check' required="required" onkeyup='PWDcheck();'></th>
+                    <input type="password" name='pwd_check' id='pwd_check' required="required"
+                           pattern="[a-zA-Z0-9]{8,}" onkeyup='PWDcheck();'></th>
                     <th><span id='error_msg' style="font-weight:bolder;"></span></th>
             </tr>
         </div>
@@ -511,8 +506,9 @@ if ($lastPage - $page <= 5) {
     </div>
 </div>
 </div>
+<!--======= 新增資料Modal⬆: =======-->
 
-<!-- Modal: Edit old!-->
+<!--======= 修改資料Modal⬇: =======-->
 <div class="modal fade" id="Modal_edit">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -528,14 +524,15 @@ if ($lastPage - $page <= 5) {
                     <tr>
 
                     <th>customerID:<input type="text" name='cid_e' id='cid_e' readonly>
-                    </th>
+                    </th><!-- ID不給改: readonly-->
                     <hr>
                     <th>cName: <input type="text" name='nam_e' id='nam_e'></th>
                     <hr>
                     <th>cAccount: <input type="text" name='acc_e' id='acc_e'>
                     </th>
                     <hr>
-                    <th>cEmail: <input type="text" name='eml_e' id='eml_e'>
+                    <th>cEmail: <input type="email" name='eml_e' id='eml_e'
+                                       pattern="([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})">
                     </th>
                     <hr>
                     <th>cBirthDate:<input type="date" name='bid_e' id='bid_e'>
@@ -544,7 +541,8 @@ if ($lastPage - $page <= 5) {
                     <th>cAddress: <input type="text" name='adr_e' id='adr_e'>
                     </th>
                     <hr>
-                    <th>cMobile: <input type="text" name='mob_e' id='mob_e'></th>
+                    <th>cMobile: <input type="text" name='mob_e' id='mob_e'
+                                        pattern="09\d{2}-?\d{3}-?\d{3}"></th>
                     <hr>
                     <th>cSex: <select name='sex_e' id='sex_e'>
                         <option value='M'>男</option>
@@ -561,6 +559,7 @@ if ($lastPage - $page <= 5) {
         </div>
     </div>
 </div>
+<!--======= 修改資料Modal⬆: =======-->
 
 </div>
 </div>

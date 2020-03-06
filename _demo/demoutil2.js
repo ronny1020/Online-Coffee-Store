@@ -10,7 +10,9 @@ function throwinmodal_INFO(myid) {
     var infoName = myid + "infoName";
     var throw_infoName = document.getElementById(infoName).innerHTML;
     // DATE: need to change format before used!
-
+    var openDate = myid + "openDate";
+    var tmp_throw_openDate = document.getElementById(openDate).innerHTML;
+    var throw_openDate = tmp_throw_openDate.split(" ");
     // alert(throw_cDate);
     var infoDescrip = myid + "infoDescrip";
     var throw_infoDescrip = document.getElementById(infoDescrip).innerHTML;
@@ -22,6 +24,7 @@ function throwinmodal_INFO(myid) {
     document.getElementById('nam2').value = throw_infoName;
     
     document.getElementById('ddp2').value = throw_infoDescrip;
+    document.getElementById('opd2').value = throw_openDate;
 
 }
 
@@ -37,7 +40,13 @@ function throwinmodal_DIS(myid) {
     var disName = myid + "disName";
     var throw_disName = document.getElementById(disName).innerHTML;
     // DATE: need to change format before used!
+    var startDate = myid + "startDate";
+    var tmp_throw_startDate = document.getElementById(startDate).innerHTML;
+    var throw_startDate = tmp_throw_startDate.split(" ");
 
+    var overDate = myid + "overDate";
+    var tmp_throw_overDate = document.getElementById(overDate).innerHTML;
+    var throw_overDate = tmp_throw_overDate.split(" ");
     // alert(throw_cDate);
     var disDescrip = myid + "disDescrip";
     var throw_disDescrip = document.getElementById(disDescrip).innerHTML;
@@ -52,6 +61,8 @@ function throwinmodal_DIS(myid) {
     
     document.getElementById('ddp2').value = throw_disDescrip;
     document.getElementById('dct2').value = throw_Discount;
+    document.getElementById('std2').value = throw_startDate;
+    document.getElementById('ovd2').value = throw_overDate;
 
 }
 

@@ -24,9 +24,9 @@ if (isset($_GET["page"])) {
 }
 
 //orderby
-if (isset($_POST["infoID_ASC"])||isset($_POST["infoName_ASC"])||isset($_POST["infoDescrip_ASC"])) {
+if (isset($_POST["infoID_ASC"])||isset($_POST["infoName_ASC"])||isset($_POST["infoDescrip_ASC"])||isset($_POST["openDate_ASC"])) {
     $_SESSION["ASCorDESC"] = "ASC";
-} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])) {
+} else if (isset($_POST["infoID_DESC"])||isset($_POST["infoName_DESC"])||isset($_POST["infoDescrip_DESC"])||isset($_POST["openDate_DESC"])) {
     $_SESSION["ASCorDESC"] = "DESC";
 } else if(isset($_SESSION["ASCorDESC"])) {
 } else {
@@ -41,6 +41,8 @@ if (isset($_POST["infoID_ASC"])||isset($_POST["infoID_DESC"])){
     $_SESSION["orderby"]="infoName";
 } else if (isset($_POST["infoDescrip_ASC"])||isset($_POST["infoDescrip_DESC"])){
     $_SESSION["orderby"]="infoDescrip";
+} else if (isset($_POST["openDate_ASC"])||isset($_POST["openDate_DESC"])){
+    $_SESSION["orderby"]="openDate";
 } else if(isset($_SESSION["orderby"])) {
 } else {
     $_SESSION["orderby"]="infoID";
@@ -122,10 +124,11 @@ if (isset($_POST['modal_submit'])) {
     $tmp_iid = $_POST['iid'];
     $tmp_ifn = $_POST['ifn'];
     $tmp_ifd = $_POST['ifd'];
+    $tmp_opd = $_POST['opd'];
    
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.infomations VALUES ('$tmp_iid','$tmp_ifn','$tmp_ifd','$userID')
+    insert into coffee.infomations VALUES ('$tmp_iid','$tmp_ifn','$tmp_ifd','$userID','$tmp_opd')
     SqlQuery;
     mysqli_query($link, $insertCommandText);
     
@@ -135,9 +138,9 @@ if (isset($_POST['modal_submit2'])) {
     $tmp_did2 = $_POST['did2'];
     $tmp_nam2 = $_POST['nam2'];
     $tmp_ddp2 = $_POST['ddp2'];
-   
+    $tmp_opd2 = $_POST['opd2'];
     
-	$sql_query = "UPDATE infomations SET infoName='$tmp_nam2', infoDescrip='$tmp_ddp2' WHERE sellerID='$userID' AND infoID='$tmp_did2'";   
+	$sql_query = "UPDATE infomations SET infoName='$tmp_nam2', infoDescrip='$tmp_ddp2', openDate='$tmp_opd2' WHERE sellerID='$userID' AND infoID='$tmp_did2'";   
 	$stmt = $link -> prepare($sql_query);
     $stmt -> execute();
 	$stmt -> close();
@@ -171,6 +174,8 @@ if(isset($_SESSION["infomation_searchKeyword"])) {
         $searchComment="and infoName like '%$searchKeyword%'";
     }else if($_SESSION["infomation_searchBy"]=="infoDescrip"){
         $searchComment="and infoDescrip like '%$searchKeyword%'";
+    } else if($_SESSION["infomation_searchBy"]=="openDate"){
+        $searchComment="and openDate like '%$searchKeyword%'";
     }
     
 }
@@ -196,7 +201,7 @@ if (isset($_POST["exportSelected"])) {
     //多一空欄位 '' 但不影響功能
     // echo $selectedList;
     $exportComment = <<<SqlQuery
-    select infoID, infoName, infoDescrip, sellerID from coffee.infomations   
+    select infoID, infoName, infoDescrip, openDate, sellerID from coffee.infomations   
     where sellerID='$userID' and infoID IN $selectedList ORDER BY infoID
     SqlQuery;
    
@@ -223,6 +228,7 @@ if (isset($_POST["exportSelected"])) {
         $output .='"' . $row["infoName"] . '",';
         $output .='"' . $row["infoDescrip"] . '",';
         $output .='"' . $row["sellerID"] . '",';
+        $output .='"' . $row["openDate"] . '",';
         $output .="\n";
         }
 
@@ -287,6 +293,10 @@ if (isset($_POST["exportSelected"])) {
                        
                         <option value="infoDescrip">
                         資訊內容
+                        </option>
+
+                        <option value="openDate">
+                        張貼日期
                         </option>
                         
                     </select>
@@ -369,6 +379,16 @@ if (isset($_POST["exportSelected"])) {
                                 </div>
                             </div>
                         </th>
+
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                                <p class="m-1">張貼日期</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="" name="openDate_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="" name="openDate_ASC">
+                                </div>
+                            </div>
+                        </th>
                         
                         </th>
                         <th>                        
@@ -380,7 +400,7 @@ if (isset($_POST["exportSelected"])) {
 // write table
 
 $commandText = <<<SqlQuery
-                    select infoID, infoName, infoDescrip, sellerID from coffee.infomations where sellerID='$userID' $searchComment ORDER BY infoID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
+                    select infoID, infoName, infoDescrip, openDate, sellerID from coffee.infomations where sellerID='$userID' $searchComment ORDER BY infoID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 $result = mysqli_query($link, $commandText);
 
@@ -396,7 +416,8 @@ while ($row = mysqli_fetch_assoc($result)):
                         <td id="<?php echo $row["infoID"]."infoID" ?>"><?php echo $row["infoID"] ?></td>
                         <td id="<?php echo $row["infoID"]."infoName" ?>"><?php echo $row["infoName"] ?></td>
                         <td id="<?php echo $row["infoID"]."infoDescrip" ?>"><?php echo $row["infoDescrip"] ?></td>
-                        
+                        <td id="<?php echo $row["infoID"]."openDate" ?>"><?php echo $row["openDate"] ?></td>
+
                         <td class="p-0">
                         <div class="right_btn" align="center">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["infoID"] ?>"
@@ -471,10 +492,13 @@ while ($row = mysqli_fetch_assoc($result)):
                     <hr>
                     <th>資訊名稱: <input type="text" name='ifn'></th>
                     <hr>
-                    <th>資訊內容: <input type="text" name='ifd'>
+                    
+                    <th>張貼日期: <input type="date" name='opd'>
                     </th>
                     <hr>
-                    
+                    <th>資訊內容: <textarea type="text" name='ifd'  rows="4" cols="50"></textarea>
+                    </th>
+                    <hr>
                     
             </tr>
         </div>
@@ -509,10 +533,13 @@ while ($row = mysqli_fetch_assoc($result)):
                     <hr>
                     <th>資訊名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
-                    <th>資訊內容: <input type="text" name='ddp2' id='ddp2' >
+                    
+                    <th>張貼日期: <input type="date" name='opd2' id='opd2'>
                     </th>
                     <hr>
-                    
+                    <th>資訊內容: <textarea type="text" name='ddp2' id='ddp2' rows="4" cols="50" ></textarea>
+                    </th>
+                    <hr>
                     
             </tr>
         </div>
