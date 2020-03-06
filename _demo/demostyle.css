@@ -1,53 +1,53 @@
     /* color schemes 主色票*/
-    
+
     .bg-color-gold {
         background-color: #C0B283 !important;
     }
-    
+
     .bg-color-silk {
         background-color: #DCD0C0 !important;
     }
-    
+
     .bg-color-Paper {
         background-color: #F4F4F4 !important;
     }
-    
+
     .bg-color-charcoal {
         background-color: #373737 !important;
     }
-    
+
     .color-gold {
         color: #C0B283 !important;
     }
-    
+
     .color-silk {
         color: #DCD0C0 !important;
     }
-    
+
     .color-Paper {
         color: #F4F4F4 !important;
     }
-    
+
     .border-color-charcoal {
         border-color: #373737 !important;
     }
-    
+
     .border-color-gold {
         border-color: #C0B283 !important;
     }
-    
+
     .border-color-silk {
         border-color: #DCD0C0 !important;
     }
-    
+
     .border-color-Paper {
         border-color: #F4F4F4 !important;
     }
-    
+
     .border-color-charcoal {
         border-color: #373737 !important;
     }
-    
+
     .mycheck {
         /* display: block;
     position: relative; */
@@ -57,8 +57,9 @@
         -webkit-user-select: none;
         user-select: none;
     }
+
     /* Hide the browser's default checkbox */
-    
+
     .mycheck input {
         position: absolute;
         opacity: 0;
@@ -66,8 +67,9 @@
         height: 0;
         width: 0;
     }
+
     /* Create a custom checkbox */
-    
+
     .checkmark {
         position: absolute;
         top: 0;
@@ -76,30 +78,35 @@
         width: 25px;
         background-color: #eee;
     }
+
     /* On mouse-over, add a grey background color */
-    
+
     .mycheck:hover input~.checkmark {
         background-color: #ccc;
     }
+
     /* When the checkbox is checked, add a blue background */
-    
+
     .mycheck input:checked~.checkmark {
         background-color: #2196F3;
     }
+
     /* Create the checkmark/indicator (hidden when not checked) */
-    
+
     .checkmark:after {
         content: "";
         position: absolute;
         display: none;
     }
+
     /* Show the checkmark when checked */
-    
+
     .mycheck input:checked~.checkmark:after {
         display: block;
     }
+
     /* Style the checkmark/indicator */
-    
+
     .mycheck .checkmark:after {
         left: 9px;
         top: 3px;
@@ -110,36 +117,36 @@
         -webkit-transform: rotate(45deg);
         transform: rotate(45deg);
     }
+
     /*====== do checkbox style. ======*/
+
     /* Source:https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox */
-    
+
     body {
         /* font-family: "Lato", sans-serif; */
         font-family: 'Noto Sans TC', sans-serif;
     }
-    
-    h1,
-    h2,
-    h3 {
+
+    h1, h2, h3 {
         font-family: 'Noto Serif TC', serif;
     }
-    
+
     div.modal-header {
         background-color: rgb(192, 178, 131);
     }
-    
+
     .modal-body th {
         font-size: 200%;
     }
-    
+
     .modal-body input {
         float: right;
     }
-    
+
     td>input {
         width: 100px;
     }
-    
+
     .login {
         position: absolute;
         left: 50%;
@@ -147,7 +154,7 @@
         transform: translate(-50%, -50%);
         /* transform: translateY(-50%); */
     }
-    
+
     .sidebar {
         height: 100%;
         width: 250px;
@@ -160,11 +167,20 @@
         padding-top: 60px;
         transform: translateX(-100%);
     }
+    /*Hide scrollbar.⬇*/
+    .sidebar_open::-webkit-scrollbar {
+        display: none;
+      }
     
     .sidebar_open {
+        -ms-overflow-style: none;
         transform: translateX(0px) !important;
     }
-    
+    /*Hide scrollbar.⬆*/
+    .sidebar_context > a{
+        background-color: #373737;
+    }
+
     .sidebar .sidebar_bg {
         background-color: #373737;
         opacity: 0.95;
@@ -173,7 +189,7 @@
         height: 100%;
         top: 0;
     }
-    
+
     .sidebar .sidebar_context {
         position: absolute;
         width: 100%;
@@ -181,11 +197,11 @@
         top: 0;
         z-index: 1;
     }
-    
+
     .sidebar .sidebar-head {
         object-fit: cover;
     }
-    
+
     .sidebar a {
         padding: 8px 8px 8px 32px;
         text-decoration: none;
@@ -198,13 +214,13 @@
         font-family: 'Noto Serif TC', serif;
         font-weight: 300;
     }
-    
+
     .sidebar a:hover {
         color: #f4f4f4;
         background-color: #C0B283;
         width: 250px;
     }
-    
+
     .closebtn {
         color: #f4f4f4;
         position: absolute;
@@ -214,29 +230,32 @@
         margin-left: 50px;
         cursor: pointer;
     }
-    
+
     .sidebar hr {
         border-color: #C0B283;
     }
+
     /* add collapsible sidebar! (0303, lee) */
-    
+
     .collapse>a {
         background-color: #595959;
     }
-    
+
     .triangle_rotate {
         font-size: 80%;
         text-align: center;
         float: right;
+        /* right: 30px; */
         transition: transform 0.5s;
     }
-    
+
     .triangle_title:hover>.triangle_rotate {
         transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
     }
+
     /* (0303, lee) end here. */
-    
+
     .openbtn {
         font-size: 20px;
         cursor: pointer;
@@ -247,17 +266,17 @@
         opacity: 0.5;
         transition: .5s;
     }
-    
+
     .openbtn:hover {
         opacity: 1;
         color: white !important;
     }
-    
+
     .openbtn:hover::after {
         content: " \5c55\958b\9078\55ae";
         /*展開選單unicode*/
     }
-    
+
     .outbtn {
         font-size: 20px;
         position: absolute;
@@ -269,7 +288,7 @@
         /* padding: 10px 15px; */
         border: none;
     }
-    
+
     .sidebar .hello {
         position: absolute;
         top: 175px;
@@ -280,12 +299,12 @@
         word-break: keep-all;
         /* margin-top: 3rem; */
     }
-    
-    input#pwd, input#pwd_check{
+
+    input#pwd, input#pwd_check {
         font: small-caption;
         font-size: 16px;
     }
-    
+
     #head {
         transition: margin-left .5s;
         padding: 16px;
@@ -293,12 +312,13 @@
         transition: 0.5s;
         z-index: 1;
     }
+
     /* .logout_form {
     position: absolute;
     bottom: 3rem;
     right: 3rem;
 } */
-    
+
     footer {
         position: absolute;
         margin-top: 3rem;
@@ -308,17 +328,18 @@
         color: #373737;
         text-align: right;
     }
-    
+
     footer>p {
         font-size: medium;
         margin-right: 10px;
     }
-    
+
     .push_footer {
         min-height: 1024px;
     }
+
     /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-    
+
     @media screen and (max-height: 450px) {
         .sidebar {
             padding-top: 15px;
@@ -327,43 +348,44 @@
             font-size: 18px;
         }
     }
+
     /* DESC-ASC button (0227 by hsieh.)*/
-    
-    .btn-DESC,
-    .btn-ASC {
+
+    .btn-DESC, .btn-ASC {
         height: 1.1rem;
         margin: 0;
         background-color: none;
         padding: 0;
         line-height: 1rem;
     }
-    
+
     .data_main_table .btn {
         line-height: 1;
     }
-    
+
     .data_main_table th {
         text-align: center;
     }
-    
+
     .data_main_table tr.dataSQL:hover {
         background-color: #DCD0C0 !important;
     }
-    
+
     .data_main_table td.num {
         text-align: right;
         padding-right: 1rem;
     }
-    
+
     .data_main_table .tags {
         width: 20%;
     }
-    
+
     .data_main_table td.tags {
         text-align: left !important;
     }
+
     /* for creating form for create or edit in products */
-    
+
     #popUp_window {
         position: fixed;
         width: 100%;
@@ -371,15 +393,15 @@
         z-index: 87;
         top: 0;
     }
-    
+
     .window_open {
         display: block;
     }
-    
+
     .window_close {
         display: none;
     }
-    
+
     #popUp_bg {
         position: absolute;
         width: 100%;
@@ -387,7 +409,7 @@
         background-color: #373737;
         opacity: 0.8;
     }
-    
+
     #popUp_context {
         position: absolute;
         width: 61.8%;
@@ -398,32 +420,34 @@
         background-color: #F4F4F4;
         z-index: 88;
     }
-    
+
     #popUp_context .closebtn {
         color: #373737 !important;
     }
-    
+
     #create_edit_form {
         overflow-Y: scroll;
     }
-    
+
     .hide {
         display: none;
     }
+
     /* product image default */
-    
+
     img.product-image {
         width: 300px;
         height: 200px;
         object-fit: cover;
     }
+
     /* Login page background. (Lee 0304) */
-    
+
     td {
         /*防塞爆*/
         word-break: break-all;
     }
-    
+
     body.login_bg {
         background: url(image/bg.jpg) no-repeat center center fixed;
         -webkit-background-size: cover;
@@ -432,11 +456,11 @@
         background-size: cover;
         background-color: grey;
     }
-    
+
     .login_bg>.card {
         background-color: rgba(255, 255, 255, 0.5);
     }
-    
+
     .card>.welcome {
         text-align: center;
         font-size: 150%;
