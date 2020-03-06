@@ -55,3 +55,32 @@ function throwinmodal_DIS(myid) {
 
 }
 
+function throwinmodal_TAL(myid) {
+    //Summon modal by Jquery.
+    $('#Modal_edit').modal('show');
+
+    var myid = myid.toString();
+    // alert('myid');
+    // Get datas from ID-labelled table.
+    var disID = myid + "disID";
+    var throw_disID = document.getElementById(disID).innerHTML;
+    var productID = myid + "productID";
+    var throw_productID = document.getElementById(productID).innerHTML;
+    // DATE: need to change format before used!
+
+    // alert(throw_cDate);
+    var disPrice = myid + "disPrice";
+    var throw_disPrice = document.getElementById(disPrice).innerHTML;
+    
+   
+    // alert(throw_cChecked);
+
+    // Write into Modal.
+    document.getElementById('did2').value = throw_disID;
+    document.getElementById('nam2').value = throw_productID;
+    
+    document.getElementById('ddp2').value = throw_disPrice;
+    
+
+}
+
