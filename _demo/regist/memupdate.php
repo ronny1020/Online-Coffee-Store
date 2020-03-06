@@ -1,4 +1,12 @@
 <?php
+
+if (isset($_POST["logout"])) {
+
+    $_SESSION['username'] = '';
+    $_SESSION['AorS'] = '';
+    header('Location: ../index.php');
+}
+
 function GetSQLValueString($theValue, $theType) {
   switch ($theType) {
     case "string":
