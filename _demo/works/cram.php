@@ -73,15 +73,14 @@ if (isset($_POST['modal_submit_e'])) {
     $tmp_ccn_e = $_POST['ccn_e'];
     $tmp_ckd_e = $_POST['ckd_e'];
 
-    //刪除舊資料
     $insertCommandText = <<<SqlQuery
-    DELETE FROM coffee.crams WHERE cramID IN ('$tmp_cri_e');
-    SqlQuery;
-    mysqli_query($link, $insertCommandText);
-
-    //插入新資料
-    $insertCommandText = <<<SqlQuery
-    insert into coffee.crams VALUES ('$tmp_cri_e','$tmp_cid_e','$tmp_dat_e','$tmp_ccn_e','$tmp_ckd_e');
+    UPDATE `coffee`.`crams` SET 
+    `cramID` = '$tmp_cri_e', 
+    `customerID` = '$tmp_cid_e',
+    `cDate` = '$tmp_dat_e', 
+    `cramContent` = '$tmp_ccn_e',
+    `cChecked` = '$tmp_ckd_e'
+    WHERE cramID IN ('$tmp_cri_e');
     SqlQuery;
     mysqli_query($link, $insertCommandText);
 }
@@ -119,7 +118,63 @@ if ($showDataEndTo > $total_num_rows) {
 $previousPage = $page - 1;
 $nextPage = $page + 1;
 
-//===== 欄數/頁數調整: ENDED HERE. =====//
+//========== 資料匯出: ==========//
+if (isset($_POST["exportSelected"])) {
+
+    $selectedList = "('";
+    foreach ($_POST as $i => $j) {
+        if (substr($i, 0, 8) == "selected") {
+            $selectedItem = ltrim($i, "selected");
+            $selectedList .= $selectedItem . "','";
+        }
+    }
+    $selectedList = rtrim($selectedList, ",");
+    $selectedList .= "')";
+
+    //防呆 一個都沒勾的話:
+    if ($selectedList == "('')") {
+        // echo "<script>alert('Please select at least 1 column.');</script>";
+        header('location:' . $_SERVER['REQUEST_URI'] . '');
+    }
+    //多一空欄位 '' 但不影響功能
+    // echo $selectedList;
+    $exportComment = <<<SqlQuery
+    select cramID, customerID, cDate, cramContent, cChecked from coffee.crams
+    WHERE cramID IN $selectedList ORDER BY cramID
+    SqlQuery;
+
+    $exportResult = mysqli_query($link, $exportComment);
+    $columns_total = mysqli_num_fields($exportResult);
+    $exportResult_exist = mysqli_num_rows($exportResult) > 0;
+    if ($exportResult_exist) {
+        // Get The Field Name
+        $output = "";
+        for ($i = 0; $i < $columns_total; $i++) {
+            $heading = mysqli_fetch_field_direct($exportResult, $i);
+            $output .= '"' . $heading->name . '",';
+        }
+        $output .= "\n";
+
+        // Get Records from the table
+        while ($row = mysqli_fetch_assoc($exportResult)) {
+            $output .= '"' . $row["cramID"] . '",';
+            $output .= '"' . $row["customerID"] . '",';
+            $output .= '"' . $row["cDate"] . '",';
+            $output .= '"' . $row["cramContent"] . '",';
+            $output .= '"' . $row["cChecked"] . '",';
+            $output .= "\n";
+        }
+
+        $filename = "CramList" . date('Y-m-d H:i:s') . ".csv";
+        header('Content-Encoding: UTF-8');
+        header("Content-Type: text/csv; charset=UTF-8");
+        header('Content-Disposition: attachment; filename=' . $filename);
+        echo "\xEF\xBB\xBF";
+        echo $output;
+
+    }
+    exit;
+}
 
 //========== 欄位排序調整: ==========//
 //Adjusted by 2 SESSION:
@@ -160,8 +215,6 @@ if (isset($_POST["cramID_ASC"]) || isset($_POST["cramID_DESC"])) {
 }
 $orderby = $_SESSION["cr_orderby"];
 
-//======= 排序調整: END HERE. =======//
-
 ?>
 <!DOCTYPE html>
 <title>管理後台</title>
@@ -195,8 +248,8 @@ $orderby = $_SESSION["cr_orderby"];
 
 <form method='post' class="card p-3">
     <div>
-        <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"
-            class="btn btn-danger mb-3">
+        <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"class="btn btn-danger mb-3">
+        <input type="submit" value="匯出勾選" class="btn btn-info ml-3 mb-3" name="exportSelected">
         <!--新增資料: #Modal_add toggled here.-->
         <input type="button" value="新增資料" name="edit" class="btn btn-primary ml-3 mb-3"
                data-toggle="modal" data-target="#Modal_add">
@@ -276,7 +329,6 @@ $orderby = $_SESSION["cr_orderby"];
                 </thead>
         <tbody>
 <!--======= Main table標題⬆: =======-->
-
 <!--======= Main table內容⬇: =======-->
 <?php
 
@@ -310,7 +362,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         
                     <input type="submit" value="刪除" name="<?php echo "delete" . $row["cramID"] ?>"
                         class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                    <!--Modal aslo toggled at here.-->
+                    <!--編輯資料: #Modal_edit toggled here.-->
                     <input type='button' value="編輯" name="<?php echo "edit" . $row["cramID"] ?>"
                         class="btn btn-primary mb-3" onclick="throwinmodal_CRAM(<?php echo "'".$row['cramID']."'"?>)">
                         </td>
@@ -374,15 +426,15 @@ if ($lastPage - $page <= 5) {
         <div class="modal-body">
             <tr>
 
-                    <th>cramID:<input type="text" name='cri'>
+                    <th>cramID:<input type="text" name='cri' required>
                     </th>
                     <hr>
-                    <th>customerID: <input type="text" name='cid'></th>
+                    <th>customerID: <input type="text" name='cid' required></th>
                     <hr>
-                    <th>cDate:<input type="date" name='dat'>
+                    <th>cDate:<input type="date" name='dat' required>
                     </th>
                     <hr>
-                    <th>cContent: <textarea name="ccn" rows="4" cols="50"></textarea>
+                    <th>cContent: <textarea name="ccn" rows="4" cols="50" required></textarea>
                     </th>
                     <hr>
                     <th>cChecked: <select name='ckd'>
@@ -420,12 +472,12 @@ if ($lastPage - $page <= 5) {
                         <th>cramID:<input type="text" name='cri_e' id='cri_e' readonly></a>
                         </th><!-- ID不給改: readonly-->
                         <hr>
-                        <th>customerID: <input type="text" name='cid_e' id='cid_e'></th>
+                        <th>customerID: <input type="text" name='cid_e' id='cid_e' required></th>
                         <hr>
-                        <th>cDate:<input type="date" name='dat_e' id='dat_e'>
+                        <th>cDate:<input type="date" name='dat_e' id='dat_e' required>
                         </th>
                         <hr>
-                        <th>cContent: <textarea name="ccn_e" id='ccn_e' rows="4" cols="50"></textarea>
+                        <th>cContent: <textarea name="ccn_e" id='ccn_e' rows="4" cols="50" required></textarea>
                         </th>
                         <hr>
                         <th>cChecked: <select name='ckd_e' id='ckd_e'>
