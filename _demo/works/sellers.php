@@ -155,7 +155,7 @@ if (isset($_POST['edModal-submit'])){
         }
         function selectAll(){
             let check_active = document.querySelectorAll("input[type='checkbox']");
-            for (let i=0; i < check_active.length; i++) check_active[i].checked = allCheckBox.checked;
+            for (let i of check_active) i.checked = allCheckBox.checked;
         }
     </script>
 </head>
@@ -187,7 +187,7 @@ if (isset($_POST['edModal-submit'])){
             </div>
 
         <table class="table table-striped ">
-            <thead class="thead-light">
+            <thead class="bg-color-gold">
                 <tr>
                     <th><input class="checkmark" style="position:relative;" type="checkbox" id="allCheckBox" onclick="selectAll()" /><label>全選</label></th>
                     <th>sellerID</th>
@@ -210,7 +210,7 @@ if (isset($_POST['edModal-submit'])){
         SqlQuery;
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)): $temp = "'"; ?>
-                <tr><!-- <label class="form-check-label"> -->
+                <tr class="dataSQL"><!-- <label class="form-check-label"> -->
                         <td><input class="checkmark" style="position:relative;" type="checkbox" name="<?php echo "selected".$row["sellerID"]; ?>"></td>
                         <td><?php echo $row["sellerID"]; $temp = $temp.$row["sellerID"]."','"; ?></td>
                         <td><?php echo $row["sName"]; $temp = $temp.$row["sName"]."','"; ?></td>
