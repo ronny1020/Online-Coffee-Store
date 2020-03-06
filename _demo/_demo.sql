@@ -625,7 +625,8 @@ INSERT INTO `discounts` VALUES
 CREATE TABLE discount_detail (
   disID varchar(10) NOT NULL,-- Primary key:流水號
   productID int(10) ZEROFILL NOT NULL, -- Primary key:流水號(商品)
-  disPrice int(10) NOT NULL -- 單價
+  disPrice int(10) NOT NULL, -- 單價
+  CONSTRAINT detail UNIQUE (disID,productID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- 預設儲存引擎: InnoDB(after php5.5)
   
