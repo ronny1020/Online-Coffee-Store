@@ -102,30 +102,36 @@ foreach ($_POST as $i => $j) {
         SqlQuery;
         
         mysqli_query($link, $deleteCommandText);
-        header('location:' . $_SERVER['REQUEST_URI'] . '');
+        // header('location:' . $_SERVER['REQUEST_URI'] . '');
         
     }
 }
 
 // delete selected items
+
 if (isset($_POST["deleteSelected"])) {
-    $selectedList = "!";
-    
+ 
 
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 8) == "selected") {
+         
             $selectedItem = ltrim($i, "selected");
-            $discountID=substr($deleteItem,0,4);
-            $disProductID=substr($deleteItem,4,10);
-            $selectedList = $selectedList . ",'" . $selectedItem . "'";
+     
+            $discountID=substr($selectedItem,0,4);
+            $disProductID=substr($selectedItem,4,10);
+
+
+            $deleteSelectedCommandText = <<<SqlQuery
+          DELETE FROM coffee.discount_detail WHERE disID IN ('$discountID') AND productID='$disProductID';
+          SqlQuery;
+
+          echo $deleteSelectedCommandText;
+            mysqli_query($link, $deleteSelectedCommandText);
+
         }
     }
-    $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
-  DELETE FROM coffee.discount_detail WHERE disID IN ($selectedList) AND productID='$disProductID';
-  SqlQuery;
-    mysqli_query($link, $deleteSelectedCommandText);
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+   
+    // header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
 
 
@@ -419,7 +425,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
                     <tr>
                         <td>
-                            <input type="checkbox" name="<?php echo "selected" . $row["disID"] ?>"
+                            <input type="checkbox" name="<?php echo "selected" . $row["disID"].$row["productID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
                         <td id="<?php echo $row["disID"].$row["productID"]."disID" ?>"><?php echo $row["disID"] ?></td>
