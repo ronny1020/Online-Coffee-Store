@@ -130,10 +130,10 @@ if (isset($_POST['modal_submit'])) {
    
     
     $insertCommandText = <<<SqlQuery
-    insert into coffee.discount_detail VALUES ('$tmp_did','$tmp_nam','$tmp_ddp')
+    insert into coffee.discount_detail VALUES ('$tmp_did','$tmp_nam','$tmp_ddp') 
     SqlQuery;
     mysqli_query($link, $insertCommandText);
-    echo $insertCommandText;
+    
 
 }
 
@@ -400,7 +400,7 @@ $commandText = <<<SqlQuery
                     select discount_detail.disID, discount_detail.productID, discount_detail.disPrice from coffee.discount_detail join discounts on (discounts.disID=discount_detail.disID) WHERE sellerID='$userID' $searchComment ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
                     SqlQuery;
 
-echo $commandText;
+
 $result = mysqli_query($link, $commandText);
 
 while ($row = mysqli_fetch_assoc($result)):
