@@ -95,9 +95,12 @@ $nextPage=$page+1;
 foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
+        $discountID=substr($deleteItem,0,4);
+        $disProductID=substr($deleteItem,4,10);
         $deleteCommandText = <<<SqlQuery
-        DELETE FROM coffee.discount_detail WHERE disID IN ('$deleteItem')
+        DELETE FROM coffee.discount_detail WHERE disID IN ('$discountID') AND productID='$disProductID'
         SqlQuery;
+        
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
         
@@ -107,16 +110,19 @@ foreach ($_POST as $i => $j) {
 // delete selected items
 if (isset($_POST["deleteSelected"])) {
     $selectedList = "!";
+    
 
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 8) == "selected") {
             $selectedItem = ltrim($i, "selected");
+            $discountID=substr($deleteItem,0,4);
+            $disProductID=substr($deleteItem,4,10);
             $selectedList = $selectedList . ",'" . $selectedItem . "'";
         }
     }
     $selectedList = ltrim($selectedList, "!,");
     $deleteSelectedCommandText = <<<SqlQuery
-  DELETE FROM coffee.discount_detail WHERE disID IN ($selectedList)
+  DELETE FROM coffee.discount_detail WHERE disID IN ($selectedList) AND productID='$disProductID';
   SqlQuery;
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
@@ -142,7 +148,8 @@ if (isset($_POST['modal_submit2'])) {
     $tmp_nam2 = $_POST['nam2'];
     $tmp_ddp2 = $_POST['ddp2'];
     
-	$sql_query = "UPDATE discount_detail SET disID='$tmp_did2', productID='$tmp_nam2', disPrice='$tmp_ddp2' WHERE disID='$tmp_did2'";   
+    $sql_query = "UPDATE discount_detail SET disPrice='$tmp_ddp2' WHERE disID='$tmp_did2' AND productID='$tmp_nam2'";   
+    echo $sql_query;
 	$stmt = $link -> prepare($sql_query);
    
     $stmt -> execute();
@@ -412,9 +419,9 @@ while ($row = mysqli_fetch_assoc($result)):
                             <input type="checkbox" name="<?php echo "selected" . $row["disID"] ?>"
                                 class="btn btn-danger mb-3">
                         </td>
-                        <td id="<?php echo $row["disID"]."disID" ?>"><?php echo $row["disID"] ?></td>
-                        <td id="<?php echo $row["disID"]."productID" ?>"><?php echo $row["productID"] ?></td>
-                        <td id="<?php echo $row["disID"]."disPrice" ?>"><?php echo $row["disPrice"] ?></td>
+                        <td id="<?php echo $row["disID"].$row["productID"]."disID" ?>"><?php echo $row["disID"] ?></td>
+                        <td id="<?php echo $row["disID"].$row["productID"]."productID" ?>"><?php echo $row["productID"] ?></td>
+                        <td id="<?php echo $row["disID"].$row["productID"]."disPrice" ?>"><?php echo $row["disPrice"] ?></td>
                         
                         
 
@@ -426,11 +433,11 @@ while ($row = mysqli_fetch_assoc($result)):
                         
                         <td class="p-0">
                         <div class="right_btn" align="center">
-                            <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"] ?>"
+                            <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"].$row["productID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                                 
-                                <input type='button' value="編輯" name="<?php echo "edit" . $row["disID"] ?>"
-                        class="btn btn-primary mb-3" onclick="throwinmodal_TAL(<?php echo "'".$row['disID']."'"?>)">
+                                <input type='button' value="編輯" name="<?php echo "edit" . $row["disID"].$row["productID"] ?>"
+                        class="btn btn-primary mb-3" onclick="throwinmodal_TAL(<?php echo "'".$row["disID"].$row["productID"]."'"?>)">
                         </div>
                         </td>
                     </tr>
@@ -495,7 +502,7 @@ while ($row = mysqli_fetch_assoc($result)):
         <div class="modal-body">
             <tr>
 
-                    <th>優惠活動:<input type="text" name='did' readonly>
+                    <th>優惠活動:<input type="text" name='did' >
                     </th>
                     <hr>
                     <th>適用產品: <input type="text" name='nam'></th>
@@ -536,7 +543,7 @@ while ($row = mysqli_fetch_assoc($result)):
                     <th>優惠活動:<input type="text" name='did2' id='did2' readonly>
                     </th>
                     <hr>
-                    <th>適用產品: <input type="text" name='nam2' id='nam2' ></th>
+                    <th>適用產品: <input type="text" name='nam2' id='nam2' readonly></th>
                     <hr>
                     <th>折扣價格: <input type="text" name='ddp2' id='ddp2'>
                     </th>
