@@ -534,7 +534,7 @@ while ($row = mysqli_fetch_assoc($result)):
                     <th>資訊名稱: <input type="text" name='nam2' id='nam2' ></th>
                     <hr>
                     
-                    <th>張貼日期: <input type="date" name='opd2' id='opd2'>
+                    <th>張貼日期: <input type="date" name='opd2' id='opd2' readonly>
                     </th>
                     <hr>
                     <th>資訊內容: <textarea type="text" name='ddp2' id='ddp2' rows="4" cols="50" ></textarea>
