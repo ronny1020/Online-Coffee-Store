@@ -257,7 +257,7 @@ $orderby = $_SESSION["cu_orderby"];
 <?php include '../parts/head.php';?>
 <!-- Start your code here. -->
 <div class="main p-5">
-
+<div class="container" style="text-align:center; font-size: 40px; font-weight: 700;">會員資料</div>
 <form method='post' class="card p-3">
     <div>
         <input type="submit" value="刪除勾選" name="deleteSelected" onclick="return confirm('你確定要刪除勾選資料嗎？')"class="btn btn-danger mb-3">

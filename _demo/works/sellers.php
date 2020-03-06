@@ -189,7 +189,7 @@ if (isset($_POST['edModal-submit'])){
         <table class="table table-striped ">
             <thead class="thead-light">
                 <tr>
-                    <th><input type="checkbox" id="allCheckBox" onclick="selectAll()" /><label>全選</label></th>
+                    <th><input class="checkmark" style="position:relative;" type="checkbox" id="allCheckBox" onclick="selectAll()" /><label>全選</label></th>
                     <th>sellerID</th>
                     <th>廠商名稱</th>
                     <th>帳號</th>
@@ -211,7 +211,7 @@ if (isset($_POST['edModal-submit'])){
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)): $temp = "'"; ?>
                 <tr><!-- <label class="form-check-label"> -->
-                        <td><input type="checkbox" name="<?php echo "selected".$row["sellerID"]; ?>"></td>
+                        <td><input class="checkmark" style="position:relative;" type="checkbox" name="<?php echo "selected".$row["sellerID"]; ?>"></td>
                         <td><?php echo $row["sellerID"]; $temp = $temp.$row["sellerID"]."','"; ?></td>
                         <td><?php echo $row["sName"]; $temp = $temp.$row["sName"]."','"; ?></td>
                         <td><?php echo $row["sAccount"]; $temp = $temp.$row["sAccount"]."','"; ?></td>

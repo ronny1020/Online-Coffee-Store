@@ -37,11 +37,12 @@ if (isset($_GET["page"])) {
     $page = 1;
 }
 
+
 //orderby
 // productID, ProductName, categoryName, UnitPrice, UnitsInStock, add_time
-if (isset($_POST["productID_ASC"]) || isset($_POST["ProductName_ASC"]) || isset($_POST["categoryName_ASC"]) || isset($_POST["UnitPrice_ASC"]) || isset($_POST["UnitsInStock_ASC"]) || isset($_POST["add_time_ASC"])) {
+if (isset($_POST["productID_ASC"]) || isset($_POST["ProductName_ASC"]) || isset($_POST["categoryName_ASC"]) || isset($_POST["UnitPrice_ASC"]) || isset($_POST["UnitsInStock_ASC"]) || isset($_POST["add_time_ASC"]) || isset($_POST["visited_ASC"])) {
     $_SESSION["product_ASCorDESC"] = "ASC";
-} else if (isset($_POST["productID_DESC"]) || isset($_POST["ProductName_DESC"]) || isset($_POST["categoryName_DESC"]) || isset($_POST["UnitPrice_DESC"]) || isset($_POST["UnitsInStock_DESC"]) || isset($_POST["add_time_DESC"])) {
+} else if (isset($_POST["productID_DESC"]) || isset($_POST["ProductName_DESC"]) || isset($_POST["categoryName_DESC"]) || isset($_POST["UnitPrice_DESC"]) || isset($_POST["UnitsInStock_DESC"]) || isset($_POST["add_time_DESC"])|| isset($_POST["visited_DESC"])) {
     $_SESSION["product_ASCorDESC"] = "DESC";
 } else if (isset($_SESSION["product_ASCorDESC"])) {
 } else {
@@ -61,6 +62,8 @@ if (isset($_POST["productID_ASC"]) || isset($_POST["productID_DESC"])) {
     $_SESSION["product_orderby"] = "UnitsInStock";
 } else if (isset($_POST["add_time_ASC"]) || isset($_POST["add_time_DESC"])) {
     $_SESSION["product_orderby"] = "add_time";
+} else if (isset($_POST["visited_ASC"]) || isset($_POST["visited_DESC"])) {
+    $_SESSION["product_orderby"] = "visited";
 } else if (isset($_SESSION["product_orderby"])) {
 } else {
     $_SESSION["product_orderby"] = "productID";
@@ -76,6 +79,28 @@ if (isset($_POST["row_num_submit"])) {
     $_SESSION["products_row_num"] = 50;
 }
 $rowNum = $_SESSION["products_row_num"];
+
+
+// visitedRange
+if (isset($_POST["visited_rangeSelect"])) {
+    $_SESSION["visited_rangeSelect"] = $_POST["visited_rangeSelect"];
+    header('location:products.php');
+} else if (isset($_SESSION["visited_rangeSelect"])) {
+} else {
+    $_SESSION["visited_rangeSelect"] = "999years";
+}
+$visitedRange= $_SESSION["visited_rangeSelect"];
+
+
+$time = time();
+$timeNow=date("Y-m-d H:i:s", $time);
+
+
+$visitedRangeStart = date_create(date("Y-m-d H:i:s", $time));
+date_add($visitedRangeStart, date_interval_create_from_date_string('-'.$visitedRange));
+$visitedRangeStart=date_format($visitedRangeStart, 'Y-m-d H:i:s');
+
+
 
 //connect to SQL
 header("content-type:text/html; charset=utf-8");
@@ -130,7 +155,7 @@ if(isset($_SESSION["product_searchKeyword"])) {
             $productIDList=$productIDList.$productID."','";
         }
         $productIDList=$productIDList."')";
-        $searchComment="and productID in $productIDList";
+        $searchComment="and products.productID in $productIDList";
     }
 }
 
@@ -493,7 +518,6 @@ if (isset($_POST["edit_data"])) {
 
 
 
-
 ?>
 
 <!DOCTYPE html>
@@ -573,13 +597,25 @@ if (isset($_POST["edit_data"])) {
                         <?php
 echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 筆(共 $total_num_rows 筆資料)" ?>
                     </span>
-                    <label for="row_num_select">請選擇顯示行數:</label>
+                    <label for="visited_rangeSelect" class="ml-3">請選擇人氣統計時間:</label>
+                    <select id="visited_rangeSelect" name="visited_rangeSelect">
+                        <option value="999years" <?php if ($visitedRange == "999years") {echo "selected";}?>>全部</option>
+                        <option value="1day" <?php if ($visitedRange == "1day") {echo "selected";}?>>單日內 </option>
+                        <option value="1week" <?php if ($visitedRange == "1week") {echo "selected";}?>>單周內 </option>
+                        <option value="1month" <?php if ($visitedRange == "1month" ) {echo "selected";}?>>單月內 </option>
+                        <option value="3months" <?php if ($visitedRange == "3months") {echo "selected";}?>>三個月內</option>
+                        <option value="1year" <?php if ($visitedRange == "1year") {echo "selected";}?>>一年內</option>
+                    </select>
+
+                    <label for="row_num_select" class="ml-3">請選擇顯示行數:</label>
                     <select id="row_num_select" name="row_num">
                         <option value="10" <?php if ($rowNum == 10) {echo "selected";}?>>10 </option>
                         <option value="20" <?php if ($rowNum == 20) {echo "selected";}?>>20 </option>
                         <option value="50" <?php if ($rowNum == 50) {echo "selected";}?>>50 </option>
                         <option value="100" <?php if ($rowNum == 100) {echo "selected";}?>>100</option>
                     </select>
+
+
                     <input type="submit" value="確定" name="row_num_submit" class="btn btn-primary ml-3 mb-3">
                 </span>
             </div>
@@ -650,6 +686,15 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                                 </div>
                             </div>
                         </th>
+                        <th>
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0">
+                                <p class="m-1">人氣</p>
+                                <div class="DESC-ASC ml-2">
+                                    <input type="submit" class="d-block btn btn-DESC" value="▲" name="visited_DESC">
+                                    <input type="submit" class="d-block btn btn-ASC" value="▼" name="visited_ASC">
+                                </div>
+                            </div>
+                        </th>
                         <th class=tags>tags
                         </th>
                         <th>
@@ -661,9 +706,10 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                     <?php
                     // write table
 
-                    $commandText = "select productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time, specification, products.description from coffee.products 
+                    $commandText = "select products.productID, ProductName, sellerID, categoryName, UnitPrice, UnitsInStock, add_time,COUNT(time_stamp) visited, specification, products.description from coffee.products 
                     JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
-                    where sellerID='$userID' $searchComment ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
+                    LEFT JOIN coffee.product_visited ON coffee.product_visited.productID=coffee.products.productID  and time_stamp BETWEEN '$visitedRangeStart' AND '$timeNow' 
+                    where sellerID='$userID' $searchComment  group by productID ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet;";
 
                     $result = mysqli_query($link, $commandText);
                     $result_exist = mysqli_num_rows($result)>0;
@@ -691,6 +737,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                         <td id="<?php echo $row["productID"] . "UnitPrice" ?>"  class="num"><?php echo number_format($row["UnitPrice"]) ?></td>
                         <td id="<?php echo $row["productID"] . "UnitsInStock" ?>"  class="num"><?php echo number_format($row["UnitsInStock"]) ?></td>
                         <td id="<?php echo $row["productID"] . "add_time" ?>" ><?php echo $row["add_time"] ?></td>
+                        <td id="<?php echo $row["productID"] . "visited" ?>"class="num" ><?php echo $row["visited"] ?></td>
                         <td class="hide" id="<?php echo $row["productID"] . "specification" ?>" ><?php echo $row["specification"] ?></td>
                         <td class="hide" id="<?php echo $row["productID"] . "description" ?>" ><?php echo $row["description"] ?></td>
                         <td><?php
