@@ -367,7 +367,7 @@
         text-align: center;
     }
 
-    .data_main_table tr.dataSQL:hover {
+    tr.dataSQL:hover {
         background-color: #DCD0C0 !important;
     }
 
