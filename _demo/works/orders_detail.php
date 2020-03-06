@@ -235,7 +235,7 @@ if (isset($_POST["deleteSelected"])) {
 // $commandText: $str
 // 受所允許之總欄數調控
 $commandText = <<<SqlQuery
-select OrderID, ProductID,  Quantity, Discount from coffee.orders_detail 
+select OrderID, ProductID,  Quantity, Discount from coffee.orders_detail
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
