@@ -84,7 +84,7 @@ $rowNum = $_SESSION["products_row_num"];
 // visitedRange
 if (isset($_POST["visited_rangeSelect"])) {
     $_SESSION["visited_rangeSelect"] = $_POST["visited_rangeSelect"];
-    header('location:products.php');
+    // header('location:products.php');
 } else if (isset($_SESSION["visited_rangeSelect"])) {
 } else {
     $_SESSION["visited_rangeSelect"] = "999years";
@@ -178,12 +178,21 @@ if($showDataStartFrom>$showDataEndTo){
 $previousPage = $page - 1;
 $nextPage = $page + 1;
 
+$updateNum=0;
+$insertNum=0;
+$warningMessage="";
+$deleteNum=0;
+
+
+
 
 // right delete btn
 foreach ($_POST as $i => $j) {
-    if (substr($i, 0, 6) == "delete") {
+    if (substr($i, 0, 6) === "delete" && $i!="deleteSelected" ) {        
+        
+
         $deleteItem = ltrim($i, "delete");
-        $findDeletedTags="select tagID from coffee.products_tagmap WHERE productID ='$deleteItem';";
+        $findDeletedTags="select tagID from coffee.products_tagMap WHERE productID ='$deleteItem';";
         $DeletedTags=mysqli_query($link, $findDeletedTags);
         $k=0;
         while ($tagRow = mysqli_fetch_assoc($DeletedTags)) {
@@ -192,7 +201,7 @@ foreach ($_POST as $i => $j) {
         }
         foreach ($tagList as $tagRow) {
             $DeletedTagID=$tagRow["tagID"];
-            $checkDeletedTagsComment="select tagID from coffee.products_tagmap WHERE tagID ='$DeletedTagID';";
+            $checkDeletedTagsComment="select tagID from coffee.products_tagMap WHERE tagID ='$DeletedTagID';";
             $checkDeletedTags=mysqli_query($link, $checkDeletedTagsComment);
             if(mysqli_num_rows($checkDeletedTags)==1){
                 $deletedTagID=mysqli_fetch_assoc($checkDeletedTags)["tagID"];
@@ -205,19 +214,22 @@ foreach ($_POST as $i => $j) {
         mysqli_query($link, $deleteCommandTextTagMap);
         $deleteCommandText = "DELETE FROM coffee.products WHERE productID IN ('$deleteItem');";
         mysqli_query($link, $deleteCommandText);
-        header('location:' . $_SERVER['REQUEST_URI'] . '');
+        // header('location:' . $_SERVER['REQUEST_URI'] . '');
+        $deleteNum=1;
 
+        
     }
 }
+
 
 // delete selected items
 if (isset($_POST["deleteSelected"])) {
     $selectedList = "!";
 
     foreach ($_POST as $i => $j) {
-        if (substr($i, 0, 8) == "selected") {
+        if (substr($i, 0, 8) === "selected") {
             $selectedItem = ltrim($i, "selected");
-            $findDeletedTags="select tagID from coffee.products_tagmap WHERE productID ='$selectedItem';";
+            $findDeletedTags="select tagID from coffee.products_tagMap WHERE productID ='$selectedItem';";
             $DeletedTags=mysqli_query($link, $findDeletedTags);
             $k=0;
             while ($tagRow = mysqli_fetch_assoc($DeletedTags)) {
@@ -239,16 +251,19 @@ if (isset($_POST["deleteSelected"])) {
             mysqli_query($link, $deleteCommandTextTagMap);
             $deleteCommandText = "DELETE FROM coffee.products WHERE productID IN ('$selectedItem');";
             mysqli_query($link, $deleteCommandText);
-            header('location:' . $_SERVER['REQUEST_URI'] . '');
+            // header('location:' . $_SERVER['REQUEST_URI'] . '');
+            $deleteNum++;
         }
     }
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+    // header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
+
 
 // export selected data
 if (isset($_POST["exportSelected"])) {
-
+  
     $selectedList="(";
+
     foreach ($_POST as $i => $j) {
         if (substr($i, 0, 8) == "selected") {
             $selectedItem = ltrim($i, "selected");
@@ -263,7 +278,6 @@ if (isset($_POST["exportSelected"])) {
         $exportComment="select productID, ProductName, categoryName, UnitPrice, UnitsInStock, specification, products.description from coffee.products 
         JOIN coffee.category ON coffee.category.CategoryID=coffee.products.CategoryID  
         where sellerID='$userID' and productID in $selectedList ORDER BY productID;";
-
     
         $exportResult = mysqli_query($link, $exportComment);
         $columns_total = mysqli_num_fields($exportResult);
@@ -299,14 +313,12 @@ if (isset($_POST["exportSelected"])) {
         header('Content-Disposition: attachment; filename=' . $filename);
 
         echo iconv("UTF-8", "big5", $output);
-        // echo "\xEF\xBB\xBF";
-        // echo $output;
-
         exit;
   
     }
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+    // header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
+
 
 // import data
 if (isset($_POST["import_data"])) {
@@ -314,7 +326,7 @@ if (isset($_POST["import_data"])) {
     $import_file = $_FILES["ProductImage_upload"]["tmp_name"];
     
     if ($_FILES["ProductImage_upload"]["size"] > 0) {
-        
+
         $import_data = fopen($import_file, "r");
 
 
@@ -342,10 +354,12 @@ if (isset($_POST["import_data"])) {
                 if($productID_import=="productID"){
                 
                 }else if($productID_import==""){
+                   
                     $add_time_now = date("Y-m-d H:i:s", time());
                     $import_comment = "INSERT INTO coffee.products (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`,`UnitsInStock`, `add_time`, `specification`, `description`)  
                     VALUES  ('$ProductName_import','$userID',$CategoryID_import,$UnitPrice_import,$UnitsInStock_import,'$add_time_now','$specification_import','$description_import');";
                     mysqli_query($link, $import_comment );
+                    $insertNum++;
                     
                 }else{
                     $checkProductIDExistComment="select productID from coffee.products where productID=$productID_import and sellerID='$userID';";
@@ -362,14 +376,17 @@ if (isset($_POST["import_data"])) {
                         WHERE `productID` = $productID_import;";
 
                         mysqli_query($link, $importUpdate_comment);
+                        $updateNum++;
                     }else{
-                        echo "productID error in ID:$productID_import";
+                        if ($productID_import != "productID") {
+                            // $warningMessage=$warningMessage."<br>"."產品ID:$productID_import 發生ID錯誤。";
+                        }
                     }
 
                 }    
             }else{
                 if($productID_import != "productID"){
-                echo "category error in ID:$productID_import";
+                    // $warningMessage=$warningMessage."<br>"."在$productID_import 發生類別錯誤。";
                 }
             }   
         }
@@ -393,28 +410,25 @@ function uploadImage($productIDForImage){
  
     $check = getimagesize($_FILES["ProductImage_upload"]["tmp_name"]);
     if($check == false) {
-        echo "File is not an image.";
+        $GLOBALS['warningMessage']="圖片上傳失敗，這不是圖片。";
         $uploadOk = 0;
     }
     
     if($ImageUploadType != "jpg" ) {
-    echo "Sorry, only JPG are allowed.";
+        $GLOBALS['warningMessage']=="圖片上傳失敗，僅接受JPG。";
     $uploadOk = 0;
     }
 
     if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
+
     // if everything is ok, try to upload file
     } else {
         if (move_uploaded_file($_FILES["ProductImage_upload"]["tmp_name"], $ImageUpload_file)) {
           
         } else {
-            echo "Sorry, there was an error uploading your file.";
+  
         }
     }
-
-
-
 }
 
 // create data from button
@@ -439,7 +453,7 @@ if (isset($_POST["create_data"])) {
         uploadImage($productID_input);
     }
 
-foreach ($_POST as $i => $j) {
+    foreach ($_POST as $i => $j) {  
         if (substr($i, 0, 6) == "newTag" && $j !="" ) {
             $newTag=$j;
             $findTagID = mysqli_query($link, "select tagID from coffee.products_tags WHERE tagName ='$newTag';");
@@ -453,7 +467,8 @@ foreach ($_POST as $i => $j) {
             mysqli_query($link, "INSERT INTO coffee.products_tagMap (productID, tagID) VALUES ($productID_input,$newTagID);");
             }
     }
-    header('location:' . $_SERVER['REQUEST_URI'] . '');
+    // header('location:' . $_SERVER['REQUEST_URI'] . '');
+    $insertNum++;
 }
 // update
 if (isset($_POST["edit_data"])) {
@@ -512,6 +527,7 @@ if (isset($_POST["edit_data"])) {
         }
     }
     // header('location:' . $_SERVER['REQUEST_URI'] . '');
+    $updateNum++;
 }
 
 
@@ -550,6 +566,34 @@ if (isset($_POST["edit_data"])) {
 
     <!-- Start your code here -->
     <div class="main p-5">
+
+    <?php if($updateNum>0){ ?>
+    <div class="alert alert-primary alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <?php echo "您成功修改".$updateNum."筆資料。" ; ?>
+    </div>
+    
+    <?php };    
+    if($insertNum>0){ ?>
+    <div class="alert alert-info alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <?php echo "您成功新增".$insertNum."筆資料。" ; ?>
+    </div>
+    <?php };    
+    if($warningMessage !== "" ){ ?>
+    <div class="alert alert-warning alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <?php echo $warningMessage ; ?>
+    </div>
+    <?php };    
+    if($deleteNum>0){ ?>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <?php echo "您成功刪除".$deleteNum."筆資料。" ; ?>
+    </div>
+    <?php };  ?>
+
+
     <div class="container mb-3" style="text-align:center; font-size: 40px; font-weight: 700;">商品管理</div>
         <form class="card p-3 mb-5" method="POST">
             <div class="w-50 mx-auto">
