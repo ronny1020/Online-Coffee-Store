@@ -45,7 +45,7 @@ $error = "";
             </div>
 
             <a class='triangle_title' type="button" data-toggle="collapse" data-target="#order">
-                <i class='fas fa-clipboard w-25 text-center'></i> 訂單管理<div class="triangle_rotate">▶</div></a>
+                <i class='fas fa-clipboard w-25 text-center'></i>訂單管理<div class="triangle_rotate">▶</div></a>
             <div id="order" class="collapse">
                 <a href="../works/orders.php"><i class='fas fa-copy w-25 text-center'></i>訂單內容</a>
                 <a href="../works/orders_detail.php"><i class='fas fa-glasses w-25 text-center'></i>訂單細節</a>
