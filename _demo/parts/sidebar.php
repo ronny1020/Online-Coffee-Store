@@ -4,6 +4,11 @@ $error = "";
 
 ?>
 
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+
+
+
 <div id="mySidebar" class="sidebar">
     <!-- <div class="sidebar_bg"></div> -->
 
@@ -20,31 +25,33 @@ $error = "";
         <?php if ($_SESSION['AorS'] === 0) {?>
             <!-- Collapsible bar here. -->
             <a class='triangle_title' type="button" data-toggle="collapse" data-target="#member">
-                會員管理<div class="triangle_rotate">▶</div></a>
+            <i class='fas  fa-address-book w-25 text-center'></i>會員管理<div class="triangle_rotate">▶</div></a>
             <div id="member" class="collapse">
-            <a href="members.php">會員資料</a>
-            <a href="cram.php">客訴內容</a>
+            <a href="members.php"><i class='fas fa-address-card w-25 text-center'></i>會員資料</a>
+            <a href="cram.php"><i class='fas fa-phone-volume w-25 text-center'></i>客訴內容</a>
             </div>
-            <a class='triangle_title' href="sellers.php">廠商管理<div class="triangle_rotate">▶</div></a>
+            <a class='triangle_title' href="sellers.php"><i class='fas fa-coffee w-25 text-center'></i>廠商管理
+            <!-- <div class="triangle_rotate">▶</div> -->
+        </a>
         <?php } elseif ($_SESSION['AorS'] === 1) {?>
 
             <a class='triangle_title' type="button" data-toggle="collapse" data-target="#regist">
-               資料管理<div class="triangle_rotate">▶</div></a>
+            <i class='fas fa-sitemap w-25 text-center'></i>資料管理<div class="triangle_rotate">▶</div></a>
             <div id="regist" class="collapse">
-            <a href="../regist/memupdate.php">修改資料</a>
-            <a href="../works/infomations.php">訊息管理</a>
-            <a href="../works/discounts.php">優惠活動管理</a>
-            <a href="../works/discount_detail.php">優惠細節管理</a>
+            <a href="../regist/memupdate.php"><i class='fas fa-marker w-25 text-center'></i>修改資料</a>
+            <a href="../works/infomations.php"><i class='fas  fa-tasks w-25 text-center'></i>訊息管理</a>
+            <a href="../works/discounts.php"><i class='fas fa-bullhorn w-25 text-center'></i>優惠活動管理</a>
+            <a href="../works/discount_detail.php"><i class='fas fa-stream w-25 text-center'></i>優惠細節管理</a>
             </div>
 
             <a class='triangle_title' type="button" data-toggle="collapse" data-target="#order">
-               訂單管理<div class="triangle_rotate">▶</div></a>
+                <i class='fas fa-clipboard w-25 text-center'></i> 訂單管理<div class="triangle_rotate">▶</div></a>
             <div id="order" class="collapse">
-            <a href="../works/orders.php">訂單內容</a>
-            <a href="../works/orders_detail.php">訂單細節</a>
+                <a href="../works/orders.php"><i class='fas fa-copy w-25 text-center'></i>訂單內容</a>
+                <a href="../works/orders_detail.php"><i class='fas fa-glasses w-25 text-center'></i>訂單細節</a>
             </div>
 
-            <a href="../works/products.php">商品管理</a>
+            <a href="../works/products.php"><i class='fas fa-tags w-25 text-center'></i>商品管理</a>
 
 
 
