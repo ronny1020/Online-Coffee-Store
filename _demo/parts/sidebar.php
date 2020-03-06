@@ -5,8 +5,12 @@ $error = "";
 ?>
 
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<!-- 
 
+若要改圖示，請至https://www.w3schools.com/icons/fontawesome5_icons_business.asp
+把	fas fa-XXXXX 改成對應的代碼 
 
+-->
 
 
 <div id="mySidebar" class="sidebar">
