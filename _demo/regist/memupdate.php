@@ -120,7 +120,7 @@ function checkForm(){
 		}
 	}	
 	if(document.formJoin.sName.value==""){
-		alert("請填寫姓名!");
+		alert("請填寫名稱!");
 		document.formJoin.sName.focus();
 		return false;
 	}
@@ -201,7 +201,7 @@ function checkmail(sMail) {
             
             <p><font color="#FF0000">*</font>電子郵件：
             <input name="sMail" type="text" class="form-control" id="sMail" value="<?php echo $row_RecMember["sMail"];?>">
-            <span class="smalltext">請確定此電子郵件為可使用狀態，以方便未來系統使用，如補寄會員密碼信。</span></p>
+            <span class="smalltext">請確定此電子郵件為可使用狀態，以方便未來系統使用。</span></p>
             <p>&nbsp;國　　家：
             <input name="sCountry" type="text" class="form-control" id="sCountry" value="<?php echo $row_RecMember["sCountry"];?>">
             <br><span class="smalltext"></span></p>
