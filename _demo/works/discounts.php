@@ -376,6 +376,7 @@ if (isset($_POST["exportSelected"])) {
                         </th>
 
                         <th>
+                        <div align="center">
                             <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 100px;'>    
                                 <p class="m-1">優惠編號</p>
                                 <div class="DESC-ASC ml-2">
@@ -383,9 +384,11 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="disID_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
                   
                         <th>
+                        <div align="center">
                             <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">優惠名稱</p>
                                 <div class="DESC-ASC ml-2">
@@ -393,8 +396,10 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC"  value=""  name="disName_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
                         <th>
+                        <div align="center">
                             <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">優惠內容</p>
                                 <div class="DESC-ASC ml-2">
@@ -402,9 +407,11 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC"  value=""  name="disDescrip_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
                         
                         <th>
+                        <div align="center">
                         <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">折數</p>
                                 <div class="DESC-ASC ml-2">
@@ -412,9 +419,11 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="Discount_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
 
                         <th>
+                        <div align="center">
                         <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">開始日期</p>
                                 <div class="DESC-ASC ml-2">
@@ -422,9 +431,11 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="startDate_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
 
                         <th>
+                        <div align="center">
                         <div class="d-flex justify-content-center align-items-center flex-row m-0">    
                                 <p class="m-1">結束日期</p>
                                 <div class="DESC-ASC ml-2">
@@ -432,6 +443,7 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="overDate_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
 
                         </th>

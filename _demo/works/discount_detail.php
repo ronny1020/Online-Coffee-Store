@@ -367,14 +367,19 @@ if (isset($_POST["exportSelected"])) {
             <table class="table table-striped table-bordered data_main_table"  >
                 <thead class="bg-color-gold"  >
                     <tr >
+                        
                         <th>
+                        <div align="center">
                         <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 100px;' >
                             <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()"  class='checkmark' style='position: relative;' >
                             <label for="selectAll">全選</label>
                         </div>
+                        </div>
                         </th>
+                        
 
                         <th>
+                        <div align="center">
                             <div class="d-flex justify-content-center align-items-center flex-row m-0 "  style='width: 100px;'>    
                                 <p class="m-1">優惠活動</p>
                                 <div class="DESC-ASC ml-2">
@@ -382,9 +387,11 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC" value="▼" name="disID_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
                   
                         <th>
+                        <div align="center">
                             <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">適用產品</p>
                                 <div class="DESC-ASC ml-2">
@@ -392,8 +399,10 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC"  value=""  name="productID_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
                         <th>
+                        <div align="center">
                             <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">折扣價格</p>
                                 <div class="DESC-ASC ml-2">
@@ -401,6 +410,7 @@ if (isset($_POST["exportSelected"])) {
                                     <input type="submit" class="d-block btn btn-ASC"  value="▼"  name="disPrice_ASC">
                                 </div>
                             </div>
+                        </div>
                         </th>
                         
                         
