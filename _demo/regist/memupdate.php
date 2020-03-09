@@ -52,7 +52,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
 	//修正bug
 	$MyName=$_POST["sName"];
 	$MyPhone=$_POST["sPhone"];
-	$MyPassword=$_POST["sPassword"];
+	$MyPassword = password_hash($_POST["sPassword"], PASSWORD_BCRYPT);
 	$MyAddress=$_POST["sAddress"];
 	$MyMail=$_POST["sMail"];
 	$MyCountry=$_POST["sCountry"];
