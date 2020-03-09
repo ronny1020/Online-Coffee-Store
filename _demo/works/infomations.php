@@ -344,15 +344,17 @@ if (isset($_POST["exportSelected"])) {
             </div>
 
             <table class="table table-striped table-bordered data_main_table">
-                <thead class="thead-light">
+                <thead class="bg-color-gold">
                     <tr>
                         <th>
-                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()">
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 100px;'>
+                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()" class='checkmark' style='position: relative;'>
                             <label for="selectAll">全選</label>
+                        </div>
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 100px;'>    
                                 <p class="m-1">資訊編號</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="infoID_DESC">
@@ -362,7 +364,7 @@ if (isset($_POST["exportSelected"])) {
                         </th>
                   
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">資訊名稱</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="" name="infoName_DESC">
@@ -371,7 +373,7 @@ if (isset($_POST["exportSelected"])) {
                             </div>
                         </th>
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">資訊內容</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="" name="infoDescript_DESC">
@@ -381,7 +383,7 @@ if (isset($_POST["exportSelected"])) {
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">張貼日期</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="openDate_DESC">
@@ -408,10 +410,10 @@ while ($row = mysqli_fetch_assoc($result)):
 
 ?>
 
-                    <tr>
+                    <tr class="dataSQL" align="center">
                         <td>
                             <input type="checkbox" name="<?php echo "selected" . $row["infoID"] ?>"
-                                class="btn btn-danger mb-3">
+                            class='checkmark' style='position: relative;'>
                         </td>
                         <td id="<?php echo $row["infoID"]."infoID" ?>"><?php echo $row["infoID"] ?></td>
                         <td id="<?php echo $row["infoID"]."infoName" ?>"><?php echo $row["infoName"] ?></td>
