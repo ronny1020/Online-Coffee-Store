@@ -404,7 +404,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         class="btn btn-primary mb-3" onclick="throwinmodal_orders(<?php echo "'".$row['OrderID']."'"?>)">
             
                     <input type='button' value="訂單細節" name="<?php echo "edit" . $row["OrderID"] ?>"
-                        class="btn btn-primary mb-3" onclick="throwinmodal_orders_show(<?php echo "'".$row['OrderID']."'"?>)">
+                        class="btn btn-info mb-3" onclick="throwinmodal_orders_show(<?php echo "'".$row['OrderID']."'"?>)">
             
                 </td>
 
@@ -580,7 +580,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
         <!-- Modal footer -->
         <div class="modal-footer">
-            <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input>
+            <!-- <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input> -->
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         </form>
@@ -617,9 +617,6 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
 
 -->
-
-
-
 
 
 <?php include '../parts/footer.php';?>
