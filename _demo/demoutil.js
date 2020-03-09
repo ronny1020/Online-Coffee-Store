@@ -376,7 +376,7 @@ function importDataUpload() {
     // name
     import_form.CreateAppend("div", "", "class", "form-group", "id", "importDataInput");
     importDataInput.CreateAppend("label", "匯入資料上傳：", "class", "form-control-label", "for", "ProductImage_input");
-    importDataInput.CreateAppend("input", "", "type", "file", "class", "form-control-file border", "id", "ProductImage_input", "name", "ProductImage_upload");
+    importDataInput.CreateAppend("input", "", "type", "file", "class", "form-control-file border", "id", "ProductImage_input", "name", "import_upload");
 
     import_form.CreateAppend("p", "注意：匯入資料檔案僅接受csv檔，請確認檔案中產品ID是否正確，若找不到對應產品將匯入錯誤，若要新增資料請留空。");
 
