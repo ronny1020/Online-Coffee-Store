@@ -508,7 +508,7 @@ INSERT INTO `sellers` VALUES
 ,('S012','資策會咖啡','sel12ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs12','(99)0000-0006','s087@gmail.com','日本')
 ,('S013','資策會咖啡','sel13ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs13','(99)0000-0006','s009@gmail.com','台灣')
 ,('S014','資策會咖啡','sel14ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs14','(99)0000-0006','s0111@gmail.com','台灣')
-('S015', 'znB7U', 'sel015ler', '$2y$10$Wtsv/tqHAnowNfhix5hCQuYJlyWgpfC00IzzE.XE2mbAMcENSyH82', 'my_dummy_adrs015', '(99)0000-0015', 'VDQt@gmail.com', '日本'),
+,('S015', 'znB7U', 'sel015ler', '$2y$10$Wtsv/tqHAnowNfhix5hCQuYJlyWgpfC00IzzE.XE2mbAMcENSyH82', 'my_dummy_adrs015', '(99)0000-0015', 'VDQt@gmail.com', '日本'),
 ('S016', 'oH9c1', 'sel016ler', '$2y$10$n93zfcMsyDsWYAMBfn73JuGOxd/PFAN874c0Nw6QiOyFHEGvAkCiK', 'my_dummy_adrs016', '(99)0000-0016', 'fKSt@gmail.com', '台灣'),
 ('S017', 'TMYiK', 'sel017ler', '$2y$10$aQXUTfTopU/Ac2COBFxc/ObQE5l/fccUuXqMDNZcSMHKAC6OFk4mK', 'my_dummy_adrs017', '(99)0000-0017', 'dmv3@gmail.com', '台灣'),
 ('S018', 'Gh3qR', 'sel018ler', '$2y$10$GuAZ5KJ1W6ke/qkNhhmfeenS8d.gaqdhmHwFCPIHHR.UjqucvAwBG', 'my_dummy_adrs018', '(99)0000-0018', 'UtNV@gmail.com', '台灣'),
