@@ -33,7 +33,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="join")){
       GetSQLValueString($_POST["sellerID"], 'string'),
 			GetSQLValueString($_POST["sAccount"], 'string'),
 
-			password_hash($_POST["sPassword"], PASSWORD_DEFAULT),
+			password_hash($_POST["sPassword"], PASSWORD_BCRYPT),
       GetSQLValueString($_POST["sPhone"], 'string'),
       GetSQLValueString($_POST["sMail"], 'string'),
       GetSQLValueString($_POST["sCountry"], 'string'),
