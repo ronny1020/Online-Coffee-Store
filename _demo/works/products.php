@@ -323,76 +323,87 @@ if (isset($_POST["exportSelected"])) {
 // import data
 if (isset($_POST["import_data"])) {
     
-    $import_file = $_FILES["ProductImage_upload"]["tmp_name"];
+    $import_file = $_FILES["import_upload"]["tmp_name"];
     
-    if ($_FILES["ProductImage_upload"]["size"] > 0) {
+  
+    // Check if file is a  csv
+    $import_type = strtolower(pathinfo(basename($_FILES["import_upload"]["name"]),PATHINFO_EXTENSION));
 
-        $import_data = fopen($import_file, "r");
-
-
-        // while(! feof($import_data)){
-        //     print_r(fgetcsv($import_data));
-        // }
-
-        while (($row = fgetcsv($import_data, 10000, ",")) !== FALSE) {
- 
-            $row=mb_convert_encoding($row ,"UTF-8","big5");
-            
-            $productID_import=$row[0];
-            $ProductName_import=$row[1];
-            $categoryName_import=$row[2];
-            $UnitPrice_import=$row[3];
-            $UnitsInStock_import=$row[4];
-            $specification_import=$row[5];
-            $description_import=$row[6];
-
-            $findCategoryIDCommend="select CategoryID from coffee.category where categoryName='$categoryName_import';";
-            $findCategoryIDResult = mysqli_query($link, $findCategoryIDCommend);
-            if(mysqli_num_rows($findCategoryIDResult)>0){
-                $CategoryID_import=mysqli_fetch_assoc($findCategoryIDResult)["CategoryID"];
     
-                if($productID_import=="productID"){
+    if($import_type != "csv" ) {
+        $warningMessage="僅接受csv。";
+    }else{
+
+
+        if ($_FILES["import_upload"]["size"] > 0) {
+
+            $import_data = fopen($import_file, "r");
+
+
+            // while(! feof($import_data)){
+            //     print_r(fgetcsv($import_data));
+            // }
+
+            while (($row = fgetcsv($import_data, 10000, ",")) !== FALSE) {
+    
+                $row=mb_convert_encoding($row ,"UTF-8","big5");
                 
-                }else if($productID_import==""){
-                   
-                    $add_time_now = date("Y-m-d H:i:s", time());
-                    $import_comment = "INSERT INTO coffee.products (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`,`UnitsInStock`, `add_time`, `specification`, `description`)  
-                    VALUES  ('$ProductName_import','$userID',$CategoryID_import,$UnitPrice_import,$UnitsInStock_import,'$add_time_now','$specification_import','$description_import');";
-                    mysqli_query($link, $import_comment );
-                    $insertNum++;
+                $productID_import=$row[0];
+                $ProductName_import=$row[1];
+                $categoryName_import=$row[2];
+                $UnitPrice_import=$row[3];
+                $UnitsInStock_import=$row[4];
+                $specification_import=$row[5];
+                $description_import=$row[6];
+
+                $findCategoryIDCommend="select CategoryID from coffee.category where categoryName='$categoryName_import';";
+                $findCategoryIDResult = mysqli_query($link, $findCategoryIDCommend);
+                if(mysqli_num_rows($findCategoryIDResult)>0){
+                    $CategoryID_import=mysqli_fetch_assoc($findCategoryIDResult)["CategoryID"];
+        
+                    if($productID_import=="productID"){
                     
-                }else{
-                    $checkProductIDExistComment="select productID from coffee.products where productID=$productID_import and sellerID='$userID';";
-                    $checkProductIDExistResult= mysqli_query($link, $checkProductIDExistComment);
-      
-                    if(mysqli_num_rows($checkProductIDExistResult)>0){
-                        $importUpdate_comment = "UPDATE `coffee`.`products` SET 
-                        `ProductName` = '$ProductName_import', 
-                        `CategoryID` = '$CategoryID_import',
-                        `UnitPrice` = $UnitPrice_import, 
-                        `UnitsInStock` = $UnitsInStock_import,
-                        `specification` = '$specification_import',
-                        `description` = '$description_import'
-                        WHERE `productID` = $productID_import;";
-
-                        mysqli_query($link, $importUpdate_comment);
-                        $updateNum++;
+                    }else if($productID_import==""){
+                    
+                        $add_time_now = date("Y-m-d H:i:s", time());
+                        $import_comment = "INSERT INTO coffee.products (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`,`UnitsInStock`, `add_time`, `specification`, `description`)  
+                        VALUES  ('$ProductName_import','$userID',$CategoryID_import,$UnitPrice_import,$UnitsInStock_import,'$add_time_now','$specification_import','$description_import');";
+                        mysqli_query($link, $import_comment );
+                        $insertNum++;
+                        
                     }else{
-                        if ($productID_import != "productID") {
-                            // $warningMessage=$warningMessage."<br>"."產品ID:$productID_import 發生ID錯誤。";
+                        $checkProductIDExistComment="select productID from coffee.products where productID=$productID_import and sellerID='$userID';";
+                        $checkProductIDExistResult= mysqli_query($link, $checkProductIDExistComment);
+        
+                        if(mysqli_num_rows($checkProductIDExistResult)>0){
+                            $importUpdate_comment = "UPDATE `coffee`.`products` SET 
+                            `ProductName` = '$ProductName_import', 
+                            `CategoryID` = '$CategoryID_import',
+                            `UnitPrice` = $UnitPrice_import, 
+                            `UnitsInStock` = $UnitsInStock_import,
+                            `specification` = '$specification_import',
+                            `description` = '$description_import'
+                            WHERE `productID` = $productID_import;";
+
+                            mysqli_query($link, $importUpdate_comment);
+                            $updateNum++;
+                        }else{
+                            if ($productID_import != "productID") {
+                                // $warningMessage=$warningMessage."<br>"."產品ID:$productID_import 發生ID錯誤。";
+                            }
                         }
+
+                    }    
+                }else{
+                    if($productID_import != "productID"){
+                        // $warningMessage=$warningMessage."<br>"."在$productID_import 發生類別錯誤。";
                     }
+                }   
+            }
 
-                }    
-            }else{
-                if($productID_import != "productID"){
-                    // $warningMessage=$warningMessage."<br>"."在$productID_import 發生類別錯誤。";
-                }
-            }   
+            fclose($import_data);
         }
-
-        fclose($import_data);
-    }
+    }   
 }
 
 
@@ -402,10 +413,12 @@ if (isset($_POST["import_data"])) {
 // uploadImage
 function uploadImage($productIDForImage){
     $ImageUpload_dir = "../image/products/";
-    $ImageUpload_file = $ImageUpload_dir . $productIDForImage.".jpg";
 
     $uploadOk = 1;
-    $ImageUploadType = strtolower(pathinfo($ImageUpload_file,PATHINFO_EXTENSION));
+    $ImageUploadType = strtolower(pathinfo(basename($_FILES["ProductImage_upload"]["name"]),PATHINFO_EXTENSION));
+
+    $uploadedName=$ImageUpload_dir.$productIDForImage.".".$ImageUploadType;
+  
     // Check if image file is a actual image or fake image
  
     $check = getimagesize($_FILES["ProductImage_upload"]["tmp_name"]);
@@ -414,17 +427,17 @@ function uploadImage($productIDForImage){
         $uploadOk = 0;
     }
     
-    if($ImageUploadType != "jpg" ) {
-        $GLOBALS['warningMessage']=="圖片上傳失敗，僅接受JPG。";
-    $uploadOk = 0;
+    if(($ImageUploadType != "jpg" && $ImageUploadType != "png" && $ImageUploadType != "jpeg"  && $ImageUploadType != "gif" )  ) {
+        $GLOBALS['warningMessage']="圖片上傳失敗，僅接受JPG、JPEG、PNG、GIF。";
+        $uploadOk = 0;
     }
 
     if ($uploadOk == 0) {
 
     // if everything is ok, try to upload file
     } else {
-        if (move_uploaded_file($_FILES["ProductImage_upload"]["tmp_name"], $ImageUpload_file)) {
-          
+        if (move_uploaded_file($_FILES["ProductImage_upload"]["tmp_name"], $uploadedName)) {
+            $GLOBALS['warningMessage']="圖片上傳成功";
         } else {
   
         }
