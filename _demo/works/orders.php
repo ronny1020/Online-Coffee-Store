@@ -227,9 +227,9 @@ if (isset($_POST["deleteSelected"])) {
 <?php include '../parts/sidebar.php';?>
 <?php include '../parts/head.php';?>
 <!-- Start your code here. -->
-<!-- <div class="main p-5">
+ <div class="main p-5">
 <form class="card p-3 mb-5" method="POST">
-            <div class="w-50 mx-auto">
+<!--            <div class="w-50 mx-auto">
                 <label for="searchKeyword">
                     請輸入關鍵字並選擇搜尋欄位1111111：
                 </label>
@@ -291,19 +291,68 @@ if (isset($_POST["deleteSelected"])) {
         <thead class="thead-light">
             <tr>
             <th><input type="checkbox" id="selectAll" onclick="selectAllCheckbox()"><label for="selectAll">全選</label></th>
-                <th>OrderID</th>
-                <th>CustomerID</th>
-                <th>OrderDate</th>
-                <th>ShippedDate</th>
-                <th>ShipAddress</th>
-                <th>ShipRegion</th>
-                <th>ShipPostCode</th>
-                <th>ShipCity</th>
-                <th>ShipCountry</th>
+                <th>
+                <div style="width: 40px;">
+                訂單ID
+                </div>
+                </th>
+                
+                <th >
+                <div style='width:40px;'>
+               顧客ID
+                </div>
+                </th>
+                
+                <th >
+                <div style='width:100px;'>
+                下訂日期
+                </div>
+                </th>
+
+                <th >
+                <div style='width:100px;'>
+                運送日期
+                </div>
+                </th>
+
+                <th >
+                <div style='width:100px;'>
+                運送地址
+                </div>
+                </th>
+
+                <th >
+                <div style='width:100px;'>
+                運送區域
+                </div>
+                </th>
+
+
+                <th >
+                <div style='width:100px;'>
+                運送郵遞區號
+                </div>
+                </th>
+                
+                <th >
+                <div style='width:80px;'>
+                運送城市
+                </div>
+                </th>
+
+
+                <th >
+                <div style='width:80px;'>
+                運送國家
+                </div>
+                </th>
+
+
+
                 <th></th>
-                <th style="visibility:hidden">ProductID</th>
-                <th style="visibility:hidden">Quantity</th>
-                <th style="visibility:hidden">Discount</th>
+                <th style="display:none;">ProductID</th>
+                <th style="display:none;">Quantity</th>
+                <th style="display:none;">Discount</th>
                 
             </tr>
         </thead>
@@ -313,9 +362,15 @@ if (isset($_POST["deleteSelected"])) {
 // write table
 // $commandText: $str
 // 受所允許之總欄數調控        這邊還要再 join orders_detail 兩個表的內容...
+
+
 $commandText = <<<SqlQuery
+
+
+
 SELECT orders.*, orders_detail.* FROM orders 
-INNER JOIN orders_detail ON orders.OrderID = orders_detail.orderID 
+INNER JOIN orders_detail ON orders.OrderID = orders_detail.orderID order by orders.OrderID
+
 SqlQuery;
 
 $result = mysqli_query($link, $commandText);
@@ -349,7 +404,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
                         class="btn btn-primary mb-3" onclick="throwinmodal_orders(<?php echo "'".$row['OrderID']."'"?>)">
             
                     <input type='button' value="訂單細節" name="<?php echo "edit" . $row["OrderID"] ?>"
-                        class="btn btn-primary mb-3" onclick="throwinmodal_orders_show(<?php echo "'".$row['OrderID']."'"?>)">
+                        class="btn btn-info mb-3" onclick="throwinmodal_orders_show(<?php echo "'".$row['OrderID']."'"?>)">
             
                 </td>
 
@@ -525,7 +580,7 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
         <!-- Modal footer -->
         <div class="modal-footer">
-            <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input>
+            <!-- <input type="submit" name="modal_submit_e" value='submit' class="btn btn-primary"></input> -->
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         </form>
@@ -562,9 +617,6 @@ while ($row = mysqli_fetch_assoc($result)): ?>
 
 
 -->
-
-
-
 
 
 <?php include '../parts/footer.php';?>
