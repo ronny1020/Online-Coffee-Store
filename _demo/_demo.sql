@@ -499,7 +499,15 @@ INSERT INTO `sellers` VALUES
 ,('S003','伯朗咖啡','sel03ler','$2y$10$NNrlO66BPXrK/q942nKR7.9SpKEgYp2W3GaRs75I3v.JDlPnDNAQS','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
 ,('S004','上島咖啡','sel04ler','$2y$10$HhsDVl94qKOFtK1l5aAj7OAhapz6ovvedlBXehTgsKc5zvWY3ftg6','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','日本')
 ,('S005','小樽咖啡','sel05ler','$2y$10$J0r1yBjU6z1cWVzuftoPzePPsU17ibJBawdgB.R4hUQ0ggP2xBQhm','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','日本')
-,('S006','資策會咖啡','sel06ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs06','(99)0000-0006','s006@gmail.com','台灣');
+,('S006','資策會咖啡','sel06ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs06','(99)0000-0006','s006@gmail.com','台灣')
+,('S007','資策會咖啡','sel07ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs07','(99)0000-0006','s007@gmail.com','台灣')
+,('S008','資策會咖啡','sel08ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs08','(99)0000-0006','s008@gmail.com','台灣')
+,('S009','資策會咖啡','sel09ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs09','(99)0000-0006','s009@gmail.com','日本')
+,('S010','資策會咖啡','sel10ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs10','(99)0000-0006','s010@gmail.com','日本')
+,('S011','資策會咖啡','sel11ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs11','(99)0000-0006','s006@gmail.com','台灣')
+,('S012','資策會咖啡','sel12ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs12','(99)0000-0006','s087@gmail.com','日本')
+,('S013','資策會咖啡','sel13ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs13','(99)0000-0006','s009@gmail.com','台灣')
+,('S014','資策會咖啡','sel14ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs14','(99)0000-0006','s0111@gmail.com','台灣');
 
 DROP TABLE IF EXISTS `infomations`;
 CREATE TABLE `infomations` (
