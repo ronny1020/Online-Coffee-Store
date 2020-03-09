@@ -364,16 +364,18 @@ if (isset($_POST["exportSelected"])) {
                 </span>
             </div>
 
-            <table class="table table-striped table-bordered data_main_table">
-                <thead class="thead-light">
-                    <tr>
+            <table class="table table-striped table-bordered data_main_table"  >
+                <thead class="bg-color-gold"  >
+                    <tr >
                         <th>
-                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()">
+                        <div class="d-flex justify-content-center align-items-center flex-row m-0 " style='width: 100px;' >
+                            <input type="checkbox" id="selectAll" onclick="selectAllCheckbox()"  class='checkmark' style='position: relative;' >
                             <label for="selectAll">全選</label>
+                        </div>
                         </th>
 
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0 ">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0 "  style='width: 100px;'>    
                                 <p class="m-1">優惠活動</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC" value="▲" name="disID_DESC">
@@ -383,7 +385,7 @@ if (isset($_POST["exportSelected"])) {
                         </th>
                   
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">適用產品</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC"  value=""  name="productID_DESC">
@@ -392,7 +394,7 @@ if (isset($_POST["exportSelected"])) {
                             </div>
                         </th>
                         <th>
-                            <div class="d-flex justify-content-center align-items-center flex-row m-0">    
+                            <div class="d-flex justify-content-center align-items-center flex-row m-0" style='width: 100px;'>    
                                 <p class="m-1">折扣價格</p>
                                 <div class="DESC-ASC ml-2">
                                     <input type="submit" class="d-block btn btn-DESC"  value="▲"  name="disPrice_DESC">
@@ -423,10 +425,12 @@ while ($row = mysqli_fetch_assoc($result)):
 
 ?>
 
-                    <tr>
+                    <tr class="dataSQL" align="center" >
                         <td>
+                        
                             <input type="checkbox" name="<?php echo "selected" . $row["disID"].$row["productID"] ?>"
-                                class="btn btn-danger mb-3">
+                            class='checkmark' style='position: relative;'  >
+                        
                         </td>
                         <td id="<?php echo $row["disID"].$row["productID"]."disID" ?>"><?php echo $row["disID"] ?></td>
                         <td id="<?php echo $row["disID"].$row["productID"]."productID" ?>"><?php echo $row["productID"] ?></td>
@@ -441,7 +445,7 @@ while ($row = mysqli_fetch_assoc($result)):
                         
                         
                         <td class="p-0">
-                        <div class="right_btn" align="center">
+                        <div class="right_btn" >
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["disID"].$row["productID"] ?>"
                                 class="btn btn-danger mb-3" onclick="return confirm('你確定要刪除這筆資料嗎？')">
                                 
