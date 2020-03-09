@@ -377,6 +377,11 @@
     .data_main_table td.tags {
         text-align: left !important;
     }
+    
+    .right_btn {
+        width: 120px;
+        padding: 0;
+    }
     /* for creating form for create or edit in products */
     
     #popUp_window {

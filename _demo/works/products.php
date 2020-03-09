@@ -740,9 +740,9 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                                 </div>
                             </div>
                         </th>
-                        <th class=tags>tags
+                        <th class="tags">tags
                         </th>
-                        <th>
+                        <th class="right_btn">
                         </th>
                 </thead>
 
@@ -812,7 +812,7 @@ echo "您在第 $page 頁，顯示資料為 $showDataStartFrom - $showDataEndTo 
                             <div class="right_btn">
                             <input type="submit" value="刪除" name="<?php echo "delete" . $row["productID"] ?>"
                                 class="btn btn-danger my-0 btn-md" onclick="return confirm('你確定要刪除這筆資料嗎？')">
-                            <input type="button" value="檢視/編輯" class="btn btn-primary my-0 btn-md" onclick="create_edit(<?php echo "'" . $row["productID"] . "'" ?>)">
+                            <input type="button" value="編輯" class="btn btn-primary my-0  mr-o btn-md" onclick="create_edit(<?php echo "'" . $row["productID"] . "'" ?>)">
                             </div>
 
                         </td>
