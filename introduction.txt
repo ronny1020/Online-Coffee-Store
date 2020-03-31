@@ -1,0 +1,26 @@
+網站題目：
+
+目的：
+
+特色：	
+
+功能：	       
+·	會員註冊、登入、修改
+·	收藏喜愛商品
+·	購物車與訂單查詢
+·	會員評價系統
+·	進階篩選商品
+·	依喜好排列商品
+·	依關鍵字搜尋商品
+·	客服系統、線上即時通訊
+
+技術：
+·	設計／原型：Adobe Photoshop、Adobe Illustrator、Adobe XD
+·	前端技術：HTML、CSS、JavaScript、jQuery、Ajax
+·	前端框架：Bootstrap、React、SCSS
+·	後端技術：PHP、Node.js
+·	資料庫／版本控制：MySQL、GitHub
+
+
+組員：	李昱、趙逢璽、林柏澈、鄭詠央、謝昊容
+
