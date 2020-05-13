@@ -48,12 +48,12 @@ $error = "";
             <a href="../works/discount_detail.php"><i class='fas fa-stream w-25 text-center small'></i>優惠細節管理</a>
             </div>
 
-            <a class='triangle_title' type="button" data-toggle="collapse" data-target="#order">
+            <!-- <a class='triangle_title' type="button" data-toggle="collapse" data-target="#order">
                 <i class='fas fa-clipboard w-25 text-center small'></i>訂單管理<div class="triangle_rotate">▶</div></a>
             <div id="order" class="collapse">
                 <a href="../works/orders.php"><i class='fas fa-copy w-25 text-center small'></i>訂單內容</a>
                 <a href="../works/orders_detail.php"><i class='fas fa-glasses w-25 text-center small'></i>訂單細節</a>
-            </div>
+            </div> -->
 
             <a href="../works/products.php"><i class='fas fa-tags w-25 text-center small'></i>商品管理</a>
 
