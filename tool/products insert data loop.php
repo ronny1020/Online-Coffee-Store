@@ -43,10 +43,10 @@ if (isset($_POST["insert"])) {
         
         $insertList = ltrim($insertList, "!,");
 
-        $CommandText = <<<SqlQuery
+        $CommandText = "
         INSERT INTO `coffee`.`products` (`ProductName`, `sellerID`, `CategoryID`, `UnitPrice`,
         `UnitsInStock`, `add_time`, `specification`, `description`)  VALUES  $insertList;
-    SqlQuery;
+    ";
 
         mysqli_query($link, $CommandText);
     }

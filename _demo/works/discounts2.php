@@ -98,9 +98,9 @@ $nextPage=$page+1;
 foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.discounts WHERE disID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
         
@@ -118,9 +118,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
   DELETE FROM coffee.discounts WHERE disID IN ($selectedList)
-  SqlQuery;
+  ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -134,9 +134,9 @@ if (isset($_POST['modal_submit'])) {
     $tmp_std = $_POST['std'];
     $tmp_ovd = $_POST['ovd'];
     
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.discounts VALUES ('$tmp_did','$tmp_nam','$tmp_ddp', '$userID' ,'$tmp_dct','$tmp_std','$tmp_ovd')
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 
 }
@@ -214,10 +214,10 @@ if (isset($_POST["exportSelected"])) {
     }
     //多一空欄位 '' 但不影響功能
     // echo $selectedList;
-    $exportComment = <<<SqlQuery
+    $exportComment = "
     select disID, disName, disDescrip, sellerID, Discount, startDate, overDate from coffee.discounts   
     where sellerID='$userID' and disID IN $selectedList ORDER BY disID
-    SqlQuery;
+    ";
    
     $exportResult = mysqli_query($link, $exportComment);
     // if($exportResult === FALSE){
@@ -455,9 +455,9 @@ if (isset($_POST["exportSelected"])) {
                     <?php
 // write table
 
-$commandText = <<<SqlQuery
+$commandText = "
                     select disID, disName, disDescrip, Discount, startDate, overDate, sellerID from coffee.discounts where sellerID='$userID' $searchComment ORDER BY disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
-                    SqlQuery;
+                    ";
 
 
 $result = mysqli_query($link, $commandText);

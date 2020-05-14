@@ -112,9 +112,9 @@ foreach ($_POST as $i => $j) {
     //Right delete button:
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.orders WHERE OrderID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
     } 
@@ -131,9 +131,9 @@ if (isset($_POST['modal_submit'])) {
    $tmp_ShipPost = @$_POST['ShipPost'];
    $tmp_ShipCity = @$_POST['ShipCity'];
    $tmp_ShipCountry = @$_POST['ShipCountry'];
-   $insertCommandText = <<<SqlQuery
+   $insertCommandText = "
    insert into coffee.orders VALUES ('$tmp_oid','$tmp_cid','$tmp_OrderD','$tmp_ShippedD','$tmp_ShippedA','$tmp_ShipR','$tmp_ShipPost','$tmp_ShipCity','$tmp_ShipCountry')
-   SqlQuery;      
+   ";      
    mysqli_query($link, $insertCommandText);
 }
 
@@ -152,15 +152,15 @@ if (isset($_POST['modal_submit_e'])) {
 
 
     //刪除舊資料
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     DELETE FROM coffee.orders WHERE OrderID IN ('$tmp_oid_e');
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 
     //插入新資料
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.orders VALUES ('$tmp_oid_e','$tmp_cid_e','$tmp_OrderD_e','$tmp_ShippedD_e','$tmp_ShippedA_e','$tmp_ShipR_e','$tmp_ShipPost_e','$tmp_ShipCity_e', '$tmp_ShipCountry_e');
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -188,9 +188,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
     DELETE FROM coffee.orders WHERE OrderID IN ($selectedList)
-    SqlQuery;
+    ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -364,14 +364,14 @@ if (isset($_POST["deleteSelected"])) {
 // 受所允許之總欄數調控        這邊還要再 join orders_detail 兩個表的內容...
 
 
-$commandText = <<<SqlQuery
+$commandText = "
 
 
 
 SELECT orders.*, orders_detail.* FROM orders 
 INNER JOIN orders_detail ON orders.OrderID = orders_detail.orderID order by orders.OrderID
 
-SqlQuery;
+";
 
 $result = mysqli_query($link, $commandText);
 while ($row = mysqli_fetch_assoc($result)): ?>

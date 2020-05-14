@@ -26,9 +26,9 @@ foreach ($_POST as $i => $j) {
     //Right delete button:
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.customers WHERE customerID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
     }
@@ -45,9 +45,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
     DELETE FROM coffee.customers WHERE customerID IN ($selectedList)
-    SqlQuery;
+    ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -63,9 +63,9 @@ if (isset($_POST['modal_submit'])) {
     $tmp_adr = $_POST['adr'];
     $tmp_mob = $_POST['mob'];
     $tmp_pwd = password_hash($_POST['pwd'], PASSWORD_BCRYPT);
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.customers VALUES ('$tmp_cid','$tmp_nam','$tmp_acc','$tmp_eml','$tmp_pwd','$tmp_sex','$tmp_bid','$tmp_adr','$tmp_mob')
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -80,7 +80,7 @@ if (isset($_POST['modal_submit_e'])) {
     $tmp_adr_e = $_POST['adr_e'];
     $tmp_mob_e = $_POST['mob_e'];
 
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     UPDATE `coffee`.`customers` SET
     `cName` = '$tmp_nam_e',
     `cAccount` = '$tmp_acc_e',
@@ -90,7 +90,7 @@ if (isset($_POST['modal_submit_e'])) {
     `cAddress` = '$tmp_adr_e',
     `cMobile` = '$tmp_mob_e'
     WHERE customerID IN ('$tmp_cid_e');
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -147,10 +147,10 @@ if (isset($_POST["exportSelected"])) {
     }
     //多一空欄位 '' 但不影響功能
     // echo $selectedList;
-    $exportComment = <<<SqlQuery
+    $exportComment = "
     select customerID, cName, cAccount, cEmail, cSex, cBirthDate, cAddress, cMobile from coffee.customers
     WHERE customerID IN $selectedList ORDER BY customerID
-    SqlQuery;
+    ";
 
     $exportResult = mysqli_query($link, $exportComment);
     $columns_total = mysqli_num_fields($exportResult);
@@ -368,10 +368,10 @@ $orderby = $_SESSION["cu_orderby"];
 // $commandText: string
 // 受所允許之總欄數調控!
 // 受升序降序調控!
-$commandText = <<<SqlQuery
+$commandText = "
 select customerID, cName, cAccount, cEmail, cSex, cBirthDate, cAddress, cMobile
 from coffee.customers ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
-SqlQuery;
+";
 
 // Give each row specific ID.
 $result = mysqli_query($link, $commandText);

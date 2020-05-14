@@ -60,9 +60,9 @@ $nextPage = $page + 1;
 foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.sellers WHERE sellerID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location: sellers.php');
     }
@@ -79,9 +79,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
   DELETE FROM coffee.sellers WHERE sellerID IN ($selectedList)
-  SqlQuery;
+  ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -96,9 +96,9 @@ if (isset($_POST["modal-submit"])){
     $phone = $_POST['phone'];
     $mail = $_POST['mail'];
     $country = $_POST['country'];
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     INSERT INTO coffee.sellers VALUES ('$sid','$nam','$acc','$pwd','$adr','$phone','$mail','$country')
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -112,11 +112,11 @@ if (isset($_POST['edModal-submit'])){
     $phone = $_POST['phone'];
     $mail = $_POST['mail'];
     $country = $_POST['country'];
-    $editCommandText = <<<SqlQuery
+    $editCommandText = "
     UPDATE coffee.sellers SET sellerID='$sid', sName='$nam', sAccount='$acc',sPassword='$pwd', 
     sAddress='$adr', sPhone='$phone', sMail='$mail', sCountry='$country' 
     where sellerID = '$sid'
-    SqlQuery;
+    ";
     mysqli_query($link, $editCommandText);
 }
 ?>
@@ -204,10 +204,10 @@ if (isset($_POST['edModal-submit'])){
             <tbody>
                 <?php
     // write table
-    $commandText = <<<SqlQuery
+    $commandText = "
         select sellerID, sName, sAccount, sPassword, sAddress, sPhone, sMail, sCountry
         from coffee.sellers LIMIT $rowNum OFFSET $tableOffSet
-        SqlQuery;
+        ";
     $result = mysqli_query($link, $commandText);
     while ($row = mysqli_fetch_assoc($result)): $temp = "'"; ?>
                 <tr class="dataSQL"><!-- <label class="form-check-label"> -->

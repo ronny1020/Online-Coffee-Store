@@ -26,9 +26,9 @@ foreach ($_POST as $i => $j) {
     //Right delete button:
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.crams WHERE cramID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
     }
@@ -45,9 +45,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
     DELETE FROM coffee.crams WHERE cramID IN ($selectedList)
-    SqlQuery;
+    ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -59,9 +59,9 @@ if (isset($_POST['modal_submit'])) {
     $tmp_dat = $_POST['dat'];
     $tmp_ccn = $_POST['ccn'];
     $tmp_ckd = $_POST['ckd'];
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.crams VALUES ('$tmp_cri','$tmp_cid','$tmp_dat','$tmp_ccn','$tmp_ckd')
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -73,7 +73,7 @@ if (isset($_POST['modal_submit_e'])) {
     $tmp_ccn_e = $_POST['ccn_e'];
     $tmp_ckd_e = $_POST['ckd_e'];
 
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     UPDATE `coffee`.`crams` SET
     `cramID` = '$tmp_cri_e',
     `customerID` = '$tmp_cid_e',
@@ -81,7 +81,7 @@ if (isset($_POST['modal_submit_e'])) {
     `cramContent` = '$tmp_ccn_e',
     `cChecked` = '$tmp_ckd_e'
     WHERE cramID IN ('$tmp_cri_e');
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -138,10 +138,10 @@ if (isset($_POST["exportSelected"])) {
     }
     //多一空欄位 '' 但不影響功能
     // echo $selectedList;
-    $exportComment = <<<SqlQuery
+    $exportComment = "
     select cramID, customerID, cDate, cramContent, cChecked from coffee.crams
     WHERE cramID IN $selectedList ORDER BY cramID
-    SqlQuery;
+    ";
 
     $exportResult = mysqli_query($link, $exportComment);
     $columns_total = mysqli_num_fields($exportResult);
@@ -337,10 +337,10 @@ $orderby = $_SESSION["cr_orderby"];
 // $commandText: string
 // 受所允許之總欄數調控!
 // 受升序降序調控!
-$commandText = <<<SqlQuery
+$commandText = "
 select cramID, customerID, cDate, cramContent, cChecked
 from coffee.crams ORDER BY $orderby $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
-SqlQuery;
+";
 
 $result = mysqli_query($link, $commandText);
 

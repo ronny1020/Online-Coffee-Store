@@ -61,9 +61,9 @@ if (isset($_POST["insert"])) {
 
     $insertList = ltrim($insertList, "!,");
 
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
   INSERT INTO coffee.sellers VALUES $insertList
-  SqlQuery;
+  ";
     mysqli_query($link, $deleteSelectedCommandText);
 
     echo "done";
