@@ -93,9 +93,9 @@ $nextPage=$page+1;
 foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.infomations WHERE infoID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
         
@@ -113,9 +113,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
   DELETE FROM coffee.infomations WHERE infoID IN ($selectedList)
-  SqlQuery;
+  ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -127,9 +127,9 @@ if (isset($_POST['modal_submit'])) {
     $tmp_opd = $_POST['opd'];
    
     
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.infomations VALUES ('$tmp_iid','$tmp_ifn','$tmp_ifd','$userID','$tmp_opd')
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
     
 }
@@ -200,10 +200,10 @@ if (isset($_POST["exportSelected"])) {
     }
     //多一空欄位 '' 但不影響功能
     // echo $selectedList;
-    $exportComment = <<<SqlQuery
+    $exportComment = "
     select infoID, infoName, infoDescrip, openDate, sellerID from coffee.infomations   
     where sellerID='$userID' and infoID IN $selectedList ORDER BY infoID
-    SqlQuery;
+    ";
    
     $exportResult = mysqli_query($link, $exportComment);
     // if($exportResult === FALSE){
@@ -401,9 +401,9 @@ if (isset($_POST["exportSelected"])) {
                     <?php
 // write table
 
-$commandText = <<<SqlQuery
+$commandText = "
                     select infoID, infoName, infoDescrip, openDate, sellerID from coffee.infomations where sellerID='$userID' $searchComment ORDER BY infoID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
-                    SqlQuery;
+                    ";
 $result = mysqli_query($link, $commandText);
 
 while ($row = mysqli_fetch_assoc($result)):

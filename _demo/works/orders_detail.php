@@ -62,20 +62,20 @@ foreach ($_POST as $i => $j) {
     //Right delete button:
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.orders_detail WHERE OrderID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
     } //Right edit button:
     elseif (substr($i, 0, 4) == "edit") {
         //獲得customerID
         // $editItem = ltrim($i, "edit");
-        // $editCommandText = <<<SqlQuery
+        // $editCommandText = "
         // select OrderID, CustomerID, EmployeeID, RequiredDate, ShippedDate, ShipVia, Freight, ShipName, 
         // ShipAddress, ShipRegion, ShipPostCode, ShipCountry, ShipCity   
         // from coffee.orders WHERE CustomerID IN ('$editItem')
-        // SqlQuery;
+        // ";
         // $result = mysqli_query($link, $editCommandText);
         // while ($row = mysqli_fetch_assoc($result)) {
         //     $_SESSION["modal_cid"] = $row["customerID"];
@@ -98,9 +98,9 @@ if (isset($_POST['modal_submit'])) {
    $tmp_Quan = @$_POST['Quan'];
    $tmp_Dis= @$_POST['Dis'];
 
-   $insertCommandText = <<<SqlQuery
+   $insertCommandText = "
    insert into coffee.orders_detail VALUES ('$tmp_oid','$tmp_pid','$tmp_Quan','$tmp_Dis')
-   SqlQuery;
+   ";
    
 
    
@@ -116,15 +116,15 @@ if (isset($_POST['modal_submit_e'])) {
     $tmp_Dis_e= $_POST['Dis_e'];
 
     //刪除舊資料
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     DELETE FROM coffee.orders_detail WHERE OrderID IN ('$tmp_oid_e');
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 
     //插入新資料
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.orders_detail VALUES ('$tmp_oid_e','$tmp_pid_e','$tmp_Quan_e','$tmp_Dis_e');
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -155,9 +155,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
     DELETE FROM coffee.orders_detail WHERE OrderID IN ($selectedList)
-    SqlQuery;
+    ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -234,9 +234,9 @@ if (isset($_POST["deleteSelected"])) {
 // write table
 // $commandText: $str
 // 受所允許之總欄數調控
-$commandText = <<<SqlQuery
+$commandText = "
 select OrderID, ProductID,  Quantity, Discount from coffee.orders_detail order by orders_detail.OrderID
-SqlQuery;
+";
 
 $result = mysqli_query($link, $commandText);
 while ($row = mysqli_fetch_assoc($result)): ?>

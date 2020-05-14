@@ -97,9 +97,9 @@ foreach ($_POST as $i => $j) {
         $deleteItem = ltrim($i, "delete");
         $discountID=substr($deleteItem,0,4);
         $disProductID=substr($deleteItem,4,10);
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.discount_detail WHERE disID IN ('$discountID') AND productID='$disProductID'
-        SqlQuery;
+        ";
         
         mysqli_query($link, $deleteCommandText);
         // header('location:' . $_SERVER['REQUEST_URI'] . '');
@@ -121,9 +121,9 @@ if (isset($_POST["deleteSelected"])) {
             $disProductID=substr($selectedItem,4,10);
 
 
-            $deleteSelectedCommandText = <<<SqlQuery
+            $deleteSelectedCommandText = "
           DELETE FROM coffee.discount_detail WHERE disID IN ('$discountID') AND productID='$disProductID';
-          SqlQuery;
+          ";
 
           echo $deleteSelectedCommandText;
             mysqli_query($link, $deleteSelectedCommandText);
@@ -144,9 +144,9 @@ if (isset($_POST['modal_submit'])) {
     $tmp_nam3 = trim($tmp_nam);
     $tmp_ddp3 = trim($tmp_ddp);
     
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.discount_detail VALUES ('$tmp_did3','$tmp_nam3','$tmp_ddp3') 
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
     
 
@@ -221,10 +221,10 @@ if (isset($_POST["exportSelected"])) {
     }
     //多一空欄位 '' 但不影響功能
     // echo $selectedList;
-    $exportComment = <<<SqlQuery
+    $exportComment = "
     select disID, productID, disPrice from coffee.discount_detail   
     where sellerID='$userID' and disID IN $selectedList ORDER BY disID
-    SqlQuery;
+    ";
    
     $exportResult = mysqli_query($link, $exportComment);
     // if($exportResult === FALSE){
@@ -424,9 +424,9 @@ if (isset($_POST["exportSelected"])) {
                     <?php
 // write table
 
-$commandText = <<<SqlQuery
+$commandText = "
                     select discount_detail.disID, discount_detail.productID, discount_detail.disPrice from coffee.discount_detail join discounts on (discounts.disID=discount_detail.disID) WHERE sellerID='$userID' $searchComment ORDER BY discount_detail.disID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
-                    SqlQuery;
+                    ";
 
 
 $result = mysqli_query($link, $commandText);

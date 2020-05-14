@@ -100,9 +100,9 @@ $nextPage = $page + 1;
 foreach ($_POST as $i => $j) {
     if (substr($i, 0, 6) == "delete") {
         $deleteItem = ltrim($i, "delete");
-        $deleteCommandText = <<<SqlQuery
+        $deleteCommandText = "
         DELETE FROM coffee.coupon WHERE couponID IN ('$deleteItem')
-        SqlQuery;
+        ";
         mysqli_query($link, $deleteCommandText);
         header('location:' . $_SERVER['REQUEST_URI'] . '');
     }
@@ -119,9 +119,9 @@ if (isset($_POST["deleteSelected"])) {
         }
     }
     $selectedList = ltrim($selectedList, "!,");
-    $deleteSelectedCommandText = <<<SqlQuery
+    $deleteSelectedCommandText = "
   DELETE FROM coffee.coupon WHERE couponID IN ($selectedList)
-  SqlQuery;
+  ";
     mysqli_query($link, $deleteSelectedCommandText);
     header('location:' . $_SERVER['REQUEST_URI'] . '');
 }
@@ -135,9 +135,9 @@ if (isset($_POST['modal_submit'])) {
     $tmp_end = $_POST['end'];
     $tmp_ovd = $_POST['ovd'];
 
-    $insertCommandText = <<<SqlQuery
+    $insertCommandText = "
     insert into coffee.coupon VALUES ('$tmp_did','$tmp_nam','$tmp_min', '$tmp_lim' ,'$tmp_end','$tmp_ovd')
-    SqlQuery;
+    ";
     mysqli_query($link, $insertCommandText);
 }
 
@@ -216,10 +216,10 @@ if (isset($_POST["exportSelected"])) {
     }
     //多一空欄位 '' 但不影響功能
     // echo $selectedList;
-    $exportComment = <<<SqlQuery
+    $exportComment = "
     select couponID, couponName, minus, limitation, cpendDate, used from coffee.coupon  
     where sellerID='$userID' and couponID IN $selectedList ORDER BY couponID
-    SqlQuery;
+    ";
 
     $exportResult = mysqli_query($link, $exportComment);
     // if($exportResult === FALSE){
@@ -462,9 +462,9 @@ if (isset($_POST["exportSelected"])) {
                         <?php
                         // write table
 
-                        $commandText = <<<SqlQuery
+                        $commandText = "
                     select couponID, couponName, minus, limitation, cpendDate, used from coffee.coupon $searchComment ORDER BY couponID $ASCorDESC LIMIT $rowNum OFFSET $tableOffSet
-                    SqlQuery;
+                    ";
 
 
                         $result = mysqli_query($link, $commandText);
