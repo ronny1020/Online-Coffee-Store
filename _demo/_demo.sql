@@ -494,9 +494,9 @@ CREATE TABLE `sellers` (
 
 -- add dummy datas:
 INSERT INTO `sellers` VALUES
- ('S001','星巴克','sel01ler','$2y$10$veXmDFN1rExJQdGUbTkPiOEc0lUq5H0N0xIuMNDCQa5vap1U3sPHa','my_dummy_adrs01','(99)0000-0001','s001@gmail.com','美國')
-,('S002','露易莎咖啡','sel02ler','$2y$10$oBCfgBb.BzmRrMAruZQIP.kZWH/jn9D.Rbmr8m3WIIwkE7dJ9i4du','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
-,('S003','伯朗咖啡','sel03ler','$2y$10$NNrlO66BPXrK/q942nKR7.9SpKEgYp2W3GaRs75I3v.JDlPnDNAQS','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
+ ('S001','非洲人咖啡','sel01ler','$2y$10$veXmDFN1rExJQdGUbTkPiOEc0lUq5H0N0xIuMNDCQa5vap1U3sPHa','my_dummy_adrs01','(99)0000-0001','s001@gmail.com','美國')
+,('S002','瑪麗亞咖啡','sel02ler','$2y$10$oBCfgBb.BzmRrMAruZQIP.kZWH/jn9D.Rbmr8m3WIIwkE7dJ9i4du','my_dummy_adrs02','(99)0000-0002','s002@gmail.com','台灣')
+,('S003','古坑樹咖啡','sel03ler','$2y$10$NNrlO66BPXrK/q942nKR7.9SpKEgYp2W3GaRs75I3v.JDlPnDNAQS','my_dummy_adrs03','(99)0000-0003','s003@gmail.com','台灣')
 ,('S004','上島咖啡','sel04ler','$2y$10$HhsDVl94qKOFtK1l5aAj7OAhapz6ovvedlBXehTgsKc5zvWY3ftg6','my_dummy_adrs04','(99)0000-0004','s004@gmail.com','日本')
 ,('S005','小樽咖啡','sel05ler','$2y$10$J0r1yBjU6z1cWVzuftoPzePPsU17ibJBawdgB.R4hUQ0ggP2xBQhm','my_dummy_adrs05','(99)0000-0005','s005@gmail.com','日本')
 ,('S006','資策會咖啡','sel06ler','$2y$10$VLBi1ja7JcXYV1qGfhVdU.ZXnxi1mGbFH9j/ZH8NHGm80G5migqxK','my_dummy_adrs06','(99)0000-0006','s006@gmail.com','台灣')

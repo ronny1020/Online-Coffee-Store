@@ -95,3 +95,41 @@ function throwinmodal_TAL(myid) {
 
 }
 
+function throwinmodal_ABC(myid) {
+    //Summon modal by Jquery.
+    $('#Modal_edit').modal('show');
+
+    var myid = myid.toString();
+    // alert('myid');
+    // Get datas from ID-labelled table.
+    var couponID = myid + "couponID";
+    var throw_couponID = document.getElementById(couponID).innerHTML;
+    var couponName = myid + "couponName";
+    var throw_couponName = document.getElementById(couponName).innerHTML;
+    // DATE: need to change format before used!
+    var cpendDate = myid + "cpendDate";
+    var tmp_throw_cpendDate = document.getElementById(cpendDate).innerHTML;
+    var throw_cpendDate = tmp_throw_cpendDate.split(" ");
+    // alert(throw_cDate);
+    var minus = myid + "minus";
+    var throw_minus = document.getElementById(minus).innerHTML;
+    var limitation = myid + "limitation";
+    var throw_limitation = document.getElementById(limitation).innerHTML;
+    var used = myid + "used";
+    // var throw_used = document.getElementById(used).innerHTML;
+    
+   
+    // alert(throw_cChecked);
+
+    // Write into Modal.
+    document.getElementById('did2').value = throw_couponID;
+    document.getElementById('nam2').value = throw_couponName;
+    
+    document.getElementById('min2').value = throw_minus;
+    document.getElementById('lim2').value = throw_limitation;
+    document.getElementById('end2').value = throw_cpendDate;
+    
+    // document.getElementById('ovd2').value = throw_used;
+    
+
+}
